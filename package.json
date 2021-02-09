@@ -1,0 +1,17 @@
+{
+  "name": "proj-restfulfriends",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "concurrently \"cd server && npm run dev\" \"cd client && npm start\" ",
+    "install-dependencies": "npm install && cd server && npm install && cd ../client && npm install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/csc302-spring-2021/proj-RESTfulfriends.git"
+  },
+  "homepage": "https://github.com/csc302-spring-2021/proj-RESTfulfriends#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "concurrently": "^5.3.0"
+  }
+}
