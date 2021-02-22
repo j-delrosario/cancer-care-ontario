@@ -1,0 +1,10 @@
+language: node_js
+node_js:
+  - "14"
+script:
+  - echo "*****Build Starts******"
+  - echo "Installing Dependencies"
+  - npm run install-dependencies
+  - echo "Running Front-end Tests"
+  - echo "Running Back-end Tests"
+  - cd ../server && npm test
