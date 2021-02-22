@@ -1,10 +1,11 @@
 var mongoose = require("mongoose");
 const SDCSection = require("./SDCSection");
+const DiagnosticProcedureID = require("./DiagnosticProcedureID");
 var Schema = mongoose.Schema;
 
 var SDCFormSchema = new Schema({
     id: {type: Number, required: true},
-    diagnosticProcedure: {type: Number, required: true}, //TODO: Replace with DiagnosticProcedureID when implemented
+    diagnosticProcedure: {type: DiagnosticProcedureID, required: true},
     sections: Array[SDCSection],
 });
 
