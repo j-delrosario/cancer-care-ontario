@@ -1,0 +1,11 @@
+# Tests
+### Testing Framework
+For testing we decided to go with separate testing frameworks for our front and back-end; both for better integration with the specific technologies being used in either and to learn to use a few of the most popular frameworks for our tech stack. To test our React front-end we will be using Jest as our test-runner, assertion library, and for mocking, as well as Enzyme for a few extra utilities; since these were purpose built to make testing React components easier. For our server we will be using Mocha as our test-runner and Chai as our assertion library. We will be using MongoDB memory server instead of mocks for tests against the database on the back-end; this is so that if we change queries or query parameters (since we are early in development) then an in-memory database allows for a more flexible testing environment since we would not have to go back and rewrite all of our mocks with every update. For end to end testing we will also be using Selenium webdriver to work with the browser for testing.
+
+### Test-Driven Development
+For development purposes we split our tasks to be relatively small, focused, and granular. With this we can first translate those tasks into basic unit tests before actually implementing the functionality. This allows for a more directed workflow and to guarantee that we are adequately building up our tests as the project grows larger.
+
+Larger scale integration and end to end tests will be assigned as separate tasks of their own. The pre-defined user stories can be used as the models for these tests to mimic real-world use cases.
+
+### Continuous Integration
+We have set up the repository for Travis integration for the front and back-end unit tests which we have now. All pull requests will be tested before being merged with the main branch. In the beginning the tests will primarily be these unit tests for individual models, components, routes, etc. but as development continues we will be including more robust integration tests for front and back-end and eventually full end-to-end testing and integrate these tests with Travis as they are created.

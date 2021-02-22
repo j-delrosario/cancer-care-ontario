@@ -7,4 +7,4 @@ script:
   - npm run install-dependencies
   - echo "Running Front-end Tests"
   - echo "Running Back-end Tests"
-  - cd ../server && npm test
+  - cd server && npm test
