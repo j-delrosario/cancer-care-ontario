@@ -1,5 +1,3 @@
-## Goal
-
 ## Competancies and Constraints
 
 # Competancies
@@ -36,9 +34,9 @@ Here is how our team is divided:
 
 # Front-end Team
 Ahmad Fakhry,
-Kabir,
-Chantal,
-Rebecca,
+Kabir Virji,
+Chantal Sorias,
+Rebecca Choi,
 
 # Back-end Team
 Gabriel Bailey
