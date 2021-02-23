@@ -11,4 +11,4 @@ var IntQuestionBodySchema = new Schema(
 
 var IntQuestionBody = SDCQuestionBody.discriminator("Int", IntQuestionBodySchema);
 
-module.exports = mongoose.model("IntQuestionBody", IntQuestionBody);
+module.exports = mongoose.model("IntQuestionBody", IntQuestionBodySchema);
