@@ -5,10 +5,10 @@ var options = { discriminatorKey: "questionType"};
 
 var SDCQuestionBodySchema = new Schema(
     {
-        questionTitle: String,
-        questionText: String,
+        //questionTitle: String,
+        //questionText: String,
     },
     options);
 
-module.exports = mongoose.model("SDCQuestionBody", SDCQuestionBody);
+module.exports = mongoose.model("SDCQuestionBody", SDCQuestionBodySchema);
 module.exports.options = options;
