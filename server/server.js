@@ -8,12 +8,12 @@ async function startServer() {
 
   await loaders({ expressApp: app });
 
-  app.listen(3001, err => {
+  app.listen(config.port, err => {
     if (err) {
       console.log(err);
       return;
     }
-    console.log(`Your server is ready! At port 3001`);
+    console.log(`Your server is ready! At port: ` + config.port);
   });
 
 

@@ -11,7 +11,7 @@ module.exports = () => {
 	  })
 
 	// PATIENT
-	app.get('/getPatient', async (req, res) => { // call in postman like localhost:3001/api/getPatient?id=1
+	app.get('/getPatient', async (req, res) => {
 		try {
 		  const patient = await patientModel.findOne({"id": req.id}, {})
 		  res.send(patient)

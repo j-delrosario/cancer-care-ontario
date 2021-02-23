@@ -5,8 +5,8 @@ var options = { discriminatorKey: "questionType"};
 
 var SDCQuestionBodySchema = new Schema(
     {
-        //questionTitle: String,
-        //questionText: String,
+        questionTitle: String,
+        questionText: String,
     },
     options);
 
