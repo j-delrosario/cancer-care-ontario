@@ -66,8 +66,8 @@ getDummyData = () => axios.get(`http://localhost:3001/api/getSDCForm?id=${num}`)
     "sections": ["1", "2"],<br></br>
     "questions": {this.state.value}<br></br>
     </p> : <p></p>}
-        <p onClick={this.sendDummyData}>SEND DUMMY DATA</p>
-        <p onClick={this.getDummyData}>GET DUMMY DATA</p>
+        <button onClick={this.sendDummyData}>SEND DUMMY DATA</button>
+        <button onClick={this.getDummyData}>GET DUMMY DATA</button>
         {this.state.getResponse === null ? <p></p> : <p>{this.state.getResponse}</p>}
       </div>
     );
