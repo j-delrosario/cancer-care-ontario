@@ -7,6 +7,9 @@ module.exports = ({ app }) => {
   /**
    * Health Check endpoints
    */
+  app.get('/', (req, res) => {
+    res.status(200).end();
+  });
   app.get('/status', (req, res) => {
     res.status(200).end();
   });

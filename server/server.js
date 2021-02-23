@@ -4,7 +4,7 @@ const express = require('express');
 
 async function startServer() {
 
-  const app = express();
+  let app = express();
 
   await loaders({ expressApp: app });
 
@@ -15,9 +15,6 @@ async function startServer() {
     }
     console.log(`Your server is ready! At port: ` + config.port);
   });
-
-
-
 }
 
 startServer();
