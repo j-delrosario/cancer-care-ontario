@@ -7,8 +7,8 @@ module.exports = () => {
 	const app = express.Router();
 
 	app.get('/', (req, res) => {
-		res.send('Sever Running ;)')
-	  })
+		res.send('Server Running ;)');
+	  });
 
 	// PATIENT
 	app.get('/getPatient', async (req, res) => {
@@ -53,7 +53,6 @@ module.exports = () => {
 	// SDC FORM
 	app.get('/getSDCForm', async (req, res) => {
 		try {
-			console.log(req)
 		  const sdc = await SDCFormModel.findOne({"id": req.query.id}, {})
         //   res.status(200).send({
         //     id: sdc.id,
