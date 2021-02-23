@@ -5,7 +5,7 @@ var Schema = mongoose.Schema;
 var MultipleChoiceQuestionBodySchema = new Schema(
     {
         isRadio: Boolean,
-        choices: Array[String],
+        choices: [String],
     },
     questionBody.options
 );

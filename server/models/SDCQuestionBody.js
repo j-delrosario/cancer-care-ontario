@@ -10,5 +10,5 @@ var SDCQuestionBodySchema = new Schema(
     },
     options);
 
-module.exports = mongoose.model("SDCQuestionBody", SDCQuestionBody);
+module.exports = mongoose.model("SDCQuestionBody", SDCQuestionBodySchema);
 module.exports.options = options;

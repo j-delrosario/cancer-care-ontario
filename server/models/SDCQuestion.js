@@ -8,7 +8,9 @@ var SDCQuestionSchema = new Schema({
     orderNumber: {type: Number, required: true},
     controlQuestion: Number, //TODO: replace with SDCQuestionResponse?
     controlAnswer: String,
-    questionBody: SDCQuestionBody,
+    questionBody: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "SDCQuestionBody"},
 });
 
 module.exports = mongoose.model("SDCQuestion", SDCQuestionSchema);

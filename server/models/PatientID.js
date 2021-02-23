@@ -5,7 +5,7 @@ var PatientID = new Schema({
     id: {type: Number, required: true},
     name: String,
     OHIPNumber: Number,
-    responses: Array[Number], //TODO: replace with SDCQuestionResponse?,
+    responses: [Number], //TODO: replace with SDCQuestionResponse?,
     });
 
 module.exports = mongoose.model("PatientID", PatientID);

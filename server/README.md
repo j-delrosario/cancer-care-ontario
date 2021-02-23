@@ -1,7 +1,8 @@
 # `Server side code`
 
-Server needs a MongoDB connection, and is defaulted to running on localhost:27017.\
-Run "C:/Program Files/MongoDB/Server/4.4/bin/mongod.exe" (or w/e you installed MongoDB to) to run the MongoDB daemon locally.
+Server is running on port 3001 and is hooked into our MongoDB Atlas cluster.\
+To see and manage the database you will want to install [MongoDB Compass](https://www.mongodb.com/try/download/compass).
+The link to connect Compass to the cluster is mongodb+srv://admin:<123>@cluster0.hxf94.mongodb.net/test
 
 ## Available Scripts
 
