@@ -16,6 +16,10 @@ Runs the app in the development mode. Hotloading server code.
 
 Runs the app in the release mode. No hotloading.
 
+### `npm run ci`
+
+Starts the server in release mode then runs the tests.
+
 ## `Directory Structure`
 ```
 server/

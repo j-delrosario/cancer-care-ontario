@@ -74,20 +74,6 @@ describe('SDCForms', () => {
                 done();
                 });
         });
-        it('it should GET the specified SDCForm', (done) => {
-            chai.request("http://localhost:3001/api")
-                .get('/getSDCForm')
-                .query({id: "5005"})
-                .end((err, res) => {
-                    (res).should.have.status(200);
-                    expect((res)).to.be.an('object');
-                    expect((res.body.sections)).to.be.an('array');
-                    expect((res.body.questions)).to.be.an('array');
-                    expect((res.body.id)).to.equal(formID);
-                    expect((res.body.diagnosticProcedure)).to.equal(dp);
-                done();
-                });
-        });
     });
 
 });
