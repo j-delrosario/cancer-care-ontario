@@ -1,9 +1,9 @@
 var mongoose = require("mongoose");
-const IntQuestionResponse = require("./IntQuestionResponse"); //TODO NEEDS TO BE IMPLEMENTED
-const TrueFalseQuestionResponse = require("./TrueFalseQuestionResponse"); //TODO NEEDS TO BE IMPLEMENTED
-const StringQuestionResponse = require("./StringQuestionResponse"); //TODO NEEDS TO BE IMPLEMENTED
-const CheckboxQuestionResponse = require("./CheckboxQuestionResponse"); //TODO NEEDS TO BE IMPLEMENTED
-const RadioButtonQuestionResponse = require("./RadioButtonQuestionResponse"); //TODO NEEDS TO BE IMPLEMENTED
+const IntQuestionResponse = require("./IntQuestionResponse");
+const TrueFalseQuestionResponse = require("./TrueFalseQuestionResponse"); 
+const StringQuestionResponse = require("./StringQuestionResponse"); 
+const CheckboxQuestionResponse = require("./CheckboxQuestionResponse"); 
+const RadioButtonQuestionResponse = require("./RadioButtonQuestionResponse"); 
 var Schema = mongoose.Schema;
 
 var SDCQuestionResponseSchema = new Schema({
