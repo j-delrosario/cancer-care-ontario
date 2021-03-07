@@ -5,11 +5,9 @@ var Schema = mongoose.Schema;
 var MultipleChoiceQuestionBodySchema = new Schema(
     {
         isRadio: Boolean,
-        choices: [String],
+        choices: [],
     },
-    questionBody.options
+    SDCQuestionBody.options
 );
 
-var MultipleChoiceQuestionBody = SDCQuestionBody.discriminator("MultipleChoice", MultipleChoiceQuestionBodySchema);
-
-module.exports = mongoose.model("MultipleChoiceQuestionBody", MultipleChoiceQuestionBody);
+module.exports = SDCQuestionBody.discriminator("MultipleChoice", MultipleChoiceQuestionBodySchema);

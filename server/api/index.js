@@ -2,6 +2,7 @@ const express = require('express');
 const patientModel = require('../models/PatientID');
 const diagnosticModel = require('../models/DiagnosticProcedureID');
 const SDCFormModel = require('../models/SDCForm');
+const xml2SDC = require("../services/xmlToSDCForm");
 
 module.exports = () => {
 	const app = express.Router();
@@ -67,11 +68,20 @@ module.exports = () => {
 		}
 	  });
 
-	app.post('/saveSDCForm', async (req, res) => { // needs two things, id and diagnostic id
+	  app.post('/saveSDCForm2', async (req, res) => { // needs two things, id and diagnostic id
 		const sdc = new SDCFormModel(req.body);
 		try {
 		  await sdc.save();
 		  res.send(sdc);
+		} catch (err) {
+		  res.status(500).send(err);
+		}
+	  });
+
+	app.post('/saveSDCForm', async (req, res) => { // needs two things, id and diagnostic id
+		const sdc = new SDCFormModel(req.body);
+		try {
+		  xml2SDC();
 		} catch (err) {
 		  res.status(500).send(err);
 		}
