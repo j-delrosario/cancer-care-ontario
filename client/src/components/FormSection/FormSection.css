@@ -1,0 +1,28 @@
+.container {
+  margin: 10px;
+}
+
+.sectionTitleContainer {
+  background-color: midnightblue;
+  color: white;
+  padding: 10px;
+}
+
+.sectionTitle {
+  font-weight: bold;
+}
+.sectionText {
+  font-size: small;
+}
+
+.questionContainer {
+  margin: 15px 10px;
+}
+
+.questionTitle {
+  font-weight: bold;
+}
+
+.questionText {
+  font-size: small;
+}
