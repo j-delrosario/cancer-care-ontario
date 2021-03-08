@@ -5,13 +5,7 @@ const DiagnosticProcedureID = require("./DiagnosticProcedureID");
 var Schema = mongoose.Schema;
 
 var SDCFormSchema = new Schema({
-    id: {type: Number, required: true},
-    // Remove below after P1
-    /*
-    diagnosticProcedure: {type: Number, required: true},
-    sections: [String],
-    questions: [String],
-    */
+    id: {type: String, required: true},
     title: String,
     diagnosticProcedure: {
         type: mongoose.Schema.Types.ObjectId,

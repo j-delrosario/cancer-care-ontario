@@ -1,8 +1,8 @@
 const express = require('express');
 const patientModel = require('../models/PatientID');
-const diagnosticModel = require('../models/DiagnosticProcedureID');
-const SDCFormModel = require('../models/SDCForm');
-const xml2SDC = require("../services/xmlToSDCForm");
+const models = require("../models");
+const UploadSDCForm = require("../services/UploadSDCForm");
+const xmlStr = require('../xml/Adrenal.Bx.Res.129_3.003.001.REL_sdcFDF')
 
 module.exports = () => {
 	const app = express.Router();
@@ -78,10 +78,9 @@ module.exports = () => {
 		}
 	  });
 
-	app.post('/saveSDCForm', async (req, res) => { // needs two things, id and diagnostic id
-		const sdc = new SDCFormModel(req.body);
+	app.post('/saveSDCForm', async (req, res) => {
 		try {
-		  xml2SDC();
+			await UploadSDCForm(xmlStr);
 		} catch (err) {
 		  res.status(500).send(err);
 		}
