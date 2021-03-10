@@ -6,6 +6,8 @@ var Schema = mongoose.Schema;
 
 var SDCFormSchema = new Schema({
     id: {type: String, required: true},
+    lineage: {type: String, required: true},
+    version: {type: String, required: true},
     title: String,
     diagnosticProcedure: {
         type: mongoose.Schema.Types.ObjectId,

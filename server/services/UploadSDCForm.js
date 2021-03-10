@@ -237,16 +237,19 @@ function AddDependenciesToModel(model, form, tab="") {
 
 module.exports = (xmlStr) => {
     let json = JSON.parse(xmlToJson(xmlStr));
-
+    const fs = require("fs");
+    var writeStream = fs.createWriteStream('./output');
+    writeStream.write(JSON.stringify(json));
     let procedureIDModel = new models.DiagnosticProcedureID({});
     let formModel = new models.SDCForm({});
 
     if (json.hasOwnProperty("FormDesign")){
         formDesign = json.FormDesign;
+        //TODO: find out what ID to use for this
         procedureIDModel.id = 100.00;
         formModel.id = formDesign.$.ID;
         formModel.diagnosticProcedure = procedureIDModel;
-        formModel.markModified("diagnosticProcedure")
+        formModel.version = formDesign.$.
         if (formDesign.$.formTitle)
             formModel.title = formDesign.$.formTitle;
         console.log("Form Design found");

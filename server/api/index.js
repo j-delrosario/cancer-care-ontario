@@ -68,19 +68,12 @@ module.exports = () => {
 		}
 	  });
 
-	  app.post('/saveSDCForm2', async (req, res) => { // needs two things, id and diagnostic id
-		const sdc = new SDCFormModel(req.body);
-		try {
-		  await sdc.save();
-		  res.send(sdc);
-		} catch (err) {
-		  res.status(500).send(err);
-		}
-	  });
-
+	// If you want to actually upload an example to DB swap the comment on UploadSDCForm
 	app.post('/saveSDCForm', async (req, res) => {
 		try {
-			await UploadSDCForm(xmlStr);
+			//await UploadSDCForm(xmlStr);
+			await UploadSDCForm(req.body);
+			res.status(200).send();
 		} catch (err) {
 		  res.status(500).send(err);
 		}
