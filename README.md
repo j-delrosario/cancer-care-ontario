@@ -18,6 +18,10 @@ The link to connect Compass to the cluster is mongodb+srv://admin:<123>@cluster0
 Dependencies are separated between client and server-side.
 Installs all dependencies in the root, client, and server.
 
+### `npm run test`
+
+Sets up a release server, runs server side tests, then runs client side tests.
+
 ## Directory Structure
 
 ```

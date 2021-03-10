@@ -10,6 +10,10 @@ var SDCSectionSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "SDCQuestion",
     }],
+    sections: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "SDCSection",
+    }],
 });
 
 module.exports = mongoose.model("SDCSection", SDCSectionSchema);

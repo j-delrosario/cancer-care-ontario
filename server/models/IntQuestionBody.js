@@ -4,11 +4,12 @@ var Schema = mongoose.Schema;
 
 var IntQuestionBodySchema = new Schema(
     {
-    //TODO: for when we decide how to handle Integer validation
+        unitSystem: String,
+        units: String,
+        max: Number,
+        min: Number,
     },
-    questionBody.options
+    SDCQuestionBody.options
 );
 
-var IntQuestionBody = SDCQuestionBody.discriminator("Int", IntQuestionBodySchema);
-
-module.exports = mongoose.model("IntQuestionBody", IntQuestionBodySchema);
+module.exports = SDCQuestionBody.discriminator("Int", IntQuestionBodySchema);

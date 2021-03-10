@@ -6,9 +6,7 @@ var StringQuestionBodySchema = new Schema(
     {
     //TODO: for when we decide how to handle String validation
     },
-    questionBody.options
+    SDCQuestionBody.options
 );
 
-var StringQuestionBody = SDCQuestionBody.discriminator("String", StringQuestionBodySchema);
-
-module.exports = mongoose.model("StringQuestionBody", StringQuestionBody);
+module.exports = SDCQuestionBody.discriminator("String", StringQuestionBodySchema);

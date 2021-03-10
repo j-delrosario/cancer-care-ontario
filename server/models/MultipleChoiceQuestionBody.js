@@ -1,15 +1,17 @@
 var mongoose = require("mongoose");
+const SDCQuestion = require("./SDCQuestion");
 const SDCQuestionBody = require("./SDCQuestionBody");
 var Schema = mongoose.Schema;
 
 var MultipleChoiceQuestionBodySchema = new Schema(
     {
         isRadio: Boolean,
-        choices: [String],
+        choices: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "SDCQuestion",
+        }],
     },
-    questionBody.options
+    SDCQuestionBody.options
 );
 
-var MultipleChoiceQuestionBody = SDCQuestionBody.discriminator("MultipleChoice", MultipleChoiceQuestionBodySchema);
-
-module.exports = mongoose.model("MultipleChoiceQuestionBody", MultipleChoiceQuestionBody);
+module.exports = SDCQuestionBody.discriminator("MultipleChoice", MultipleChoiceQuestionBodySchema);
