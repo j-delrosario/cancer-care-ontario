@@ -2,6 +2,7 @@ import logo from "./logo.svg";
 import "./App.css";
 import React from "react";
 import { Route, Switch, BrowserRouter } from "react-router-dom";
+import Navbar from "./components/Navbar/Navbar";
 import Home from "./components/Home/Home";
 import FormSection from "./components/FormSection/FormSection";
 
@@ -16,6 +17,7 @@ class App extends React.Component {
               path="/"
               render={() => (
                 <div>
+                  <Navbar />
                   <Home />
                 </div>
               )}
@@ -25,9 +27,10 @@ class App extends React.Component {
           <Switch>
             <Route
               exact
-              path="/form"
+              path="/form-filler"
               render={() => (
                 <div>
+                  <Navbar />
                   <FormSection />
                 </div>
               )}
