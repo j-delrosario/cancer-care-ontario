@@ -4,11 +4,13 @@ import TrueFalse from "../Questions/TrueFalse/TrueFalse";
 import MultipleChoice from "../Questions/MultipleChoice/MultipleChoice";
 import Text from "../Questions/Text/Text";
 import Int from "../Questions/Int/Int";
-import { Button } from "@material-ui/core";
+import { Button, TextField } from "@material-ui/core";
+import Autocomplete from "@material-ui/lab/Autocomplete";
 
 class FormSection extends React.Component {
   state = {
-    form: {
+    form: null,
+    adrenalGlandForm: {
       sections: [
         {
           questions: [
@@ -1356,10 +1358,61 @@ class FormSection extends React.Component {
       },
       title: "ADRENAL GLAND",
     },
+    procedures: [{ title: "Adrenal Gland" }],
   };
   componentDidMount() {
-    // TODO: Get form
+    // TODO: Get list of procedures
   }
+
+  handleProcedureChange = (event, input) => {
+    // TODO: Get form based on procedure
+    console.log("input: ", input);
+    if (input == null) {
+      this.setState({ form: null });
+    } else {
+      this.setState({ form: this.state.adrenalGlandForm });
+    }
+  };
+
+  renderForm = () => {
+    if (this.state.form !== null) {
+      return (
+        <div>
+          <h1>{this.state.form.title}</h1>
+          {this.state.form.sections.map((section) => (
+            <div key={section.id}>
+              <div className="sectionTitleContainer">
+                <div className="sectionTitle">{section.title}</div>
+                <div className="sectionText">{section.sectionText}</div>
+              </div>
+              {section.questions.map((question) => (
+                <div key={question.id} className="questionContainer">
+                  <div className="questionTitle">
+                    {question.questionBody.questionTitle}
+                  </div>
+                  <div className="questionText">
+                    {question.questionBody.questionText}
+                  </div>
+
+                  {this.renderQuestionType(question.questionBody)}
+                </div>
+              ))}
+            </div>
+          ))}
+          <div className="action-buttons">
+            <Button variant="contained" color="secondary">
+              Cancel
+            </Button>
+            <Button variant="contained" color="primary">
+              Submit
+            </Button>
+          </div>
+        </div>
+      );
+    } else {
+      return <div></div>;
+    }
+  };
 
   // TODO: Add other types of questions
   // Returns question based on question type
@@ -1367,7 +1420,13 @@ class FormSection extends React.Component {
     if (questionBody.questionType == "TrueFalse") {
       return <TrueFalse />;
     } else if (questionBody.questionType == "MultipleChoice") {
-      return <MultipleChoice choices={questionBody.choices} />;
+      // Check to see if radio, otherwise it is checkbox
+      return (
+        <MultipleChoice
+          isRadio={"is_radio" in questionBody ? questionBody.is_radio : false}
+          choices={questionBody.choices}
+        />
+      );
     } else if (questionBody.questionType == "String") {
       return <Text />;
     } else if (questionBody.questionType == "Int") {
@@ -1378,34 +1437,21 @@ class FormSection extends React.Component {
   render() {
     return (
       <div className="container">
-        <h1>{this.state.form.title}</h1>
-        {this.state.form.sections.map((section) => (
-          <div key={section.id}>
-            <div className="sectionTitleContainer">
-              <div className="sectionTitle">{section.title}</div>
-              <div className="sectionText">{section.sectionText}</div>
-            </div>
-            {section.questions.map((question) => (
-              <div key={question.id} className="questionContainer">
-                <div className="questionTitle">
-                  {question.questionBody.questionTitle}
-                </div>
-                <div className="questionText">
-                  {question.questionBody.questionText}
-                </div>
-
-                {this.renderQuestionType(question.questionBody)}
-              </div>
-            ))}
-          </div>
-        ))}
-        <div className="action-buttons">
-          <Button variant="contained" color="secondary">
-            Cancel
-          </Button>
-          <Button variant="contained" color="primary">
-            Submit
-          </Button>
+        <div>
+          <Autocomplete
+            onChange={this.handleProcedureChange}
+            options={this.state.procedures}
+            getOptionLabel={(option) => option.title}
+            style={{ width: 300 }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Choose procedure"
+                variant="outlined"
+              />
+            )}
+          />
+          {this.renderForm()}
         </div>
       </div>
     );
