@@ -31,21 +31,34 @@ class MultipleChoice extends React.Component {
     });
   };
 
+  // handleCheckboxChange = (event) => {
+  //   this.state.choices.map((choice) =>
+  //     choice.questionBody.questionTitle == event.target.name
+  //       ? (choice.checked = event.target.checked)
+  //       : choice
+  //   );
+  //   this.props.question.answer = choice.checked;
+  // };
+
   handleCheckboxChange = (event) => {
-    this.state.choices.map((choice) =>
-      choice.questionBody.questionTitle == event.target.name
-        ? (choice.checked = event.target.checked)
-        : choice
-    );
+    this.state.choices.forEach((choice) => {
+      if (choice.questionBody.questionTitle == event.target.name) {
+        choice.checked = event.target.checked;
+        this.props.question.choices.filter(
+          (choice) => choice.questionBody.questionTitle == event.target.name
+        )[0].checked = event.target.checked;
+        console.log("checked", event.target.checked);
+      }
+    });
   };
 
-  renderQuestionType = (questionBody) => {
+  renderQuestionType = (choice, display = false) => {
     // If the multiple choice selection is selected by the user
-    if (this.state.input == questionBody.questionTitle) {
+    if (this.state.input == choice.questionBody.questionTitle || display) {
       // If the multiple choice selection has a number input
-      if (questionBody.questionType == "Int") {
+      if (choice.questionBody.questionType == "Int") {
         return <Int />;
-      } else if (questionBody.questionType == "String") {
+      } else if (choice.questionBody.questionType == "String") {
         // If the multiple choice selection has a String input
         return <Text />;
       }
@@ -70,7 +83,7 @@ class MultipleChoice extends React.Component {
                   />
                 </div>
                 <div className="inputContainer">
-                  {this.renderQuestionType(choice.questionBody)}
+                  {this.renderQuestionType(choice)}
                 </div>
               </div>
             ))}
@@ -96,7 +109,7 @@ class MultipleChoice extends React.Component {
                   />
                 </div>
                 <div className="inputContainer">
-                  {this.renderQuestionType(choice.questionBody)}
+                  {this.renderQuestionType(choice, true)}
                 </div>
               </div>
             ))}

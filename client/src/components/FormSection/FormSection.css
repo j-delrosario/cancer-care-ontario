@@ -1,7 +1,6 @@
 .container {
   margin: 10px;
 }
-
 .sectionTitleContainer {
   background-color: midnightblue;
   color: white;
@@ -31,4 +30,8 @@
 .action-buttons {
   display: flex;
   justify-content: space-between;
+}
+
+.autocomplete {
+  margin: 5px;
 }

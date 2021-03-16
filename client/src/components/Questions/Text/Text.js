@@ -7,10 +7,14 @@ class Text extends React.Component {
     input: "",
   };
 
-  handleInputChange = (event) => {
+  onInputChange = (event) => {
+    const value = event.target.value;
+    const name = event.target.name;
     this.setState({
-      input: event.target.value,
+      input: value,
     });
+
+    this.props.question.answer = value;
   };
 
   render() {
@@ -18,7 +22,7 @@ class Text extends React.Component {
       <div className="textFieldContainer">
         <TextField
           value={this.state.input}
-          onChange={this.handleInputChange}
+          onChange={this.onInputChange}
           fullWidth
           multiline
           variant="outlined"
