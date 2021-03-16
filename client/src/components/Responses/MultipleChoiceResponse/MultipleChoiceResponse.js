@@ -48,10 +48,10 @@ class MultipleChoice extends React.Component {
     if (this.state.input == choice.questionBody.questionTitle || display) {
       // If the multiple choice selection has a number input
       if (choice.questionBody.questionType == "Int") {
-        return <IntResponse />;
+        return <IntResponse question={choice.questionBody} />;
       } else if (choice.questionBody.questionType == "String") {
         // If the multiple choice selection has a String input
-        return <TextResponse />;
+        return <TextResponse question={choice.questionBody} />;
       }
     }
   };
@@ -73,9 +73,9 @@ class MultipleChoice extends React.Component {
             {this.state.choices.map((choice) => (
               <div key={choice._id} className="choiceContainer">
                 <div className="choiceText">{this.renderChoice(choice)}</div>
-                {/* <div className="inputContainer">
-                  {this.renderQuestionType(choice)}
-                </div> */}
+                {/* <div className="inputContainer"> */}
+                {this.renderQuestionType(choice)}
+                {/* </div> */}
               </div>
             ))}
           </RadioGroup>
@@ -101,9 +101,9 @@ class MultipleChoice extends React.Component {
                     {() => this.renderChoice(choice)}
                   </div>
                 </div> */}
-                {/* <div className="inputContainer">
-                  {this.renderQuestionType(choice, true)}
-                </div> */}
+                {/* <div className="inputContainer"> */}
+                {this.renderQuestionType(choice, true)}
+                {/* </div> */}
               </div>
             ))}
           </FormGroup>

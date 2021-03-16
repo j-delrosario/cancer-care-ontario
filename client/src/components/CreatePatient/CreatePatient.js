@@ -32,7 +32,6 @@ class CreatePatient extends React.Component {
       .then((res) => {
         this.props.closeModal();
         this.props.reloadPatients();
-        console.log("submitted");
       })
       .catch((err) => {
         console.log(err);

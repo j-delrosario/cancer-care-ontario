@@ -8,11 +8,10 @@ import CreatePatient from "../CreatePatient/CreatePatient";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import axios from "axios";
 import { Button, Modal, TextField } from "@material-ui/core";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 
 class FormSection extends React.Component {
   state = {
-    form: null,
     adrenalGlandForm: {
       sections: [
         {
@@ -1361,12 +1360,38 @@ class FormSection extends React.Component {
       },
       title: "ADRENAL GLAND",
     },
+    form:
+      this.props.location !== undefined
+        ? this.props.location.state.response.form
+        : null, // check if form has been sent from edit
     procedures: [{ title: "Adrenal Gland" }],
+    procedure:
+      this.props.location !== undefined
+        ? { title: "Adrenal Gland" } // TODO: Change when diagnostic prodecure name/title is captured
+        : null,
     patients: [],
-    patient: null,
+    patient:
+      this.props.location !== undefined
+        ? this.props.location.state.response.patient
+        : null,
     createPatientModalOpen: false,
+    isFormValid: false,
+    editMode: false,
+    response:
+      this.props.location !== undefined
+        ? this.props.location.state.response
+        : null,
   };
   componentDidMount() {
+    console.log("this.props", this.props);
+    console.log("this.state.form", this.state.form);
+
+    // If a form has been sent in from clicking the edit button, then we are in edit mode
+    if (this.props.location !== undefined) {
+      this.setState({
+        editMode: true,
+      });
+    }
     // TODO: Get list of procedures
 
     // Get list of patients
@@ -1388,11 +1413,10 @@ class FormSection extends React.Component {
 
   handleProcedureChange = (event, input) => {
     // TODO: Get form based on procedure
-    // console.log("input: ", input);
     if (input == null) {
       this.setState({ form: null });
     } else {
-      this.setState({ form: this.state.adrenalGlandForm });
+      this.setState({ form: this.state.adrenalGlandForm, procedure: input });
     }
   };
 
@@ -1403,12 +1427,11 @@ class FormSection extends React.Component {
   };
 
   canSubmit = () => {
+    // return this.state.patient !== null && this.state.isFormValid;
     return this.state.patient !== null;
   };
 
   handleSubmit = () => {
-    console.log("form", this.state.form);
-    console.log("patient", this.state.patient);
     axios
       .post("http://localhost:3001/api/responses/", {
         patient: this.state.patient,
@@ -1421,6 +1444,47 @@ class FormSection extends React.Component {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  handleUpdate = () => {
+    axios
+      .put("http://localhost:3001/api/responses/" + this.state.response._id, {
+        patient: this.state.patient,
+        form: this.state.form,
+        formTitle: this.state.form.title,
+      })
+      .then((res) => {
+        console.log("form updated");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  renderSubmitButton = () => {
+    if (this.state.editMode) {
+      return (
+        <Button
+          onClick={() => this.handleUpdate()}
+          variant="contained"
+          color="primary"
+          disabled={!this.canSubmit()}
+        >
+          Update
+        </Button>
+      );
+    } else {
+      return (
+        <Button
+          onClick={() => this.handleSubmit()}
+          variant="contained"
+          color="primary"
+          disabled={!this.canSubmit()}
+        >
+          Submit
+        </Button>
+      );
+    }
   };
 
   renderForm = () => {
@@ -1485,14 +1549,7 @@ class FormSection extends React.Component {
                 Cancel
               </Button>
             </Link>
-            <Button
-              onClick={() => this.handleSubmit()}
-              variant="contained"
-              color="primary"
-              disabled={!this.canSubmit()}
-            >
-              Submit
-            </Button>
+            {this.renderSubmitButton()}
           </div>
         </div>
       );
@@ -1513,14 +1570,33 @@ class FormSection extends React.Component {
           isRadio={"is_radio" in questionBody ? questionBody.is_radio : false}
           choices={questionBody.choices}
           question={questionBody}
+          updateIsFormValid={this.updateIsFormValid}
         />
       );
     } else if (questionBody.questionType == "String") {
-      return <Text question={questionBody} />;
+      return (
+        <Text
+          required={true}
+          question={questionBody}
+          updateIsFormValid={this.updateIsFormValid}
+        />
+      );
     } else if (questionBody.questionType == "Int") {
-      return <Int question={questionBody} />;
+      return (
+        <Int
+          question={questionBody}
+          required={true}
+          updateIsFormValid={this.props.updateIsFormValid}
+        />
+      );
     }
   }
+
+  updateIsFormValid = (value) => {
+    this.setState({
+      isFormValid: value,
+    });
+  };
 
   handleCreatePatientModalOpen = () => {
     this.setState({
@@ -1539,6 +1615,7 @@ class FormSection extends React.Component {
       <div className="container">
         <div>
           <Autocomplete
+            value={this.state.procedure}
             className="autocomplete"
             onChange={this.handleProcedureChange}
             options={this.state.procedures}
@@ -1569,4 +1646,4 @@ class FormSection extends React.Component {
   }
 }
 
-export default FormSection;
+export default withRouter(FormSection);

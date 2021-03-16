@@ -5,6 +5,8 @@ import IntResponse from "../Responses/IntResponse/IntResponse";
 import TextResponse from "../Responses/TextResponse/TextResponse";
 import MultipleChoiceResponse from "../Responses/MultipleChoiceResponse/MultipleChoiceResponse";
 
+import "./Response.css";
+
 class Response extends React.Component {
   state = { form: this.props.response.form };
 
@@ -26,7 +28,6 @@ class Response extends React.Component {
   }
 
   render() {
-    console.log("form", this.state.form);
     return (
       <div>
         <h1>{this.state.form.title}</h1>
@@ -51,18 +52,27 @@ class Response extends React.Component {
           </div>
         ))}
         <div className="action-buttons">
-          <Link to="/">
+          <Link className="response-link" to="/">
             <Button variant="contained" color="secondary">
               Cancel
             </Button>
           </Link>
-          <Button
-            //   onClick={() => this.handleSubmit()}
-            variant="contained"
-            color="primary"
+          <Link
+            to={{
+              pathname: "/form-filler",
+              state: {
+                response: this.props.response,
+              },
+            }}
           >
-            Edit
-          </Button>
+            <Button
+              className="response-link"
+              variant="contained"
+              color="primary"
+            >
+              Edit
+            </Button>
+          </Link>
         </div>
       </div>
     );

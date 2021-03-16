@@ -20,7 +20,9 @@ class MultipleChoice extends React.Component {
       // Give choices a checked property to keep track if user checked it
       for (let index = 0; index < this.state.choices.length; index++) {
         const element = this.state.choices[index];
-        element.checked = false;
+        if (element.checked === undefined) {
+          element.checked = false;
+        }
       }
     }
   }
@@ -41,14 +43,38 @@ class MultipleChoice extends React.Component {
   // };
 
   handleCheckboxChange = (event) => {
-    this.state.choices.forEach((choice) => {
-      if (choice.questionBody.questionTitle == event.target.name) {
-        choice.checked = event.target.checked;
-        this.props.question.choices.filter(
-          (choice) => choice.questionBody.questionTitle == event.target.name
-        )[0].checked = event.target.checked;
-        console.log("checked", event.target.checked);
+    // this.state.choices.forEach((choice) => {
+    //   if (choice.questionBody.questionTitle == event.target.name) {
+    //     choice.checked = event.target.checked;
+    //     this.props.question.choices.filter(
+    //       (choice) => choice.questionBody.questionTitle == event.target.name
+    //     )[0].checked = event.target.checked;
+    //     console.log("checked", event.target.checked);
+    //     console.log("choice", choice);
+    //   }
+    // });
+
+    // Update choices list
+    let choiceIndex = -1;
+    for (var i = 0; i < this.state.choices.length; i += 1) {
+      if (
+        this.state.choices[i].questionBody.questionTitle === event.target.name
+      ) {
+        choiceIndex = i;
+
+        // Update form validation if an input is required after selecting it
+        if (
+          event.target.checked === true &&
+          this.state.choices[i].questionBody.questionType !== "NoResponse"
+        ) {
+          this.props.updateIsFormValid(false);
+        }
       }
+    }
+    let newArray = [...this.state.choices];
+    newArray[choiceIndex].checked = event.target.checked;
+    this.setState({
+      choices: newArray,
     });
   };
 
@@ -57,10 +83,22 @@ class MultipleChoice extends React.Component {
     if (this.state.input == choice.questionBody.questionTitle || display) {
       // If the multiple choice selection has a number input
       if (choice.questionBody.questionType == "Int") {
-        return <Int />;
+        return (
+          <Int
+            question={choice.questionBody}
+            required={choice.checked === true}
+            updateIsFormValid={this.props.updateIsFormValid}
+          />
+        );
       } else if (choice.questionBody.questionType == "String") {
         // If the multiple choice selection has a String input
-        return <Text />;
+        return (
+          <Text
+            question={choice.questionBody}
+            required={choice.checked === true}
+            updateIsFormValid={this.props.updateIsFormValid}
+          />
+        );
       }
     }
   };
