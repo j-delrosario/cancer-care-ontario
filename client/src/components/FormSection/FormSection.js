@@ -1370,7 +1370,6 @@ class FormSection extends React.Component {
     // TODO: Get list of procedures
 
     // Get list of patients
-    // Get the current user's conversations
     this.getPatients();
   }
 
@@ -1378,7 +1377,6 @@ class FormSection extends React.Component {
     axios
       .get("http://localhost:3001/api/patients")
       .then((res) => {
-        console.log(res.data);
         this.setState({
           patients: res.data,
         });

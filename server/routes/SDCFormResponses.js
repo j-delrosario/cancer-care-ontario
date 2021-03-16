@@ -128,4 +128,28 @@ router.put("/api/responses/:id", async (req, res) => {
   }
 });
 
+// a DELETE route to remove a response by id
+router.delete("/api/responses/:id", mongoChecker, async (req, res) => {
+  const id = req.params.id;
+
+  // Good practise: Validate id immediately.
+  if (!ObjectID.isValid(id)) {
+    res.status(404).send(); // if invalid id, definitely can't find resource, 404.
+    return; // so that we don't run the rest of the handler.
+  }
+
+  // If id valid, findById
+  try {
+    const response = await SDCFormResponse.deleteOne({ _id: id });
+    if (!response) {
+      res.status(404).send("Response not found"); // could not find this patient
+    } else {
+      res.send("deleted");
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Internal Server Error"); // server error
+  }
+});
+
 module.exports = router;
