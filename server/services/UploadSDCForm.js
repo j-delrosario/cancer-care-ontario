@@ -237,9 +237,6 @@ function AddDependenciesToModel(model, form, tab="") {
 
 module.exports = (xmlStr) => {
     let json = JSON.parse(xmlToJson(xmlStr));
-    const fs = require("fs");
-    var writeStream = fs.createWriteStream('./output');
-    writeStream.write(JSON.stringify(json));
     let procedureIDModel = new models.DiagnosticProcedureID({});
     let formModel = new models.SDCForm({});
 
@@ -249,7 +246,8 @@ module.exports = (xmlStr) => {
         procedureIDModel.id = 100.00;
         formModel.id = formDesign.$.ID;
         formModel.diagnosticProcedure = procedureIDModel;
-        formModel.version = formDesign.$.
+        formModel.lineage = formDesign.$.lineage;
+        formModel.version = formDesign.$.version;
         if (formDesign.$.formTitle)
             formModel.title = formDesign.$.formTitle;
         console.log("Form Design found");
@@ -265,4 +263,5 @@ module.exports = (xmlStr) => {
         console.log("Form Model Created");
     }
     SaveModel(formModel);
+    console.log("Form Model Saved");
 }

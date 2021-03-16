@@ -11,7 +11,7 @@ The page and the server will reload if you make edits.
 
 Server is running on port 3001 and is hooked into our MongoDB Atlas cluster.\
 To see and manage the database you will want to install [MongoDB Compass](https://www.mongodb.com/try/download/compass).
-The link to connect Compass to the cluster is mongodb+srv://admin:<123>@cluster0.hxf94.mongodb.net/test
+The link to connect Compass to the cluster is mongodb+srv://admin:123@cluster0.hxf94.mongodb.net/test
 
 ### `npm run install-dependencies`
 
