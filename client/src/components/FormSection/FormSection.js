@@ -4,8 +4,11 @@ import TrueFalse from "../Questions/TrueFalse/TrueFalse";
 import MultipleChoice from "../Questions/MultipleChoice/MultipleChoice";
 import Text from "../Questions/Text/Text";
 import Int from "../Questions/Int/Int";
-import { Button, TextField } from "@material-ui/core";
+import CreatePatient from "../CreatePatient/CreatePatient";
 import Autocomplete from "@material-ui/lab/Autocomplete";
+import axios from "axios";
+import { Button, Modal, TextField } from "@material-ui/core";
+import { Link } from "react-router-dom";
 
 class FormSection extends React.Component {
   state = {
@@ -1359,14 +1362,33 @@ class FormSection extends React.Component {
       title: "ADRENAL GLAND",
     },
     procedures: [{ title: "Adrenal Gland" }],
+    patients: [],
+    patient: null,
+    createPatientModalOpen: false,
   };
   componentDidMount() {
     // TODO: Get list of procedures
+
+    // Get list of patients
+    this.getPatients();
   }
+
+  getPatients = () => {
+    axios
+      .get("http://localhost:3001/api/patients")
+      .then((res) => {
+        this.setState({
+          patients: res.data,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   handleProcedureChange = (event, input) => {
     // TODO: Get form based on procedure
-    console.log("input: ", input);
+    // console.log("input: ", input);
     if (input == null) {
       this.setState({ form: null });
     } else {
@@ -1374,10 +1396,68 @@ class FormSection extends React.Component {
     }
   };
 
+  onPatientChange = (event, input) => {
+    this.setState({
+      patient: input,
+    });
+  };
+
+  canSubmit = () => {
+    return this.state.patient !== null;
+  };
+
+  handleSubmit = () => {
+    console.log("form", this.state.form);
+    console.log("patient", this.state.patient);
+    axios
+      .post("http://localhost:3001/api/responses/", {
+        patient: this.state.patient,
+        form: this.state.form,
+        formTitle: this.state.form.title,
+      })
+      .then((res) => {
+        console.log("form submitted");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   renderForm = () => {
     if (this.state.form !== null) {
       return (
         <div>
+          <Autocomplete
+            className="autocomplete"
+            required
+            noOptionsText={
+              <Button
+                onMouseDown={() => this.handleCreatePatientModalOpen()}
+                variant="contained"
+              >
+                Add New Patient
+              </Button>
+            }
+            value={this.state.patient}
+            onChange={this.onPatientChange}
+            options={this.state.patients}
+            getOptionLabel={(option) => option.name}
+            style={{ width: 300 }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Choose patient"
+                variant="outlined"
+              />
+            )}
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => this.handleCreatePatientModalOpen()}
+          >
+            Add New Patient
+          </Button>
           <h1>{this.state.form.title}</h1>
           {this.state.form.sections.map((section) => (
             <div key={section.id}>
@@ -1400,10 +1480,17 @@ class FormSection extends React.Component {
             </div>
           ))}
           <div className="action-buttons">
-            <Button variant="contained" color="secondary">
-              Cancel
-            </Button>
-            <Button variant="contained" color="primary">
+            <Link to="/">
+              <Button variant="contained" color="secondary">
+                Cancel
+              </Button>
+            </Link>
+            <Button
+              onClick={() => this.handleSubmit()}
+              variant="contained"
+              color="primary"
+              disabled={!this.canSubmit()}
+            >
               Submit
             </Button>
           </div>
@@ -1425,20 +1512,34 @@ class FormSection extends React.Component {
         <MultipleChoice
           isRadio={"is_radio" in questionBody ? questionBody.is_radio : false}
           choices={questionBody.choices}
+          question={questionBody}
         />
       );
     } else if (questionBody.questionType == "String") {
-      return <Text />;
+      return <Text question={questionBody} />;
     } else if (questionBody.questionType == "Int") {
-      return <Int />;
+      return <Int question={questionBody} />;
     }
   }
+
+  handleCreatePatientModalOpen = () => {
+    this.setState({
+      createPatientModalOpen: true,
+    });
+  };
+
+  handleCreatePatientModalClose = () => {
+    this.setState({
+      createPatientModalOpen: false,
+    });
+  };
 
   render() {
     return (
       <div className="container">
         <div>
           <Autocomplete
+            className="autocomplete"
             onChange={this.handleProcedureChange}
             options={this.state.procedures}
             getOptionLabel={(option) => option.title}
@@ -1453,6 +1554,16 @@ class FormSection extends React.Component {
           />
           {this.renderForm()}
         </div>
+        <Modal
+          open={this.state.createPatientModalOpen}
+          onClose={this.handleCreatePatientModalClose}
+          className="create-patient-modal"
+        >
+          <CreatePatient
+            closeModal={this.handleCreatePatientModalClose}
+            reloadPatients={this.getPatients}
+          />
+        </Modal>
       </div>
     );
   }

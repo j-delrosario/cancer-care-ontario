@@ -1,5 +1,6 @@
 import React from "react";
 import TextField from "@material-ui/core/TextField";
+import "./IntResponse.css";
 
 class Int extends React.Component {
   state = { input: "" };
@@ -12,7 +13,10 @@ class Int extends React.Component {
   render() {
     return (
       <div className="numberInputContainer">
-        <TextField
+        <div className="answer">
+          {this.props.question !== undefined ? this.props.question.answer : ""}
+        </div>
+        {/* <TextField
           onChange={this.onInputChange}
           value={this.state.input}
           variant="outlined"
@@ -20,7 +24,7 @@ class Int extends React.Component {
           InputLabelProps={{
             shrink: true,
           }}
-        />
+        /> */}
       </div>
     );
   }
