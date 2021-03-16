@@ -4,7 +4,7 @@ import TextField from "@material-ui/core/TextField";
 
 class Text extends React.Component {
   state = {
-    input: "",
+    input: this.props.question !== undefined ? this.props.question.answer : "",
   };
 
   onInputChange = (event) => {

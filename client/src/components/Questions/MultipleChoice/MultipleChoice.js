@@ -20,7 +20,9 @@ class MultipleChoice extends React.Component {
       // Give choices a checked property to keep track if user checked it
       for (let index = 0; index < this.state.choices.length; index++) {
         const element = this.state.choices[index];
-        element.checked = false;
+        if (element.checked === undefined) {
+          element.checked = false;
+        }
       }
     }
   }

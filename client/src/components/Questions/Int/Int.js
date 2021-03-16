@@ -2,7 +2,9 @@ import React from "react";
 import TextField from "@material-ui/core/TextField";
 
 class Int extends React.Component {
-  state = { input: "" };
+  state = {
+    input: this.props.question !== undefined ? this.props.question.answer : "",
+  };
 
   onInputChange = (event) => {
     const value = event.target.value;
