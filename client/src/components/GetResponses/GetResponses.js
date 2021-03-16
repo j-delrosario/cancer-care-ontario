@@ -51,7 +51,6 @@ class GetResponses extends React.Component {
             });
         }
       );
-      console.log("input", input);
     }
   };
 
@@ -69,7 +68,7 @@ class GetResponses extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="responses-container">
         Responses
         <Autocomplete
           className="autocomplete"

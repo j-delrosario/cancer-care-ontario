@@ -26,7 +26,6 @@ class Response extends React.Component {
   }
 
   render() {
-    console.log("form", this.state.form);
     return (
       <div>
         <h1>{this.state.form.title}</h1>

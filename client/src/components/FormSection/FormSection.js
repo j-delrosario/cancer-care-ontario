@@ -1365,6 +1365,7 @@ class FormSection extends React.Component {
     patients: [],
     patient: null,
     createPatientModalOpen: false,
+    isFormValid: false,
   };
   componentDidMount() {
     // TODO: Get list of procedures
@@ -1388,7 +1389,6 @@ class FormSection extends React.Component {
 
   handleProcedureChange = (event, input) => {
     // TODO: Get form based on procedure
-    // console.log("input: ", input);
     if (input == null) {
       this.setState({ form: null });
     } else {
@@ -1403,12 +1403,11 @@ class FormSection extends React.Component {
   };
 
   canSubmit = () => {
+    // return this.state.patient !== null && this.state.isFormValid;
     return this.state.patient !== null;
   };
 
   handleSubmit = () => {
-    console.log("form", this.state.form);
-    console.log("patient", this.state.patient);
     axios
       .post("http://localhost:3001/api/responses/", {
         patient: this.state.patient,
@@ -1513,14 +1512,33 @@ class FormSection extends React.Component {
           isRadio={"is_radio" in questionBody ? questionBody.is_radio : false}
           choices={questionBody.choices}
           question={questionBody}
+          updateIsFormValid={this.updateIsFormValid}
         />
       );
     } else if (questionBody.questionType == "String") {
-      return <Text question={questionBody} />;
+      return (
+        <Text
+          required={true}
+          question={questionBody}
+          updateIsFormValid={this.updateIsFormValid}
+        />
+      );
     } else if (questionBody.questionType == "Int") {
-      return <Int question={questionBody} />;
+      return (
+        <Int
+          question={questionBody}
+          required={true}
+          updateIsFormValid={this.props.updateIsFormValid}
+        />
+      );
     }
   }
+
+  updateIsFormValid = (value) => {
+    this.setState({
+      isFormValid: value,
+    });
+  };
 
   handleCreatePatientModalOpen = () => {
     this.setState({

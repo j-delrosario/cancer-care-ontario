@@ -9,18 +9,26 @@ class Text extends React.Component {
 
   onInputChange = (event) => {
     const value = event.target.value;
-    const name = event.target.name;
     this.setState({
       input: value,
     });
 
     this.props.question.answer = value;
+    if (value !== "" && this.props.required) {
+      this.props.updateIsFormValid(true);
+    } else {
+      this.props.updateIsFormValid(false);
+    }
   };
 
   render() {
     return (
       <div className="textFieldContainer">
         <TextField
+          helperText={
+            this.props.required && this.state.input === "" ? "Required" : ""
+          }
+          error={this.props.required && this.state.input === ""}
           value={this.state.input}
           onChange={this.onInputChange}
           fullWidth
