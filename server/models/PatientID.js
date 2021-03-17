@@ -2,11 +2,12 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 var PatientID = mongoose.model("PatientID", {
-  // id: {type: Number, required: true},
+  // patient's _id is type: mongoose.Schema.Types.ObjectId
   name: String,
   OHIPNumber: Number,
-  responses: [Number], //TODO: replace with SDCQuestionResponse?,
+  responses: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "SDCFormResponse"}], //Should delete this?
 });
 
-// module.exports = mongoose.model("PatientID", PatientID);
-module.exports = { PatientID };
+module.exports = mongoose.model("PatientID", PatientID);

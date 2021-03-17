@@ -7,7 +7,9 @@ var DiagnosticProcedureID = new Schema({
     procedureForm: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "SDCForm"},
-    responses: [Number], //TODO: replace with SDCQuestionResponse?,
+        responses: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "SDCFormResponse"}], //Is storing this more efficient than just searching the responses?
     });
 
 module.exports = mongoose.model("DiagnosticProcedureID", DiagnosticProcedureID);
