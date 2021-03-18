@@ -37,7 +37,7 @@ class App extends React.Component {
   })
   .then(res => console.log(res.json()))
 
-getDummyData = () => axios.get(`http://localhost:3001/api/asd`)
+getDummyData = () => axios.get(`http://localhost:3001/api/ADRENAL GLAND`)
   .then(function (response) {
     // handle success
     console.log(response.data)
