@@ -2,9 +2,10 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 var PersistentFilledFormLocator = new Schema({
-    id: {type: Number, required: true}, //Should this be the id of the SDCQuestionResponse or an id just for the locator? I think it should be the response ID
-    filledform: Number, //TODO: replace with SDCQuestionResponse?,
-    url: String,
+    filledform: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "SDCFormResponse"}, // This is the _id of the relevant SDCFormResponse
+    url: {type: String, default: this._id.str}
     });
 
 module.exports = mongoose.model("PersistentFilledFormLocator", PersistentFilledFormLocator);
