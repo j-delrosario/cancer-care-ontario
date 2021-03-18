@@ -25,9 +25,9 @@ class App extends React.Component {
     this.setState({value: event.target.value});
   }
 
-  sendDummyData = () => fetch("http://localhost:3001/api/saveSDCForm", {
-    method: 'POST', 
-    headers: { 'Content-Type': 'application/json' }, 
+  sendDummyData = () => fetch("http://localhost:3001/api/SDCForm", {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       "id":num,
       "diagnosticProcedure": 1,
@@ -37,7 +37,21 @@ class App extends React.Component {
   })
   .then(res => console.log(res.json()))
 
-getDummyData = () => axios.get(`http://localhost:3001/api/getSDCForm?id=${num}`)
+getDummyData = () => axios.get(`http://localhost:3001/api/asd`)
+  .then(function (response) {
+    // handle success
+    console.log(response.data)
+    alert(response.data.questions)
+  })
+  .catch(function (error) {
+    // handle error
+    console.log(error);
+  })
+  .then(function () {
+    // always executed
+  });
+
+  deleteDummyData = () => axios.delete(`http://localhost:3001/api/SDCForm/ADRENAL GLAND`, {data: ""})
   .then(function (response) {
     // handle success
     console.log(response.data)
@@ -68,6 +82,7 @@ getDummyData = () => axios.get(`http://localhost:3001/api/getSDCForm?id=${num}`)
     </p> : <p></p>}
         <button onClick={this.sendDummyData}>SEND DUMMY DATA</button>
         <button onClick={this.getDummyData}>GET DUMMY DATA</button>
+        <button onClick={this.deleteDummyData}>DELETE DUMMY DATA</button>
         {this.state.getResponse === null ? <p></p> : <p>{this.state.getResponse}</p>}
       </div>
     );
