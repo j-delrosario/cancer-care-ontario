@@ -4,21 +4,13 @@ const patientModel = require('../models/PatientID');
 const routes = require("./routes");
 
 module.exports = () => {
-	const app = express.Router();
+  const app = express.Router();
 
-	app.get('/', (req, res) => {
-		res.send('Server Running ;)');
-	  });
+  app.get("/", (req, res) => {
+    res.send("Server Running ;)");
+  });
 
-	// PATIENT
-	app.get('/getPatient', async (req, res) => {
-		try {
-		  const patient = await patientModel.findOne({"id": req.id}, {})
-		  res.send(patient)
-		} catch (err) {
-		  res.status(500).send(err);
-		}
-	  });
+  // PATIENT
 
 	app.post('/savePatient', async (req, res) => {
 		const patient = new patientModel(req.body);
@@ -34,5 +26,16 @@ module.exports = () => {
 
 	app.use('/diagnosticProcedure', routes.diagnosticProcedureRoutes);
 
-	return app
-}
+  // If you want to actually upload an example to DB swap the comment on UploadSDCForm
+  app.post("/saveSDCForm", async (req, res) => {
+    try {
+      //await UploadSDCForm(xmlStr);
+      await UploadSDCForm(req.body);
+      res.status(200).send();
+    } catch (err) {
+      res.status(500).send(err);
+    }
+  });
+
+  return app;
+};
