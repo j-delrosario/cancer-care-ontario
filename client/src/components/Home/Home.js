@@ -25,7 +25,7 @@ class Home extends React.Component {
   }
 
   sendDummyData = () =>
-    fetch("http://localhost:3001/api/saveSDCForm", {
+    fetch("http://localhost:3001/api/SDCForm", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -38,7 +38,7 @@ class Home extends React.Component {
 
   getDummyData = () =>
     axios
-      .get(`http://localhost:3001/api/getSDCForm?id=${num}`)
+      .get(`http://localhost:3001/api/SDCForm/ADRENAL GLAND`)
       .then(function (response) {
         // handle success
         console.log(response.data);
@@ -51,6 +51,22 @@ class Home extends React.Component {
       .then(function () {
         // always executed
       });
+
+  deleteDummyData = () =>
+  axios
+    .delete(`http://localhost:3001/api/SDCForm/ADRENAL GLAND`, {data: ""})
+    .then(function (response) {
+      // handle success
+      console.log(response.data);
+      alert(response.data.questions);
+    })
+    .catch(function (error) {
+      // handle error
+      console.log(error);
+    })
+    .then(function () {
+      // always executed
+    });
 
   render() {
     return (
@@ -78,6 +94,7 @@ class Home extends React.Component {
         )}
         <button onClick={this.sendDummyData}>SEND DUMMY DATA</button>
         <button onClick={this.getDummyData}>GET DUMMY DATA</button>
+        <button onClick={this.deleteDummyData}>DELETE DUMMY DATA</button>
         {this.state.getResponse === null ? (
           <p></p>
         ) : (

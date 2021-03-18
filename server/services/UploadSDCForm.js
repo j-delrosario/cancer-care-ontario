@@ -118,17 +118,13 @@ function AddStringQuestionBodyToModel(model, question) {
 
 function AddMultipleChoiceQuestionBodyToModel(model, question, tab="") {
     AddQuestionBodyToModel(model, question);
-    if (question.ListField[0].$.maxSelections == 1)
-        model.isRadio = true;
     question.ListField[0].List[0].ListItem.forEach( (listItem) => {
         let multipleChoiceModel = multipleChoiceBodyModel = null;
         console.log(tab + "Creating Multiple Choice option as " + TypeOfListItem(listItem) + " Question with ID: " + listItem.$.ID + " and Order #: " + listItem.$.order);
         multipleChoiceModel = new models.SDCQuestion({id: listItem.$.ID, orderNumber: listItem.$.order});
 
-        if (listItem.$.selectionDisablesChildren)
-            multipleChoiceModel.selectionDisablesChildren = true;
-        if (listItem.$.selectionDeselectsSiblings)
-            multipleChoiceModel.selectionDeselectsSiblings = true;
+        multipleChoiceModel.selectionDisablesChildren = listItem.$.selectionDisablesChildren ?  true : false;
+        multipleChoiceModel.selectionDeselectsSiblings = listItem.$.selectionDeselectsSiblings ? true : false;
 
         switch (TypeOfListItem(listItem)) {
             case "Int":
@@ -235,21 +231,28 @@ function AddDependenciesToModel(model, form, tab="") {
     }
 }
 
-module.exports = (xmlStr) => {
+module.exports = async (xmlStr) => {
     let json = JSON.parse(xmlToJson(xmlStr));
     let procedureIDModel = new models.DiagnosticProcedureID({});
     let formModel = new models.SDCForm({});
 
+    if (json.hasOwnProperty("SDCPackage")) {
+        json = Array.isArray(json.SDCPackage) ? json.SDCPackage[0] : json.SDCPackage;
+    }
+    if (json.hasOwnProperty("XMLPackage")) {
+        json = Array.isArray(json.XMLPackage) ? json.XMLPackage[0] : json.XMLPackage;
+    }
     if (json.hasOwnProperty("FormDesign")){
-        formDesign = json.FormDesign;
-        //TODO: find out what ID to use for this
-        procedureIDModel.id = 100.00;
+        formDesign = Array.isArray(json.FormDesign) ? json.FormDesign[0] : json.FormDesign;
+        if (formDesign.$.formTitle) {
+            procedureIDModel.id = formDesign.$.formTitle;
+            formModel.title = formDesign.$.formTitle;
+        }
         formModel.id = formDesign.$.ID;
         formModel.diagnosticProcedure = procedureIDModel;
         formModel.lineage = formDesign.$.lineage;
         formModel.version = formDesign.$.version;
-        if (formDesign.$.formTitle)
-            formModel.title = formDesign.$.formTitle;
+
         console.log("Form Design found");
     }
     SaveModel(procedureIDModel);
