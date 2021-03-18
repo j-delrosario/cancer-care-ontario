@@ -11,6 +11,7 @@ const xmlStrLung = require('../../xml/PKG_LDCT_LUNG_forStudents');
 const saveSDCForm =  async (req, res) => {
 
     try {
+        //Switch comments if you want to test Frontend
         await UploadSDCForm(xmlStrAdrenal);
         //await UploadSDCForm(xmlStrLung);
         //await UploadSDCForm(req.body);
