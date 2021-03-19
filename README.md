@@ -89,4 +89,4 @@ For this project, we prototype our own structured EMR capable of storing these s
 
 There exists an endpoint for our structured EMR prototype that retrieves structured clinical notes as jsons and a family doctor UI that renders them.  
 
-The authentication, authorization and advanced query capabilities of the structured EMR are beyond the scope of this project (other than the queries you need to test it).  
+The authentication, authorization and advanced query capabilities of the structured EMR are beyond the scope of this project (other than the queries needed to test it).  

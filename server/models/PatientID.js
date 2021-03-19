@@ -1,7 +1,7 @@
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
-var PatientID = mongoose.model("PatientID", {
+var PatientID = new Schema({
   // patient's _id is type: mongoose.Schema.Types.ObjectId
   name: String,
   OHIPNumber: Number,
