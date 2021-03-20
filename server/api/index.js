@@ -24,5 +24,7 @@ module.exports = () => {
 
 	app.use('/DiagnosticProcedure', routes.diagnosticProcedureRoutes);
 
+	app.use('/PersistentLocator', routes.PFFLRoutes);
+
   return app;
 };
