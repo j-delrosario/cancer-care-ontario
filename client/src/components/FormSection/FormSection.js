@@ -134,6 +134,8 @@ class FormSection extends React.Component {
         formFiller: this.state.formFiller,
       })
       .then((res) => {
+        console.log(res.data._id) // url
+        let url = res.data._id
         console.log("form submitted");
 
         // Open success message
@@ -143,7 +145,7 @@ class FormSection extends React.Component {
           </div>
         );
         this.props.appState.handleOpenSnackbarMessage("success", message);
-        this.props.history.push("/"); // Go to homepage
+        this.props.history.push(`/?responseID=${url}`); // Go to homepage
       })
       .catch((err) => {
         console.log(err);
