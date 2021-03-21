@@ -17,9 +17,9 @@ class Navbar extends React.Component {
             <Link to="/form-filler" className="link">
               Form Filler
             </Link>
-            <Link to="/responses" className="link">
+            {/* <Link to="/responses" className="link">
               Responses
-            </Link>
+            </Link> */}
           </Toolbar>
         </AppBar>
       </div>
