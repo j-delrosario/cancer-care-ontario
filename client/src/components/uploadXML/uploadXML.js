@@ -1,10 +1,22 @@
 import React from 'react'
-import {DropzoneArea} from 'material-ui-dropzone'
+import {Button} from '@material-ui/core'
+import { DropzoneArea } from 'material-ui-dropzone'
+import './uploadXML.css'
 const UploadXML = (props) => {
-    const { onUpload } = props;
+    const { onUpload, onSubmit } = props;
     return (
-        <DropzoneArea
-            onChange={onUpload} />
+        <div >
+            <DropzoneArea
+                // acceptedFiles={['application/xml']}
+                className="upload-base"
+                onChange={onUpload}
+                showAlerts
+            />
+            <Button style={{
+                marginTop: '20px',
+                marginBottom: "20px"
+            }} variant="contained" onClick={onSubmit}>Submit</Button>
+        </div>
     )
 }
 

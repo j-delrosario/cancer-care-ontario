@@ -20,6 +20,9 @@ class Navbar extends React.Component {
             <Link to="/responses" className="link">
               Responses
             </Link>
+            <Link to="/formmanager" className="link">
+              Form Manager
+            </Link>
           </Toolbar>
         </AppBar>
       </div>
