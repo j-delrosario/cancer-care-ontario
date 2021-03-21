@@ -5,6 +5,7 @@ import MultipleChoice from "../Questions/MultipleChoice/MultipleChoice";
 import Text from "../Questions/Text/Text";
 import Int from "../Questions/Int/Int";
 import CreatePatient from "../CreatePatient/CreatePatient";
+import CreateFormFiller from "../CreateFormFiller/CreateFormFiller";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import axios from "axios";
 import { Button, Modal, TextField } from "@material-ui/core";
@@ -1361,24 +1362,30 @@ class FormSection extends React.Component {
       title: "ADRENAL GLAND",
     },
     form:
-      this.props.location !== undefined
-        ? this.props.location.state.response.form
+      this.props.location.state !== undefined
+        ? this.props.location.state.response.SDCForm
         : null, // check if form has been sent from edit
     procedures: [{ title: "Adrenal Gland" }],
     procedure:
-      this.props.location !== undefined
+      this.props.location.state !== undefined
         ? { title: "Adrenal Gland" } // TODO: Change when diagnostic prodecure name/title is captured
         : null,
     patients: [],
     patient:
-      this.props.location !== undefined
+      this.props.location.state !== undefined
         ? this.props.location.state.response.patient
         : null,
+    formFillers: [],
+    formFiller:
+      this.props.location.state !== undefined
+        ? this.props.location.state.response.formFiller
+        : null,
     createPatientModalOpen: false,
+    createFormFillerModalOpen: false,
     isFormValid: false,
     editMode: false,
     response:
-      this.props.location !== undefined
+      this.props.location.state !== undefined
         ? this.props.location.state.response
         : null,
   };
@@ -1387,7 +1394,8 @@ class FormSection extends React.Component {
     console.log("this.state.form", this.state.form);
 
     // If a form has been sent in from clicking the edit button, then we are in edit mode
-    if (this.props.location !== undefined) {
+    console.log(this.props);
+    if (this.props.location.state !== undefined) {
       this.setState({
         editMode: true,
       });
@@ -1396,14 +1404,28 @@ class FormSection extends React.Component {
 
     // Get list of patients
     this.getPatients();
+    this.getFormFillers();
   }
 
   getPatients = () => {
     axios
-      .get("http://localhost:3001/api/patients")
+      .get("http://localhost:3001/api/Patient/patients")
       .then((res) => {
         this.setState({
           patients: res.data,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  getFormFillers = () => {
+    axios
+      .get("http://localhost:3001/api/FormFiller/formFillers")
+      .then((res) => {
+        this.setState({
+          formFillers: res.data,
         });
       })
       .catch((err) => {
@@ -1426,6 +1448,12 @@ class FormSection extends React.Component {
     });
   };
 
+  onFormFillerChange = (event, input) => {
+    this.setState({
+      formFiller: input,
+    });
+  };
+
   canSubmit = () => {
     // return this.state.patient !== null && this.state.isFormValid;
     return this.state.patient !== null;
@@ -1433,10 +1461,11 @@ class FormSection extends React.Component {
 
   handleSubmit = () => {
     axios
-      .post("http://localhost:3001/api/responses/", {
+      .post("http://localhost:3001/api/SDCFormResponse/responses/", {
         patient: this.state.patient,
-        form: this.state.form,
+        SDCForm: this.state.form,
         formTitle: this.state.form.title,
+        formFiller: this.state.formFiller,
       })
       .then((res) => {
         console.log("form submitted");
@@ -1448,11 +1477,16 @@ class FormSection extends React.Component {
 
   handleUpdate = () => {
     axios
-      .put("http://localhost:3001/api/responses/" + this.state.response._id, {
-        patient: this.state.patient,
-        form: this.state.form,
-        formTitle: this.state.form.title,
-      })
+      .put(
+        "http://localhost:3001/api/SDCFormResponse/responses/" +
+          this.state.response._id,
+        {
+          patient: this.state.patient,
+          SDCForm: this.state.form,
+          formTitle: this.state.form.title,
+          formFiller: this.state.formFiller,
+        }
+      )
       .then((res) => {
         console.log("form updated");
       })
@@ -1491,37 +1525,40 @@ class FormSection extends React.Component {
     if (this.state.form !== null) {
       return (
         <div>
-          <Autocomplete
-            className="autocomplete"
-            required
-            noOptionsText={
-              <Button
-                onMouseDown={() => this.handleCreatePatientModalOpen()}
-                variant="contained"
-              >
-                Add New Patient
-              </Button>
-            }
-            value={this.state.patient}
-            onChange={this.onPatientChange}
-            options={this.state.patients}
-            getOptionLabel={(option) => option.name}
-            style={{ width: 300 }}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Choose patient"
-                variant="outlined"
-              />
-            )}
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => this.handleCreatePatientModalOpen()}
-          >
-            Add New Patient
-          </Button>
+          <div className="patient-container">
+            <Autocomplete
+              className="autocomplete"
+              required
+              noOptionsText={
+                <Button
+                  onMouseDown={() => this.handleCreatePatientModalOpen()}
+                  variant="contained"
+                >
+                  Add New Patient
+                </Button>
+              }
+              value={this.state.patient}
+              onChange={this.onPatientChange}
+              options={this.state.patients}
+              getOptionLabel={(option) => option.name}
+              style={{ width: 300 }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Choose patient"
+                  variant="outlined"
+                />
+              )}
+            />
+            <div className="or">-- OR --</div>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => this.handleCreatePatientModalOpen()}
+            >
+              Add New Patient
+            </Button>
+          </div>
           <h1>{this.state.form.title}</h1>
           {this.state.form.sections.map((section) => (
             <div key={section.id}>
@@ -1610,10 +1647,42 @@ class FormSection extends React.Component {
     });
   };
 
+  handleCreateFormFillerModalOpen = () => {
+    this.setState({
+      createFormFillerModalOpen: true,
+    });
+  };
+
+  handleCreateFormFillerModalClose = () => {
+    this.setState({
+      createFormFillerModalOpen: false,
+    });
+  };
+
   render() {
     return (
       <div className="container">
         <div>
+          <Autocomplete
+            className="autocomplete"
+            required
+            noOptionsText={
+              <Button
+                onMouseDown={() => this.handleCreateFormFillerModalOpen()}
+                variant="contained"
+              >
+                Add New Form Filler
+              </Button>
+            }
+            value={this.state.formFiller}
+            onChange={this.onFormFillerChange}
+            options={this.state.formFillers}
+            getOptionLabel={(option) => option.name}
+            style={{ width: 300 }}
+            renderInput={(params) => (
+              <TextField {...params} label="Form Filler" variant="outlined" />
+            )}
+          />
           <Autocomplete
             value={this.state.procedure}
             className="autocomplete"
@@ -1639,6 +1708,16 @@ class FormSection extends React.Component {
           <CreatePatient
             closeModal={this.handleCreatePatientModalClose}
             reloadPatients={this.getPatients}
+          />
+        </Modal>
+        <Modal
+          open={this.state.createFormFillerModalOpen}
+          onClose={this.handleCreateFormFillerModalClose}
+          className="create-patient-modal"
+        >
+          <CreateFormFiller
+            closeModal={this.handleCreateFormFillerModalClose}
+            reloadFormFillers={this.getFormFillers}
           />
         </Modal>
       </div>

@@ -1,13 +1,13 @@
 const express = require("express");
 
-const MovieCtrl = require("../controllers/movie-ctrl");
+const PatientContoller = require("../controllers/patientController");
 
 const router = express.Router();
 
-router.post("/movie", MovieCtrl.createMovie);
-router.put("/movie/:id", MovieCtrl.updateMovie);
-router.delete("/movie/:id", MovieCtrl.deleteMovie);
-router.get("/movie/:id", MovieCtrl.getMovieById);
-router.get("/movies", MovieCtrl.getMovies);
+router.post("/patients", PatientContoller.createPatient);
+router.put("/patients/:id", PatientContoller.updatePatient);
+router.delete("/patients/:id", PatientContoller.deletePatient);
+router.get("/patients/:id", PatientContoller.getPatientById);
+router.get("/patients", PatientContoller.getPatients);
 
 module.exports = router;

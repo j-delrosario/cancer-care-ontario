@@ -84,7 +84,7 @@ router.put("/api/patients/:id", async (req, res) => {
     const patient = await PatientID.findOneAndReplace({ _id: id }, req.body, {
       new: true,
     });
-    if (!user) {
+    if (!patient) {
       res.status(404).send();
     } else {
       res.send(patient);

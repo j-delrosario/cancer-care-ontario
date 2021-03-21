@@ -8,7 +8,7 @@ import MultipleChoiceResponse from "../Responses/MultipleChoiceResponse/Multiple
 import "./Response.css";
 
 class Response extends React.Component {
-  state = { form: this.props.response.form };
+  state = { form: this.props.response.SDCForm };
 
   renderQuestionType(questionBody) {
     if (questionBody.questionType == "MultipleChoice") {
