@@ -1,3 +1,9 @@
 .response-link {
   text-decoration: none;
 }
+
+.left-buttons {
+  width: 200px;
+  display: flex;
+  justify-content: space-between;
+}

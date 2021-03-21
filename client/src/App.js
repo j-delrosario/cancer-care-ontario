@@ -6,8 +6,31 @@ import Navbar from "./components/Navbar/Navbar";
 import Home from "./components/Home/Home";
 import FormSection from "./components/FormSection/FormSection";
 import GetResponses from "./components/GetResponses/GetResponses";
+import FormFiller from "./components/FormFiller/FormFiller";
+import { Snackbar } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
 
 class App extends React.Component {
+  state = {
+    openSnackbarMessage: false,
+    snackbarSeverity: "",
+    snackbarMessage: "",
+  };
+
+  handleOpenSnackbarMessage = (severity, message) => {
+    this.setState({
+      snackbarSeverity: severity,
+      snackbarMessage: message,
+      openSnackbarMessage: true,
+    });
+  };
+
+  handleCloseSnackbarMessage = () => {
+    this.setState({
+      openSnackbarMessage: false,
+    });
+  };
+
   render() {
     return (
       <div>
@@ -32,13 +55,13 @@ class App extends React.Component {
               render={() => (
                 <div>
                   <Navbar />
-                  <FormSection />
+                  <FormFiller appState={this} />
                 </div>
               )}
             ></Route>
           </Switch>
 
-          <Switch>
+          {/* <Switch>
             <Route
               exact
               path="/responses"
@@ -49,8 +72,20 @@ class App extends React.Component {
                 </div>
               )}
             ></Route>
-          </Switch>
+          </Switch> */}
         </BrowserRouter>
+        <Snackbar
+          open={this.state.openSnackbarMessage}
+          autoHideDuration={10000}
+          onClose={this.handleCloseSnackbarMessage}
+        >
+          <Alert
+            onClose={this.handleCloseSnackbarMessage}
+            severity={this.state.snackbarSeverity}
+          >
+            {this.state.snackbarMessage}
+          </Alert>
+        </Snackbar>
       </div>
     );
   }

@@ -28,6 +28,13 @@ class GetResponses extends React.Component {
   };
 
   onPatientChange = (event, input) => {
+    // Reset responses
+    this.setState({
+      responses: [],
+      formResponse: null,
+    });
+
+    // Get responses by user
     if (input !== null) {
       this.setState(
         {
@@ -54,6 +61,14 @@ class GetResponses extends React.Component {
     }
   };
 
+  reset = () => {
+    this.setState({
+      responses: [],
+      formResponse: null,
+      patient: null,
+    });
+  };
+
   handleResponseChange = (response) => {
     this.setState({
       formResponse: response,
@@ -62,14 +77,41 @@ class GetResponses extends React.Component {
 
   renderFormResponse = () => {
     if (this.state.formResponse !== null) {
-      return <Response response={this.state.formResponse} />;
+      return (
+        <Response
+          response={this.state.formResponse}
+          reset={this.reset} // clear patient and responses on page
+          resetTab={this.props.resetTab} // set tab back to new form tab for editMode
+          appState={this.props.appState}
+        />
+      );
+    }
+  };
+
+  renderResponses = () => {
+    if (this.state.responses.length === 0 && this.state.patient !== null) {
+      return <div>No responses</div>;
+    } else {
+      return (
+        <div>
+          {this.state.responses.map((response) => (
+            <div key={response._id}>
+              <div className="formTitle">
+                <Button onClick={() => this.handleResponseChange(response)}>
+                  {response.SDCForm.title}
+                </Button>
+              </div>
+            </div>
+          ))}
+          {this.renderFormResponse()}
+        </div>
+      );
     }
   };
 
   render() {
     return (
       <div className="responses-container">
-        Responses
         <Autocomplete
           className="autocomplete"
           value={this.state.patient}
@@ -81,16 +123,7 @@ class GetResponses extends React.Component {
             <TextField {...params} label="Choose patient" variant="outlined" />
           )}
         />
-        {this.state.responses.map((response) => (
-          <div key={response._id}>
-            <div className="formTitle">
-              <Button onClick={() => this.handleResponseChange(response)}>
-                {response.SDCForm.title}
-              </Button>
-            </div>
-          </div>
-        ))}
-        {this.renderFormResponse()}
+        {this.renderResponses()}
       </div>
     );
   }

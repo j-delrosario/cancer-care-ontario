@@ -1,0 +1,10 @@
+.deleteModal {
+  width: 500px;
+  height: 200px;
+  margin: auto;
+  padding: 10px;
+}
+
+.deleteModalContent {
+  text-align: center;
+}
