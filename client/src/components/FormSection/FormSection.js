@@ -145,7 +145,7 @@ class FormSection extends React.Component {
           </div>
         );
         this.props.appState.handleOpenSnackbarMessage("success", message);
-        this.props.history.push(`/?responseID=${url}`); // Go to homepage
+        this.props.history.push(`/form-response?id=${url}`); // Go to homepage
       })
       .catch((err) => {
         console.log(err);
