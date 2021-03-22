@@ -64,12 +64,11 @@ class App extends React.Component {
 
           <Switch>
             <Route
-              exact
-              path="/form-response"
-              render={() => (
+              path="/form-response/:id"
+              render={(props) => (
                 <div>
                   <Navbar />
-                  <FormResponse appState={this} />
+                  <FormResponse {...props} appState={this} />
                 </div>
               )}
             ></Route>

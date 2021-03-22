@@ -43,11 +43,7 @@ class FormSection extends React.Component {
     sdcForms: [],
   };
   componentDidMount() {
-    console.log("this.props", this.props);
-    console.log("this.state.form", this.state.form);
-
     // If a form has been sent in from clicking the edit button, then we are in edit mode
-    console.log(this.props);
     if (this.props.location.state !== undefined) {
       this.setState({
         editMode: true,
@@ -64,7 +60,6 @@ class FormSection extends React.Component {
     axios
       .get("http://localhost:3001/api/SDCForm/")
       .then((res) => {
-        console.log(res.data);
         this.setState({
           sdcForms: res.data,
         });
@@ -134,8 +129,8 @@ class FormSection extends React.Component {
         formFiller: this.state.formFiller,
       })
       .then((res) => {
-        console.log(res.data._id) // url
-        let url = res.data._id
+        console.log(res.data._id); // url
+        let url = res.data._id;
         console.log("form submitted");
 
         // Open success message

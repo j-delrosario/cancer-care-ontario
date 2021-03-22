@@ -13,7 +13,6 @@ class DeleteResponse extends React.Component {
           this.state.response._id
       )
       .then((res) => {
-        console.log(res.data);
         this.props.closeModal();
         this.props.reset();
 
