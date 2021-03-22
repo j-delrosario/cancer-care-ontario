@@ -48,7 +48,6 @@ class GetResponses extends React.Component {
                 this.state.patient._id
             )
             .then((res) => {
-              // console.log(res.data);
               this.setState({
                 responses: res.data,
               });
@@ -83,6 +82,7 @@ class GetResponses extends React.Component {
           reset={this.reset} // clear patient and responses on page
           resetTab={this.props.resetTab} // set tab back to new form tab for editMode
           appState={this.props.appState}
+          canEdit={true}
         />
       );
     }

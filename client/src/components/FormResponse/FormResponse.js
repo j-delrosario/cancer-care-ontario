@@ -2,13 +2,13 @@ import React, { Component } from "react";
 import Response from "../Response/Response";
 import axios from "axios";
 class FormResponse extends React.Component {
-  state = { 
-      response: "" 
-    };
+  state = {
+    response: "",
+  };
 
   componentDidMount() {
-    let id = window.location.href.slice(39).trim()
-    this.getResponseInfo(id)
+    const responseId = this.props.match.params.id;
+    this.getResponseInfo(responseId);
   }
 
   getResponseInfo = (id) => {
@@ -27,7 +27,11 @@ class FormResponse extends React.Component {
   render() {
     return (
       <div>
-          { this.state.response === "" ? <Response response={this.state.response} /> : <p>URL not found!</p>}
+        {this.state.response !== "" ? (
+          <Response response={this.state.response} />
+        ) : (
+          <p>URL not found!</p>
+        )}
       </div>
     );
   }
