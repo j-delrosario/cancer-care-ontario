@@ -7,6 +7,7 @@ import Home from "./components/Home/Home";
 import FormSection from "./components/FormSection/FormSection";
 import GetResponses from "./components/GetResponses/GetResponses";
 import FormFiller from "./components/FormFiller/FormFiller";
+import FormResponse from "./components/FormResponse/FormResponse";
 import { Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 
@@ -56,6 +57,19 @@ class App extends React.Component {
                 <div>
                   <Navbar />
                   <FormFiller appState={this} />
+                </div>
+              )}
+            ></Route>
+          </Switch>
+
+          <Switch>
+            <Route
+              exact
+              path="/form-response"
+              render={() => (
+                <div>
+                  <Navbar />
+                  <FormResponse appState={this} />
                 </div>
               )}
             ></Route>
