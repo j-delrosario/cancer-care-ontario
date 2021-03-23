@@ -3,7 +3,7 @@ import React from "react";
 import { Route, Switch, BrowserRouter } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 import Home from "./components/Home/Home";
-import FormSection from "./components/FormSection/FormSection";
+import CreateEditForm from "./components/CreateEditForm/CreateEditForm";
 import GetResponses from "./components/GetResponses/GetResponses";
 import FormFiller from "./components/FormFiller/FormFiller";
 import FormResponse from "./components/FormResponse/FormResponse";
@@ -72,7 +72,6 @@ class App extends React.Component {
               )}
             ></Route>
           </Switch>
-
           <Switch>
             <Route
               exact
@@ -101,7 +100,7 @@ class App extends React.Component {
         </BrowserRouter>
         <Snackbar
           open={this.state.openSnackbarMessage}
-          autoHideDuration={10000}
+          autoHideDuration={5000}
           onClose={this.handleCloseSnackbarMessage}
         >
           <Alert
