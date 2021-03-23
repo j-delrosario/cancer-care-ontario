@@ -8,10 +8,7 @@ class DeleteResponse extends React.Component {
 
   handleSubmit = () => {
     axios
-      .delete(
-        "http://localhost:3001/api/SDCFormResponse/responses/" +
-          this.state.response._id
-      )
+      .delete("/api/SDCFormResponse/responses/" + this.state.response._id)
       .then((res) => {
         this.props.closeModal();
         this.props.reset();
@@ -26,6 +23,14 @@ class DeleteResponse extends React.Component {
       })
       .catch((err) => {
         console.log(err);
+
+        // Open failure message
+        const message = (
+          <div>
+            <h2>Response not deleted</h2>
+          </div>
+        );
+        this.props.appState.handleOpenSnackbarMessage("error", message);
       });
   };
 
