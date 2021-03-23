@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Tabs, Tab } from "@material-ui/core";
 import GetResponses from "../GetResponses/GetResponses";
-import FormSection from "../FormSection/FormSection";
+import CreateEditForm from "../CreateEditForm/CreateEditForm";
 class FormFiller extends React.Component {
   state = {
     tab:
@@ -22,7 +22,7 @@ class FormFiller extends React.Component {
   renderTab = () => {
     if (this.state.tab === 0) {
       return (
-        <FormSection
+        <CreateEditForm
           appState={this.props.appState}
           response={this.props.response}
         />

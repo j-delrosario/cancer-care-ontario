@@ -25,16 +25,30 @@ class CreatePatient extends React.Component {
 
   handleSubmit = () => {
     axios
-      .post("http://localhost:3001/api/Patient/patients/", {
+      .post("/api/Patient/patients/", {
         name: this.state.name,
         OHIPNumber: this.state.ohip,
       })
       .then((res) => {
         this.props.closeModal();
         this.props.reloadPatients();
+        // Open success message
+        const message = (
+          <div>
+            <h2>Patient Added!</h2>
+          </div>
+        );
+        this.props.appState.handleOpenSnackbarMessage("success", message);
       })
       .catch((err) => {
         console.log(err);
+        // Open failure message
+        const message = (
+          <div>
+            <h2>Patient not added!</h2>
+          </div>
+        );
+        this.props.appState.handleOpenSnackbarMessage("error", message);
       });
   };
 
