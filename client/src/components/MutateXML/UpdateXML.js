@@ -21,7 +21,7 @@ const MutateXML = (props) => {
             <DropzoneDialog
                     open={open}
                     // onSave={this.handleSave.bind(this)}
-                    // acceptedFiles={['application/xml']}
+                    acceptedFiles={['application/xml']}
                     // showPreviews={true}
                     // maxFileSize={5000000}
                     onClose={() => setOpen(false)}

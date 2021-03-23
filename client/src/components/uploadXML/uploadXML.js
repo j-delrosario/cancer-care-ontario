@@ -7,7 +7,7 @@ const UploadXML = (props) => {
     return (
         <div >
             <DropzoneArea
-                // acceptedFiles={['application/xml']}
+                acceptedFiles={['application/xml']}
                 className="upload-base"
                 onChange={onUpload}
                 showAlerts

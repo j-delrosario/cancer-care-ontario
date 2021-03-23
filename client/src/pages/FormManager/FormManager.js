@@ -9,6 +9,7 @@ import './FormManager.css'
 
 const FormManager = () => {
     const [xmlFile, setXMLFile] = useState(null);
+    const [updatedXMLFile, setUpdatedXMLFile] = useState(null);
     const [deleteId, setDeleteId] = useState('');
     // const [updateId, setUpdateId] = useState('');
 
