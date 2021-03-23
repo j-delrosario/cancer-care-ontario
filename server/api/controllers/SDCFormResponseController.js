@@ -32,6 +32,31 @@ const getResponsesByUserId = async (req, res) => {
   }
 };
 
+const searchResponses = async (req, res) => {
+  //This should perhaps replace getResponses and take its name.
+  try {
+    query = {};
+    if (req.query.patientID) {
+      query["patientID"] = ObjectID(req.query.patientID);
+    }
+    if (req.query.patientID) {
+      query["diagnosticProcedureID"] = ObjectID(req.query.diagnosticProcedureID);
+    }
+    if (req.query.patientID) {
+      query["timestamp"] = ObjectID(req.query.timestamp);
+    }
+    
+    diagnosticProcedureID = ObjectID(req.query.diagnosticProcedureID);
+    timestamp = Date(req.query.time);
+
+    const responses = await SDCFormResponse.find(query);
+    res.send(responses);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send(err);
+  }
+};
+
 const createResponse = async (req, res) => {
   try {
     // Create a new SDCFormResponse
@@ -103,4 +128,5 @@ module.exports = {
   createResponse,
   updateResponse,
   deleteResponse,
+  searchResponses,
 };

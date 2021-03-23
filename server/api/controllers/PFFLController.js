@@ -4,7 +4,7 @@ const SDCFormResponseModel = require('../../models/FormResponses/SDCFormResponse
 const findURLForFormResponseByID = async (req, res) => {
     try {
         const SDCFormResponse = await SDCFormResponseModel.findOne({"id": req.params.id});
-        const PFFL = await pFFLModel.findOne({"_id": SDCFormResponse.persistentLocator});
+        PFFL = await pFFLModel.findOne({"_id": SDCFormResponse.persistentLocator});
         if (!PFFL) {
             // Create a new persistent locator
             const loc = new pFFLModel({
