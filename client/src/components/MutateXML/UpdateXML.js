@@ -10,7 +10,7 @@ const MutateXML = (props) => {
     const { onSubmit, formId } = props;
     return (
         <form onSubmit={onSubmit}>
-            <TextField variant="outlined" name={formId} id="standard-basic" label="ID" />
+            <TextField variant="outlined" name={formId} id="standard-basic" label="Form Name" />
             <Button style={{
                 marginLeft: '20px',
             }} variant="contained" onClick={() => setOpen(true)}>Add Updated XML</Button>

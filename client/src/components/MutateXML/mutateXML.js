@@ -8,7 +8,7 @@ const MutateXML = (props) => {
         <form onSubmit={onSubmit}>
             <Grid container spacing={2}>
                 <Grid item >
-                    <TextField variant="outlined" onChange={setFormId} id="standard-basic" label="ID" />
+                    <TextField variant="outlined" onChange={setFormId} id="standard-basic" label="Form Name" />
                 </Grid>
                 <br />
                 <Grid item>
