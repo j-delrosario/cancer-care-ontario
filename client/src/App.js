@@ -5,8 +5,32 @@ import Navbar from "./components/Navbar/Navbar";
 import Home from "./components/Home/Home";
 import FormSection from "./components/FormSection/FormSection";
 import GetResponses from "./components/GetResponses/GetResponses";
+import FormFiller from "./components/FormFiller/FormFiller";
+import FormResponse from "./components/FormResponse/FormResponse";
+import { Snackbar } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
 import FormManager from './pages/FormManager/FormManager'
 class App extends React.Component {
+  state = {
+    openSnackbarMessage: false,
+    snackbarSeverity: "",
+    snackbarMessage: "",
+  };
+
+  handleOpenSnackbarMessage = (severity, message) => {
+    this.setState({
+      snackbarSeverity: severity,
+      snackbarMessage: message,
+      openSnackbarMessage: true,
+    });
+  };
+
+  handleCloseSnackbarMessage = () => {
+    this.setState({
+      openSnackbarMessage: false,
+    });
+  };
+
   render() {
     return (
       <div>
@@ -31,7 +55,19 @@ class App extends React.Component {
               render={() => (
                 <div>
                   <Navbar />
-                  <FormSection location={undefined} />
+                  <FormFiller appState={this} />
+                </div>
+              )}
+            ></Route>
+          </Switch>
+
+          <Switch>
+            <Route
+              path="/form-response/:id"
+              render={(props) => (
+                <div>
+                  <Navbar />
+                  <FormResponse {...props} appState={this} />
                 </div>
               )}
             ></Route>
@@ -63,6 +99,18 @@ class App extends React.Component {
             ></Route>
           </Switch>
         </BrowserRouter>
+        <Snackbar
+          open={this.state.openSnackbarMessage}
+          autoHideDuration={10000}
+          onClose={this.handleCloseSnackbarMessage}
+        >
+          <Alert
+            onClose={this.handleCloseSnackbarMessage}
+            severity={this.state.snackbarSeverity}
+          >
+            {this.state.snackbarMessage}
+          </Alert>
+        </Snackbar>
       </div>
     );
   }

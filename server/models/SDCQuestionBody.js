@@ -8,7 +8,15 @@ var SDCQuestionBodySchema = new Schema(
         questionTitle: String,
         questionText: String,
     },
-    options);
+    options
+);
+
+function autoPopulateQuestionBody(next) {
+    this.populate('choices');
+    next();
+}
+
+SDCQuestionBodySchema.pre('findOne', autoPopulateQuestionBody).pre('find', autoPopulateQuestionBody);
 
 module.exports = mongoose.model("SDCQuestionBody", SDCQuestionBodySchema);
 module.exports.options = options;

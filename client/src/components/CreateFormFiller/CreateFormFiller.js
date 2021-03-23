@@ -7,9 +7,9 @@ import {
   CardActions,
 } from "@material-ui/core";
 import axios from "axios";
-import "./CreatePatient.css";
+import "./CreateFormFiller.css";
 
-class CreatePatient extends React.Component {
+class CreateFormFiller extends React.Component {
   state = {
     name: "",
     ohip: "",
@@ -25,13 +25,12 @@ class CreatePatient extends React.Component {
 
   handleSubmit = () => {
     axios
-      .post("http://localhost:3001/api/Patient/patients/", {
+      .post("http://localhost:3001/api/FormFiller/formFillers/", {
         name: this.state.name,
-        OHIPNumber: this.state.ohip,
       })
       .then((res) => {
         this.props.closeModal();
-        this.props.reloadPatients();
+        this.props.reloadFormFillers();
       })
       .catch((err) => {
         console.log(err);
@@ -42,7 +41,7 @@ class CreatePatient extends React.Component {
     return (
       <div>
         <Card className="modal">
-          <div className="title">New Patient</div>
+          <div className="title">New Form Filler</div>
           <CardContent className="modalContent">
             <div>
               <TextField
@@ -52,17 +51,6 @@ class CreatePatient extends React.Component {
                 label="Name"
                 fullWidth
                 onChange={this.onInputChange}
-              />
-            </div>
-            <div>
-              <TextField
-                name="ohip"
-                className="textfield"
-                variant="outlined"
-                label="OHIP Number"
-                fullWidth
-                onChange={this.onInputChange}
-                type="number"
               />
             </div>
           </CardContent>
@@ -88,4 +76,4 @@ class CreatePatient extends React.Component {
   }
 }
 
-export default CreatePatient;
+export default CreateFormFiller;

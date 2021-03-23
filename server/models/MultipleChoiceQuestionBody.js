@@ -5,7 +5,6 @@ var Schema = mongoose.Schema;
 
 var MultipleChoiceQuestionBodySchema = new Schema(
     {
-        isRadio: Boolean,
         choices: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: "SDCQuestion",

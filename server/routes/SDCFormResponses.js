@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router(); // Express Router
 
 // import the Patient mongoose model
-const { SDCFormResponse } = require("../models/SDCFormResponse");
+const { SDCFormResponse } = require("../models/");
 
 // to validate object IDs
 const { ObjectID } = require("mongodb");
