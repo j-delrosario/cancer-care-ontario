@@ -19,7 +19,11 @@ const FormManager = () => {
     }
     const onSubmitNewXML = async () => {
         try {
-            const res = await axios.post(`http://localhost:3001/api/SDCForm`, xmlFile);
+            let form = new FormData();
+            form.append("file", xmlFile);
+            const res = await axios.post(`http://localhost:3001/api/SDCForm`, form, {
+                headers: form.getHeaders()
+            });
             console.log(res);
         } catch (error) {
             console.log(error)
