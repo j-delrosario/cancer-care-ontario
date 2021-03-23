@@ -50,3 +50,7 @@ Delete an SDCForm by Diagnostic Procedure
 Get an SDCForm by Diagnostic Procedure, right now it is defaulted to uploading a copy of the ADRENAL GLAND form,
 Switch the commented lines in api/controllers/SDCFormController if you want to try it out with your frontend
 ```axios.post(`http://localhost:3001/api/SDCForm`, XML form goes here)```
+Get a URL that can be used to retrieve a SDCFormResponse
+```axios.get(`http://localhost:3001/api/PersistentLocator/id/response id goes here`)```
+Get a SDCFormResponse via it's associated URL
+```axios.get(`http://localhost:3001/api/PersistentLocator/url goes here`)```

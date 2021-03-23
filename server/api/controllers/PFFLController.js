@@ -5,6 +5,17 @@ const findURLForFormResponseByID = async (req, res) => {
     try {
         const SDCFormResponse = await SDCFormResponseModel.findOne({"id": req.params.id});
         const PFFL = await pFFLModel.findOne({"_id": SDCFormResponse.persistentLocator});
+        if (!PFFL) {
+            // Create a new persistent locator
+            const loc = new pFFLModel({
+                filledform:  SDCFormResponse._id,
+                url: SDCFormResponse._id.toString()
+            });
+            /// Save the locator
+            const newLoc = await loc.save();
+            res.send(newLoc);
+            PFFL = loc;
+        }
         res.send(PFFL.url)
     } catch (err) {
         res.status(500).send(err);
