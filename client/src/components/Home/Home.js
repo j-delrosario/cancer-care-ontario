@@ -25,7 +25,7 @@ class Home extends React.Component {
   }
 
   sendDummyData = () =>
-    fetch("http://localhost:3001/api/SDCForm", {
+    fetch("/api/SDCForm", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -38,7 +38,7 @@ class Home extends React.Component {
 
   getDummyData = () =>
     axios
-      .get(`http://localhost:3001/api/SDCForm/ADRENAL GLAND`)
+      .get(`/api/SDCForm/ADRENAL GLAND`)
       .then(function (response) {
         // handle success
         console.log(response.data);
@@ -53,20 +53,20 @@ class Home extends React.Component {
       });
 
   deleteDummyData = () =>
-  axios
-    .delete(`http://localhost:3001/api/SDCForm/ADRENAL GLAND`, {data: ""})
-    .then(function (response) {
-      // handle success
-      console.log(response.data);
-      alert(response.data.questions);
-    })
-    .catch(function (error) {
-      // handle error
-      console.log(error);
-    })
-    .then(function () {
-      // always executed
-    });
+    axios
+      .delete(`/api/SDCForm/ADRENAL GLAND`, { data: "" })
+      .then(function (response) {
+        // handle success
+        console.log(response.data);
+        alert(response.data.questions);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
+      .then(function () {
+        // always executed
+      });
 
   render() {
     return (

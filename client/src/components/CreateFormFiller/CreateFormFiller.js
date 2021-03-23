@@ -25,15 +25,29 @@ class CreateFormFiller extends React.Component {
 
   handleSubmit = () => {
     axios
-      .post("http://localhost:3001/api/FormFiller/formFillers/", {
+      .post("/api/FormFiller/formFillers/", {
         name: this.state.name,
       })
       .then((res) => {
         this.props.closeModal();
         this.props.reloadFormFillers();
+        // Open success message
+        const message = (
+          <div>
+            <h2>Form Filler Added!</h2>
+          </div>
+        );
+        this.props.appState.handleOpenSnackbarMessage("success", message);
       })
       .catch((err) => {
         console.log(err);
+        // Open error message
+        const message = (
+          <div>
+            <h2>Form Filler not added!</h2>
+          </div>
+        );
+        this.props.appState.handleOpenSnackbarMessage("error", message);
       });
   };
 

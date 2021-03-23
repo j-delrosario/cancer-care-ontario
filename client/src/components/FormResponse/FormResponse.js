@@ -13,7 +13,7 @@ class FormResponse extends React.Component {
 
   getResponseInfo = (id) => {
     axios
-      .get(`http://localhost:3001/api/SDCFormResponse/responses/${id}`)
+      .get(`/api/SDCFormResponse/responses/${id}`)
       .then((res) => {
         this.setState({
           response: res.data,
