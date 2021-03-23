@@ -2,35 +2,45 @@ import React, {useState} from 'react'
 import UploadXML from '../../components/uploadXML/uploadXML'
 import MutateXML from '../../components/MutateXML/mutateXML'
 import UpdateXML from '../../components/MutateXML/UpdateXML'
-
+import axios from 'axios';
 import {Typography} from '@material-ui/core'
 // import { useForm } from "react-hook-form";
 import './FormManager.css'
 
 const FormManager = () => {
     const [xmlFile, setXMLFile] = useState(null);
-    // const { register, handleSubmit, watch, errors } = useForm();
-    // const [formID, setFormID] = useState(null);
+    const [deleteId, setDeleteId] = useState('');
+    // const [updateId, setUpdateId] = useState('');
 
     const uploadXML = (file) => {
         // console.log(file)
         setXMLFile(file[0]);
     }
-
-    const onSubmitNewXML = () => {
-        // Send a request to the backend with the file
+    const onSubmitNewXML = async () => {
+        try {
+            const res = await axios.post(`http://localhost:3001/api/SDCForm`, xmlFile);
+            console.log(res);
+        } catch (error) {
+            console.log(error)
+        }
     }
 
-    const deleteXML = () => {
-        // Send a request to the backend to delete a form with the ID given
+    const deleteXML = async () => {
+        try {
+            // Change to form name
+            const res = await axios.delete(`http://localhost:3001/api/SDCForm/${deleteId}`, { data: "" });
+            console.log(res);
+        } catch (error) {
+            console.log(error)
+        }
     }
 
-    const updateXML = () => {
+    const updateXML = async () => {
         // console.log("TEST")
         // Send a request to the backend to update a form with the ID given
     }
 
-    const onSubmitUpdatedXML = () => {
+    const onSubmitUpdatedXML = async () => {
         // Send a request to the backend with the file
     }
 
@@ -44,7 +54,7 @@ const FormManager = () => {
             <Typography>
                 Delete Form
             </Typography>
-            <MutateXML onSubmit={deleteXML} id={1} />
+            <MutateXML onSubmit={deleteXML} setFormId={setDeleteId} id={1} />
             <Typography>
                 Update Form
             </Typography>

@@ -3,12 +3,12 @@ import React from 'react'
 import { Button, TextField, Grid } from '@material-ui/core';
 
 const MutateXML = (props) => {
-    const { onSubmit, formId } = props;
+    const { onSubmit, setFormId } = props;
     return (
         <form onSubmit={onSubmit}>
             <Grid container spacing={2}>
                 <Grid item >
-                    <TextField variant="outlined" name={formId} id="standard-basic" label="ID" />
+                    <TextField variant="outlined" onChange={setFormId} id="standard-basic" label="ID" />
                 </Grid>
                 <br />
                 <Grid item>
