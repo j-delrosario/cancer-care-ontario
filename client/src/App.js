@@ -1,4 +1,3 @@
-import logo from "./logo.svg";
 import "./App.css";
 import React from "react";
 import { Route, Switch, BrowserRouter } from "react-router-dom";
@@ -10,7 +9,7 @@ import FormFiller from "./components/FormFiller/FormFiller";
 import FormResponse from "./components/FormResponse/FormResponse";
 import { Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
-
+import FormManager from './pages/FormManager/FormManager'
 class App extends React.Component {
   state = {
     openSnackbarMessage: false,
@@ -69,6 +68,31 @@ class App extends React.Component {
                 <div>
                   <Navbar />
                   <FormResponse {...props} appState={this} />
+                </div>
+              )}
+            ></Route>
+          </Switch>
+          <Switch>
+            <Route
+              exact
+              path="/responses"
+              render={() => (
+                <div>
+                  <Navbar />
+                  <GetResponses />
+                </div>
+              )}
+            ></Route>
+          </Switch>
+
+          <Switch>
+            <Route
+              exact
+              path="/formmanager"
+              render={() => (
+                <div>
+                  <Navbar />
+                  <FormManager />
                 </div>
               )}
             ></Route>

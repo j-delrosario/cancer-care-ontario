@@ -80,9 +80,9 @@ class MultipleChoice extends React.Component {
 
   renderQuestionType = (choice, display = false) => {
     // If the multiple choice selection is selected by the user
-    if (this.state.input == choice.questionBody.questionTitle || display) {
+    if (this.state.input === choice.questionBody.questionTitle || display) {
       // If the multiple choice selection has a number input
-      if (choice.questionBody.questionType == "Int") {
+      if (choice.questionBody.questionType === "Int") {
         return (
           <Int
             question={choice.questionBody}
@@ -90,7 +90,7 @@ class MultipleChoice extends React.Component {
             updateIsFormValid={this.props.updateIsFormValid}
           />
         );
-      } else if (choice.questionBody.questionType == "String") {
+      } else if (choice.questionBody.questionType === "String") {
         // If the multiple choice selection has a String input
         return (
           <Text
