@@ -16,7 +16,7 @@ class GetResponses extends React.Component {
 
   getPatients = () => {
     axios
-      .get("http://localhost:3001/api/Patient/patients")
+      .get("/api/Patient/patients")
       .then((res) => {
         this.setState({
           patients: res.data,
@@ -44,8 +44,7 @@ class GetResponses extends React.Component {
           // Get patient forms
           axios
             .get(
-              "http://localhost:3001/api/SDCFormResponse/responses/user/" +
-                this.state.patient._id
+              "/api/SDCFormResponse/responses/user/" + this.state.patient._id
             )
             .then((res) => {
               this.setState({
