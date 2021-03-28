@@ -10,6 +10,7 @@ import FormResponse from "./components/FormResponse/FormResponse";
 import { Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import FormManager from "./pages/FormManager/FormManager";
+import Admin from "./components/Admin/Admin";
 class App extends React.Component {
   state = {
     openSnackbarMessage: false,
@@ -81,6 +82,19 @@ class App extends React.Component {
                 <div>
                   <Navbar />
                   <FormManager />
+                </div>
+              )}
+            ></Route>
+          </Switch>
+
+          <Switch>
+            <Route
+              exact
+              path="/admin"
+              render={() => (
+                <div>
+                  <Navbar />
+                  <Admin appState={this} />
                 </div>
               )}
             ></Route>

@@ -1,0 +1,25 @@
+.formFiller-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 10px;
+}
+
+.formFiller-column {
+  width: 200px;
+}
+
+.formFiller-delete-modal {
+  width: 500px;
+  margin: 30% auto;
+}
+
+.formFiller-add-modal {
+  width: 500px;
+  margin: 20% auto;
+}
+
+.formFiller-edit-modal {
+  width: 500px;
+  margin: 20% auto;
+}

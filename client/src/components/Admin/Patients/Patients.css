@@ -1,0 +1,25 @@
+.patient-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 10px;
+}
+
+.patient-column {
+  width: 200px;
+}
+
+.patient-delete-modal {
+  width: 500px;
+  margin: 30% auto;
+}
+
+.patient-add-modal {
+  width: 500px;
+  margin: 20% auto;
+}
+
+.patient-edit-modal {
+  width: 500px;
+  margin: 20% auto;
+}
