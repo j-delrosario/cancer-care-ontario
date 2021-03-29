@@ -20,7 +20,9 @@ class Navbar extends React.Component {
             <Link to="/formmanager" className="link">
               Form Manager
             </Link>
-            {/* </Link> */}
+            <Link to="/admin" className="link">
+              Admin
+            </Link>
           </Toolbar>
         </AppBar>
       </div>
