@@ -4,6 +4,7 @@ const fs = require('fs');
 const SDCFormModel = require('../../models/SDCForm');
 const diagnosticProcedureModel = require('../../models/DiagnosticProcedureID');
 const UploadSDCForm = require("../services/UploadSDCForm");
+const SDCForm = require('../../models/SDCForm');
 
 
 
@@ -21,9 +22,10 @@ const saveSDCForm =  async (req, res) => {
 
 const findAllSDCForms = async (req, res) => {
     try {
-
-        const SDCForms = await SDCFormModel.find({});
-
+        const diagnosticProcedures = await diagnosticProcedureModel.find({"deprecated": false});
+        let SDCForms = await Promise.all(diagnosticProcedures.map(async (dp) => {
+            return await SDCFormModel.findOne({diagnosticProcedure: dp._id})
+        }))
         res.send(SDCForms);
     } catch (err) {
         res.status(500).send(err);
@@ -32,7 +34,7 @@ const findAllSDCForms = async (req, res) => {
 
 const findSDCFormByDPID = async (req, res) => {
     try {
-        const diagnosticProcedure = await diagnosticProcedureModel.findOne({"id": req.params.id});
+        const diagnosticProcedure = await diagnosticProcedureModel.findOne({"id": req.params.id, "deprecated": false});
         let SDCForms = await SDCFormModel.findOne({"diagnosticProcedure": diagnosticProcedure._id});
         res.send(SDCForms);
     } catch (err) {
