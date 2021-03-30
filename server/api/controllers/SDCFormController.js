@@ -1,20 +1,19 @@
-const mongoose = require('mongoose'),
-      Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const fs = require('fs');
 
 const SDCFormModel = require('../../models/SDCForm');
 const diagnosticProcedureModel = require('../../models/DiagnosticProcedureID');
-const UploadSDCForm = require("../../services/UploadSDCForm");
+const UploadSDCForm = require("../services/UploadSDCForm");
+const SDCForm = require('../../models/SDCForm');
 
-const xmlStrAdrenal = require('../../xml/Adrenal.Bx.Res.129_3.003.001.REL_sdcFDF')
-const xmlStrLung = require('../../xml/PKG_LDCT_LUNG_forStudents');
+
 
 const saveSDCForm =  async (req, res) => {
 
     try {
-        //Switch comments if you want to test Frontend
-        await UploadSDCForm(xmlStrAdrenal);
-        //await UploadSDCForm(xmlStrLung);
-        //await UploadSDCForm(req.body);
+        fs.readFile(req.files.file.path, 'utf8', async (err, contents) => {
+            await UploadSDCForm(contents.toString());
+        });
         res.status(200).send();
     } catch (err) {
       res.status(500).send(err);
@@ -23,9 +22,10 @@ const saveSDCForm =  async (req, res) => {
 
 const findAllSDCForms = async (req, res) => {
     try {
-
-        const SDCForms = await SDCFormModel.find({});
-
+        const diagnosticProcedures = await diagnosticProcedureModel.find({"deprecated": false});
+        let SDCForms = await Promise.all(diagnosticProcedures.map(async (dp) => {
+            return await SDCFormModel.findOne({diagnosticProcedure: dp._id})
+        }))
         res.send(SDCForms);
     } catch (err) {
         res.status(500).send(err);
@@ -34,7 +34,7 @@ const findAllSDCForms = async (req, res) => {
 
 const findSDCFormByDPID = async (req, res) => {
     try {
-        const diagnosticProcedure = await diagnosticProcedureModel.findOne({"id": req.params.id});
+        const diagnosticProcedure = await diagnosticProcedureModel.findOne({"id": req.params.id, "deprecated": false});
         let SDCForms = await SDCFormModel.findOne({"diagnosticProcedure": diagnosticProcedure._id});
         res.send(SDCForms);
     } catch (err) {

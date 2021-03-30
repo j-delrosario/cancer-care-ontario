@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { Tabs, Tab } from "@material-ui/core";
 import GetResponses from "../GetResponses/GetResponses";
 import CreateEditForm from "../CreateEditForm/CreateEditForm";

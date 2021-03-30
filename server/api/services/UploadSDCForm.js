@@ -1,12 +1,12 @@
 const xml2js = require('xml2js');
-const models = require("../models");
+const models = require("../../models");
 
 var __UploadSDCFormStack = {
     MultipleChoiceQuestionBodyModels: []
 };
 /* converts XML string to JSON string */
 function xmlToJson(xml) {
-    xml2js.parseString(xml(),  (err, result) => {
+    xml2js.parseString(xml,  (err, result) => {
         try {
             json = JSON.stringify(result, null, 2);
         }
@@ -77,8 +77,8 @@ function AddSectionsToModel(model, sectionList, tab="") {
             sectionModel.title = section.$.title;
         if (section.Property && section.Property[0].$ && section.Property[0].$.val)
             sectionModel.sectionText = section.Property[0].$.val;
-        AddDependenciesToModel(sectionModel, section, tab+"  ");
         SaveModel(sectionModel);
+        AddDependenciesToModel(sectionModel, section, tab+"  ");
         model.sections.push(sectionModel);
     });
 }
@@ -231,6 +231,21 @@ function AddDependenciesToModel(model, form, tab="") {
     }
 }
 
+// returns false iff there exists a diagnostic procedure model with id [id] in the db with the same version as [version]
+async function deprecateDiagnosticProcedure(id, version) {
+    const diagnosticProcedure = await models.DiagnosticProcedureID.findOne({"id": id});
+    if (diagnosticProcedure) {
+        if (diagnosticProcedure.version == version) {
+            return false;
+        }
+        diagnosticProcedure.deprecated = true;
+        diagnosticProcedure.save(() => {
+            console.log("Diagnostic Procedure " + diagnosticProcedure.version + " deprecated")
+        });
+    }
+    return true;
+}
+
 module.exports = async (xmlStr) => {
     let json = JSON.parse(xmlToJson(xmlStr));
     let procedureIDModel = new models.DiagnosticProcedureID({});
@@ -243,19 +258,25 @@ module.exports = async (xmlStr) => {
         json = Array.isArray(json.XMLPackage) ? json.XMLPackage[0] : json.XMLPackage;
     }
     if (json.hasOwnProperty("FormDesign")){
+        console.log("Form Design found");
         formDesign = Array.isArray(json.FormDesign) ? json.FormDesign[0] : json.FormDesign;
         if (formDesign.$.formTitle) {
             procedureIDModel.id = formDesign.$.formTitle;
             formModel.title = formDesign.$.formTitle;
         }
+        if (await deprecateDiagnosticProcedure(formDesign.$.formTitle, formDesign.$.version)) {
+            procedureIDModel.lineage = formDesign.$.lineage;
+            procedureIDModel.version = formDesign.$.version;
+            SaveModel(procedureIDModel);
+            console.log("Diagnostic Procedure Model Saved");
+        } else {
+            procedureIDModel = await models.DiagnosticProcedureID.findOne({"id": formDesign.$.formTitle, "version": formDesign.$.version});
+            console.log("Diagnostic Procedure version: " + formDesign.$.version + " already exists");
+        }
         formModel.id = formDesign.$.ID;
         formModel.diagnosticProcedure = procedureIDModel;
-        formModel.lineage = formDesign.$.lineage;
-        formModel.version = formDesign.$.version;
-
-        console.log("Form Design found");
     }
-    SaveModel(procedureIDModel);
+
 
     if (formDesign && formDesign.hasOwnProperty("Body")){
         formBody = formDesign.Body[0];
@@ -264,7 +285,7 @@ module.exports = async (xmlStr) => {
     if (formBody) {
         AddDependenciesToModel(formModel, formBody);
         console.log("Form Model Created");
+        SaveModel(formModel);
+        console.log("Form Model Saved");
     }
-    SaveModel(formModel);
-    console.log("Form Model Saved");
 }
