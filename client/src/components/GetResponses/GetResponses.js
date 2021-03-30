@@ -185,7 +185,7 @@ class GetResponses extends React.Component {
   render() {
     return (
       <div className="responses-container">
-        <Autocomplete
+        {/* <Autocomplete
           className="autocomplete"
           value={this.state.patient}
           onChange={this.onPatientChange}
@@ -196,7 +196,7 @@ class GetResponses extends React.Component {
             <TextField {...params} label="Choose patient" variant="outlined" />
           )}
         />
-        {this.renderResponses()}
+        {this.renderResponses()} */}
         <div style={{ height: "100vh", width: "100%" }}>
           <DataGrid
             rows={this.state.rows}
