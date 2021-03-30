@@ -24,22 +24,20 @@ class GetResponses extends React.Component {
         valueGetter: (params) => params.row?.SDCForm?.title,
         renderCell: (params) => (
           <strong>
-            <Link
+            {/* <Link
               to={{
                 pathname: `form-response/${params.row?._id}`,
                 state: { fromFormFiller: true },
               }}
             >
               {params.row?.SDCForm?.title}
-            </Link>
-            {/* <Button
-              variant="contained"
+            </Link> */}
+            <Button
+              onClick={() => this.handleResponseChange(params.row)}
               color="primary"
-              size="small"
-              style={{ marginLeft: 16 }}
             >
-              Open
-            </Button> */}
+              {params.row?.SDCForm?.title}
+            </Button>
           </strong>
         ),
       },
@@ -204,6 +202,7 @@ class GetResponses extends React.Component {
             pageSize={20}
           />
         </div>
+        {this.renderFormResponse()}
       </div>
     );
   }
