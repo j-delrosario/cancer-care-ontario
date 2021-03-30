@@ -1,5 +1,4 @@
-﻿module.exports = () => {
-    return `<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="sdctemplate.xslt"?>
 <FormDesign xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ID="Adrenal.Bx.Res.129_3.003.001.REL_sdcFDF" baseURI="www.cap.org/eCC" fullURI="_baseURI=www.cap.org/eCC&amp;_lineage=Adrenal.Bx.Res.129&amp;_version=3.003.001.REL&amp;_docType=sdcFDF" formTitle="ADRENAL GLAND" lineage="Adrenal.Bx.Res.129" filename="Adrenal.Bx.Res.129_3.003.001.REL_sdcFDF.xml" version="3.003.001.REL" xmlns="urn:ihe:qrph:sdc:2016">
  <Property name="Copyright" type="CAPeCC_static_text" styleClass="copyright" order="1" propName="Copyright" val="(c) 2019 College of American Pathologists.  All rights reserved.  License required for use." />
@@ -652,5 +651,4 @@
  <Footer name="footer" order="409" ID="Footer.Adrenal.Bx.Res.129_3.003.001.REL_sdcFDF">
   <Property type="meta" styleClass="copyright" order="410" propName="CopyrightFooter" val="(c) 2019 College of American Pathologists.  All rights reserved.  License required for use." />
  </Footer>
-</FormDesign>`;
-}
+</FormDesign>

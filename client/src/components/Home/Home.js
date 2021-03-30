@@ -54,7 +54,7 @@ class Home extends React.Component {
 
   deleteDummyData = () =>
     axios
-      .delete(`/api/SDCForm/ADRENAL GLAND`, { data: "" })
+      .delete(`/api/SDCForm/Lung Cancer Screening Template`, { data: "" })
       .then(function (response) {
         // handle success
         console.log(response.data);
