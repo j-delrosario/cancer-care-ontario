@@ -24,22 +24,20 @@ class GetResponses extends React.Component {
         valueGetter: (params) => params.row?.SDCForm?.title,
         renderCell: (params) => (
           <strong>
-            <Link
+            {/* <Link
               to={{
                 pathname: `form-response/${params.row?._id}`,
                 state: { fromFormFiller: true },
               }}
             >
               {params.row?.SDCForm?.title}
-            </Link>
-            {/* <Button
-              variant="contained"
+            </Link> */}
+            <Button
+              onClick={() => this.handleResponseChange(params.row)}
               color="primary"
-              size="small"
-              style={{ marginLeft: 16 }}
             >
-              Open
-            </Button> */}
+              {params.row?.SDCForm?.title}
+            </Button>
           </strong>
         ),
       },
@@ -185,7 +183,7 @@ class GetResponses extends React.Component {
   render() {
     return (
       <div className="responses-container">
-        <Autocomplete
+        {/* <Autocomplete
           className="autocomplete"
           value={this.state.patient}
           onChange={this.onPatientChange}
@@ -196,7 +194,7 @@ class GetResponses extends React.Component {
             <TextField {...params} label="Choose patient" variant="outlined" />
           )}
         />
-        {this.renderResponses()}
+        {this.renderResponses()} */}
         <div style={{ height: "100vh", width: "100%" }}>
           <DataGrid
             rows={this.state.rows}
@@ -204,6 +202,7 @@ class GetResponses extends React.Component {
             pageSize={20}
           />
         </div>
+        {this.renderFormResponse()}
       </div>
     );
   }
