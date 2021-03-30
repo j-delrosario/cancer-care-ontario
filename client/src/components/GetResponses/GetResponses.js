@@ -3,16 +3,89 @@ import axios from "axios";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { Button, Modal, TextField } from "@material-ui/core";
 import Response from "../Response/Response";
+import { DataGrid } from "@material-ui/data-grid";
+import { Link } from "react-router-dom";
 
 import "./GetResponses.css";
 
 class GetResponses extends React.Component {
-  state = { patient: null, patients: [], responses: [], formResponse: null };
+  state = {
+    patient: null,
+    patients: [],
+    responses: [],
+    formResponse: null,
+    rows: [],
+    columns: [
+      { field: "_id", hide: true, filterable: false },
+      {
+        field: "SDCForm.title",
+        headerName: "Form",
+        width: 250,
+        valueGetter: (params) => params.row?.SDCForm?.title,
+        renderCell: (params) => (
+          <strong>
+            <Link
+              to={{
+                pathname: `form-response/${params.row?._id}`,
+                state: { fromFormFiller: true },
+              }}
+            >
+              {params.row?.SDCForm?.title}
+            </Link>
+            {/* <Button
+              variant="contained"
+              color="primary"
+              size="small"
+              style={{ marginLeft: 16 }}
+            >
+              Open
+            </Button> */}
+          </strong>
+        ),
+      },
+      {
+        field: "patient.name",
+        headerName: "Patient",
+        width: 250,
+        valueGetter: (params) => params.row?.patient?.name,
+      },
+      {
+        field: "formFiller.name",
+        headerName: "Form Filler",
+        width: 250,
+        valueGetter: (params) => params.row?.formFiller?.name,
+      },
+      {
+        field: "timestamp",
+        headerName: "Created At",
+        width: 250,
+        valueGetter: (params) =>
+          new Date(params.row?.timestamp).toLocaleString(),
+      },
+    ],
+  };
 
   componentDidMount() {
+    // Get all responses
+    this.getAllResponses();
+
     // Get list of patients
     this.getPatients();
   }
+
+  getAllResponses = () => {
+    axios
+      .get("/api/SDCFormResponse/responses/")
+      .then((res) => {
+        console.log("all forms", res.data);
+        this.setState({
+          rows: res.data,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   getPatients = () => {
     axios
@@ -47,6 +120,7 @@ class GetResponses extends React.Component {
               "/api/SDCFormResponse/responses/user/" + this.state.patient._id
             )
             .then((res) => {
+              console.log("forms: ", res.data);
               this.setState({
                 responses: res.data,
               });
@@ -123,6 +197,13 @@ class GetResponses extends React.Component {
           )}
         />
         {this.renderResponses()}
+        <div style={{ height: "100vh", width: "100%" }}>
+          <DataGrid
+            rows={this.state.rows}
+            columns={this.state.columns}
+            pageSize={20}
+          />
+        </div>
       </div>
     );
   }
