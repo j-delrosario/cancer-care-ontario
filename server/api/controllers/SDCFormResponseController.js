@@ -34,26 +34,35 @@ const getResponsesByUserId = async (req, res) => {
 
 const searchResponses = async (req, res) => {
   //This should perhaps replace getResponses and take its name.
+  //Can search by SDCForm, patientID, diagnosticProcedureID, or timestamp
+  //Can't search by formFiller
+  ObjectID = require('mongodb').ObjectID;
+
   try {
     query = {};
+    //query["x"] = y should be equivalent to query["x"] = {$eq : y}
+    if (req.query.SDCForm) {
+      //console.log(req.query.SDCForm);// Get rid of this
+      query["SDCForm._id"] = ObjectID(req.query.SDCForm);
+    }
     if (req.query.patientID) {
+      console.log(req.query.patientID);
       query["patientID"] = ObjectID(req.query.patientID);
     }
-    if (req.query.patientID) {
+    if (req.query.diagnosticProcedureID) {
       query["diagnosticProcedureID"] = ObjectID(req.query.diagnosticProcedureID);
     }
-    if (req.query.patientID) {
-      query["timestamp"] = ObjectID(req.query.timestamp);
+    if (req.query.timestamp) {
+      query["timestamp"] = Date(req.query.timestamp);
     }
-    
-    diagnosticProcedureID = ObjectID(req.query.diagnosticProcedureID);
-    timestamp = Date(req.query.time);
-
+    //timestamp = Date(req.query.time);
+    console.log(query);
     const responses = await SDCFormResponse.find(query);
+    console.log(responses);
     res.send(responses);
   } catch (err) {
     console.log(err);
-    res.status(500).send(err);
+    res.status(501).send(err);//change this back to 500
   }
 };
 

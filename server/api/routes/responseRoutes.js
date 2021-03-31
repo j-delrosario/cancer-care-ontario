@@ -13,7 +13,6 @@ router.get(
   SDCFormResponseController.getResponsesByUserId
 );
 router.get("/responses", SDCFormResponseController.getResponses);
-
-router.get("/responses/search/", SDCFormResponseController.searchResponses);
+router.get("/responses-search/", SDCFormResponseController.searchResponses);//response.write(JSON.stringify(anObject));
 //Query for SDCFormResponse by patient and/or DiagnosticProcedureID, and/or date/time
 module.exports = router;
