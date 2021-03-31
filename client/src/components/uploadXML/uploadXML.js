@@ -15,7 +15,7 @@ const UploadXML = (props) => {
             <Button style={{
                 marginTop: '20px',
                 marginBottom: "20px"
-            }} variant="contained" onClick={onSubmit}>Submit</Button>
+            }} variant="contained" color="primary" onClick={onSubmit}>Submit</Button>
         </div>
     )
 }
