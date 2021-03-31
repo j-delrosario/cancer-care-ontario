@@ -233,7 +233,7 @@ function AddDependenciesToModel(model, form, tab="") {
 
 // returns false iff there exists a diagnostic procedure model with id [id] in the db with the same version as [version]
 async function deprecateDiagnosticProcedure(id, version) {
-    const diagnosticProcedure = await models.DiagnosticProcedureID.findOne({"id": id});
+    const diagnosticProcedure = await models.DiagnosticProcedureID.findOne({"id": id, "deprecated": false});
     if (diagnosticProcedure) {
         if (diagnosticProcedure.version == version) {
             return false;
@@ -250,6 +250,7 @@ module.exports = async (xmlStr) => {
     let json = JSON.parse(xmlToJson(xmlStr));
     let procedureIDModel = new models.DiagnosticProcedureID({});
     let formModel = new models.SDCForm({});
+    let procedureExists = false;
 
     if (json.hasOwnProperty("SDCPackage")) {
         json = Array.isArray(json.SDCPackage) ? json.SDCPackage[0] : json.SDCPackage;
@@ -271,12 +272,20 @@ module.exports = async (xmlStr) => {
             console.log("Diagnostic Procedure Model Saved");
         } else {
             procedureIDModel = await models.DiagnosticProcedureID.findOne({"id": formDesign.$.formTitle, "version": formDesign.$.version});
-            console.log("Diagnostic Procedure version: " + formDesign.$.version + " already exists");
+            console.log("Diagnostic Procedure: " + formDesign.$.formTitle +  ", version: " + formDesign.$.version + " already exists");
+            procedureExists = true;
         }
         formModel.id = formDesign.$.ID;
         formModel.diagnosticProcedure = procedureIDModel;
     }
 
+    if (procedureExists) {
+        if (await models.SDCForm.findOne({"diagnosticProcedure": procedureIDModel._id})) {
+            console.log("SDCForm: " + formModel.title + ", version: " + procedureIDModel.version + " already exists");
+            console.log("Aborting...")
+            return;
+        }
+    }
 
     if (formDesign && formDesign.hasOwnProperty("Body")){
         formBody = formDesign.Body[0];

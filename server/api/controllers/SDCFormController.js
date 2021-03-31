@@ -20,12 +20,22 @@ const saveSDCForm =  async (req, res) => {
     }
   }
 
+async function findAllSDCFormsByDeprecationStatus(deprecationStatus) {
+    const diagnosticProcedures = await diagnosticProcedureModel.find({"deprecated": deprecationStatus});
+    let SDCForms = await Promise.all(diagnosticProcedures.map(async (dp) => {
+        return await SDCFormModel.findOne({diagnosticProcedure: dp._id})
+    }));
+    return SDCForms;
+} 
+
 const findAllSDCForms = async (req, res) => {
     try {
-        const diagnosticProcedures = await diagnosticProcedureModel.find({"deprecated": false});
-        let SDCForms = await Promise.all(diagnosticProcedures.map(async (dp) => {
-            return await SDCFormModel.findOne({diagnosticProcedure: dp._id})
-        }))
+        let SDCForms = []
+        if (req.query && req.query.deprecated) {
+            SDCForms = await findAllSDCFormsByDeprecationStatus(true)
+        } else {
+            SDCForms = await findAllSDCFormsByDeprecationStatus(false)
+        }
         res.send(SDCForms);
     } catch (err) {
         res.status(500).send(err);
