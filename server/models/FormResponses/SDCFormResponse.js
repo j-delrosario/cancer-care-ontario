@@ -14,12 +14,12 @@ var SDCFormResponseSchema = new Schema({
     ref: "DiagnosticProcedureID",
     required: true,
   },
-  SDCForm: {
-   type: mongoose.Schema.Types.ObjectId,
-   ref: "SDCForm",
-   required: true,
-  },
-  //SDCForm: { type: Object, required: true }, // Saving a copy of the form here avoids versioning issues
+  //SDCForm: {
+  //  type: mongoose.Schema.Types.ObjectId,
+  //  ref: "SDCForm",
+  //  required: true,
+  //},
+  SDCForm: { type: Object, required: true }, // Saving a copy of the form here avoids versioning issues
   formFillerID: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "FormFillerID",

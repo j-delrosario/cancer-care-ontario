@@ -68,25 +68,6 @@ class Home extends React.Component {
         // always executed
       });
 
-  testSearch = () =>
-    axios
-      .get('/api/SDCFormResponse/responses-search/', //{params : {
-        //patientID: "6063a4266db0114f08974fbe", 
-        //timestamp : "2020-01-02"}})
-      )
-      .then(function (response) {
-        // handle success
-        console.log(response.data);
-        alert(response.data.questions);
-      })
-      .catch(function (error) {
-        // handle error
-        console.log(error);
-      })
-      .then(function () {
-        // always executed
-      });
-
   render() {
     return (
       <div>

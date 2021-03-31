@@ -1,8 +1,26 @@
 const SDCFormResponse = require("../../models/FormResponses/SDCFormResponse");
 
 const getResponses = async (req, res) => {
+  //Gets all responses if no parameter's are entered.
+  //Can search by SDCForm, patientID, diagnosticProcedureID, or timestamp(timestamp_lt for lower limit, timestamp_gt for upper limit).
+
+  //Can't search by formFiller
+  ObjectID = require('mongodb').ObjectID;
+
   try {
-    const responses = await SDCFormResponse.find({});
+    if (req.query.timestamp_gt || req.query.timestamp_lt) {
+      req.query.timestamp = {}
+    }
+    if (req.query.timestamp_gt) {
+      req.query.timestamp.$gte = new Date(req.query.timestamp_gt);
+      delete req.query.timestamp_gt;
+    }
+    if (req.query.timestamp_lt) {
+      req.query.timestamp.$lte = new Date(req.query.timestamp_lt);
+      delete req.query.timestamp_lt;
+    }
+    
+    const responses = await SDCFormResponse.find(req.query);
     res.send(responses);
   } catch (err) {
     console.log(err);
@@ -25,38 +43,6 @@ const getResponsesByUserId = async (req, res) => {
     const responses = await SDCFormResponse.find({
       "patient._id": req.params.id,
     });
-    res.send(responses);
-  } catch (err) {
-    console.log(err);
-    res.status(500).send(err);
-  }
-};
-
-const searchResponses = async (req, res) => {
-  //Can search by SDCForm, patientID, diagnosticProcedureID, or timestamp
-  //Can't search by formFiller
-  ObjectID = require('mongodb').ObjectID;
-
-  try {
-    query = {};
-    //query["x"] = y should be equivalent to query["x"] = {$eq : y}
-    if (req.query.SDCForm) {
-      //This assumes that the SDCForm attribute is an _id, which is not yet the case.
-      query["SDCForm"] = ObjectID(req.query.SDCForm);
-    }
-    if (req.query.patientID) {
-      query["patientID"] = ObjectID(req.query.patientID);
-    }
-    if (req.query.diagnosticProcedureID) {
-      query["diagnosticProcedureID"] = ObjectID(req.query.diagnosticProcedureID);
-    }
-    if (req.query.timestamp) {
-      query["timestamp"] = Date(req.query.timestamp);
-    }
-    
-    console.log(query);
-    const responses = await SDCFormResponse.find(query);
-    console.log(responses);
     res.send(responses);
   } catch (err) {
     console.log(err);
@@ -135,5 +121,4 @@ module.exports = {
   createResponse,
   updateResponse,
   deleteResponse,
-  searchResponses,
 };
