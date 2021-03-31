@@ -68,6 +68,25 @@ class Home extends React.Component {
         // always executed
       });
 
+  testSearch = () =>
+    axios
+      .get('/api/SDCFormResponse/responses-search/', //{params : {
+        //patientID: "6063a4266db0114f08974fbe", 
+        //timestamp : "2020-01-02"}})
+      )
+      .then(function (response) {
+        // handle success
+        console.log(response.data);
+        alert(response.data.questions);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
+      .then(function () {
+        // always executed
+      });
+
   render() {
     return (
       <div>
@@ -95,6 +114,7 @@ class Home extends React.Component {
         <button onClick={this.sendDummyData}>SEND DUMMY DATA</button>
         <button onClick={this.getDummyData}>GET DUMMY DATA</button>
         <button onClick={this.deleteDummyData}>DELETE DUMMY DATA</button>
+        <button onClick={this.testSearch}>TEST SEARCH</button>
         {this.state.getResponse === null ? (
           <p></p>
         ) : (

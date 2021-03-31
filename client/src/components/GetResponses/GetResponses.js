@@ -27,6 +27,17 @@ class GetResponses extends React.Component {
       });
   };
 
+  getSDCForm = (SDCFormID) => {
+    axios
+      .get("/api/SDCForm/"+SDCFormID)
+      .then((res) => {
+        return(res.data)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   onPatientChange = (event, input) => {
     // Reset responses
     this.setState({
@@ -97,7 +108,7 @@ class GetResponses extends React.Component {
             <div key={response._id}>
               <div className="formTitle">
                 <Button onClick={() => this.handleResponseChange(response)}>
-                  {response.SDCForm.title}
+                  {this.getSDCForm.title}
                 </Button>
               </div>
             </div>

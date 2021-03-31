@@ -33,7 +33,6 @@ const getResponsesByUserId = async (req, res) => {
 };
 
 const searchResponses = async (req, res) => {
-  //This should perhaps replace getResponses and take its name.
   //Can search by SDCForm, patientID, diagnosticProcedureID, or timestamp
   //Can't search by formFiller
   ObjectID = require('mongodb').ObjectID;
@@ -42,11 +41,10 @@ const searchResponses = async (req, res) => {
     query = {};
     //query["x"] = y should be equivalent to query["x"] = {$eq : y}
     if (req.query.SDCForm) {
-      //console.log(req.query.SDCForm);// Get rid of this
-      query["SDCForm._id"] = ObjectID(req.query.SDCForm);
+      //This assumes that the SDCForm attribute is an _id, which is not yet the case.
+      query["SDCForm"] = ObjectID(req.query.SDCForm);
     }
     if (req.query.patientID) {
-      console.log(req.query.patientID);
       query["patientID"] = ObjectID(req.query.patientID);
     }
     if (req.query.diagnosticProcedureID) {
@@ -55,14 +53,14 @@ const searchResponses = async (req, res) => {
     if (req.query.timestamp) {
       query["timestamp"] = Date(req.query.timestamp);
     }
-    //timestamp = Date(req.query.time);
+    
     console.log(query);
     const responses = await SDCFormResponse.find(query);
     console.log(responses);
     res.send(responses);
   } catch (err) {
     console.log(err);
-    res.status(501).send(err);//change this back to 500
+    res.status(500).send(err);
   }
 };
 
