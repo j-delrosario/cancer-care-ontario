@@ -16,6 +16,18 @@ class Response extends React.Component {
     canEdit: this.props.canEdit !== undefined ? this.props.canEdit : false,
   };
 
+  componentDidMount() {
+    console.log("props", this.props);
+    // If coming from the FormFiller page then canEdit is true
+    if (
+      this.props.location.state !== undefined &&
+      this.props.location.state.fromFormFiller
+    ) {
+      this.setState({
+        canEdit: true,
+      });
+    }
+  }
   renderQuestionType(questionBody) {
     if (questionBody.questionType == "MultipleChoice") {
       // Check to see if radio, otherwise it is checkbox

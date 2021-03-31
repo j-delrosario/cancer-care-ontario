@@ -2,13 +2,11 @@ var mongoose = require("mongoose");
 const SDCSection = require("./SDCSection");
 const SDCQuestion = require("./SDCQuestion");
 const DiagnosticProcedureID = require("./DiagnosticProcedureID");
-const DeleteObjectArray = require('../services/DeleteObjectArray');
+const DeleteObjectArray = require('../api/services/DeleteObjectArray');
 var Schema = mongoose.Schema;
 
 var SDCFormSchema = new Schema({
     id: {type: String, required: true},
-    lineage: {type: String, required: true},
-    version: {type: String, required: true},
     title: String,
     diagnosticProcedure: {
         type: mongoose.Schema.Types.ObjectId,
@@ -35,7 +33,6 @@ function autoPopulateForm(next) {
 
 async function autoDeleteForm(next) {
     const docToDelete = await this.model.findOne(this.getQuery());
-
     await DeleteObjectArray(docToDelete.questions, SDCQuestion, "Question");
     await DeleteObjectArray(docToDelete.sections, SDCSection, "Section");
     await DeleteObjectArray([docToDelete.diagnosticProcedure], DiagnosticProcedureID, "Diagnostic Procedure");

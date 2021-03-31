@@ -1,12 +1,12 @@
 var mongoose = require("mongoose");
 const SDCQuestionBody = require("./SDCQuestionBody");
 const SDCSection = require("./SDCSection");
-const DeleteObjectArray = require('../services/DeleteObjectArray');
+const DeleteObjectArray = require('../api/services/DeleteObjectArray');
 var Schema = mongoose.Schema;
 
 var SDCQuestionSchema = new Schema({
-    id: {type: Number, required: true},
-    orderNumber: {type: Number, required: true},
+    id: {type: String, required: true},
+    orderNumber: Number,
     selectionDisablesChildren: Boolean,
     selectionDeselectsSiblings: Boolean,
     questionBody: {
@@ -37,12 +37,13 @@ async function autoDeleteQuestion(next) {
     await DeleteObjectArray(docToDelete.sections, SDCSection, "Section");
 
     if (docToDelete.questionBody) {
-        questionTypeStr = docToDelete.questionBody.questionType ? docToDelete.questionBody.questionType : "";
-        await DeleteObjectArray([docToDelete.questionBody], SDCQuestionBody, questionTypeStr + " QuestionBody");
-
         if (docToDelete.questionBody.choices) {
             await DeleteObjectArray(docToDelete.questionBody.choices, this.model, "Question");
         }
+        questionTypeStr = docToDelete.questionBody.questionType ? docToDelete.questionBody.questionType : "";
+        await DeleteObjectArray([docToDelete.questionBody], SDCQuestionBody, questionTypeStr + " QuestionBody");
+
+
     }
     next();
 }
