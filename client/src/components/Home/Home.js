@@ -95,6 +95,7 @@ class Home extends React.Component {
         <button onClick={this.sendDummyData}>SEND DUMMY DATA</button>
         <button onClick={this.getDummyData}>GET DUMMY DATA</button>
         <button onClick={this.deleteDummyData}>DELETE DUMMY DATA</button>
+        <button onClick={this.testSearch}>TEST SEARCH</button>
         {this.state.getResponse === null ? (
           <p></p>
         ) : (

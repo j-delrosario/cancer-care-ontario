@@ -1,8 +1,26 @@
 const SDCFormResponse = require("../../models/FormResponses/SDCFormResponse");
 
 const getResponses = async (req, res) => {
+  //Gets all responses if no parameter's are entered.
+  //Can search by SDCForm, patientID, diagnosticProcedureID, or timestamp(timestamp_lt for lower limit, timestamp_gt for upper limit).
+
+  //Can't search by formFiller
+  ObjectID = require('mongodb').ObjectID;
+
   try {
-    const responses = await SDCFormResponse.find({});
+    if (req.query.timestamp_gt || req.query.timestamp_lt) {
+      req.query.timestamp = {}
+    }
+    if (req.query.timestamp_gt) {
+      req.query.timestamp.$gte = new Date(req.query.timestamp_gt);
+      delete req.query.timestamp_gt;
+    }
+    if (req.query.timestamp_lt) {
+      req.query.timestamp.$lte = new Date(req.query.timestamp_lt);
+      delete req.query.timestamp_lt;
+    }
+    
+    const responses = await SDCFormResponse.find(req.query);
     res.send(responses);
   } catch (err) {
     console.log(err);
@@ -25,31 +43,6 @@ const getResponsesByUserId = async (req, res) => {
     const responses = await SDCFormResponse.find({
       "patient._id": req.params.id,
     });
-    res.send(responses);
-  } catch (err) {
-    console.log(err);
-    res.status(500).send(err);
-  }
-};
-
-const searchResponses = async (req, res) => {
-  //This should perhaps replace getResponses and take its name.
-  try {
-    query = {};
-    if (req.query.patientID) {
-      query["patientID"] = ObjectID(req.query.patientID);
-    }
-    if (req.query.patientID) {
-      query["diagnosticProcedureID"] = ObjectID(req.query.diagnosticProcedureID);
-    }
-    if (req.query.patientID) {
-      query["timestamp"] = ObjectID(req.query.timestamp);
-    }
-    
-    diagnosticProcedureID = ObjectID(req.query.diagnosticProcedureID);
-    timestamp = Date(req.query.time);
-
-    const responses = await SDCFormResponse.find(query);
     res.send(responses);
   } catch (err) {
     console.log(err);
@@ -128,5 +121,4 @@ module.exports = {
   createResponse,
   updateResponse,
   deleteResponse,
-  searchResponses,
 };
