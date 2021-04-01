@@ -4,7 +4,7 @@ const SDCFormResponseController = require("../controllers/SDCFormResponseControl
 
 const router = express.Router();
 
-router.post("/responses", SDCFormResponseController.createResponse);
+router.post("/responses/", SDCFormResponseController.createResponse);
 router.put("/responses/:id", SDCFormResponseController.updateResponse);
 router.delete("/responses/:id", SDCFormResponseController.deleteResponse);
 router.get("/responses/:id", SDCFormResponseController.getResponseById);
@@ -14,6 +14,4 @@ router.get(
 );
 router.get("/responses", SDCFormResponseController.getResponses);
 
-router.get("/responses/search/", SDCFormResponseController.searchResponses);
-//Query for SDCFormResponse by patient and/or DiagnosticProcedureID, and/or date/time
 module.exports = router;
