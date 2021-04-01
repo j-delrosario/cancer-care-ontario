@@ -25,7 +25,7 @@ class Admin extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="base">
         <div className="admin-title">Admin</div>
         <Tabs
           centered

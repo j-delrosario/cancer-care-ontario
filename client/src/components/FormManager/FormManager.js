@@ -3,10 +3,12 @@ import UploadXML from './uploadXML/uploadXML'
 import axios from 'axios';
 import {Typography} from '@material-ui/core'
 // import { useForm } from "react-hook-form";
+import Alert from '@material-ui/lab/Alert';
 import './FormManager.css'
 
 const FormManager = () => {
     const [xmlFile, setXMLFile] = useState(null);
+    const [alert, setAlert] = useState(null);
 
     const uploadXML = (file) => {
         setXMLFile(file[0]);
@@ -15,10 +17,10 @@ const FormManager = () => {
         try {
             let form = new FormData();
             form.append("file", xmlFile);
-            const res = await axios.post(`http://localhost:3001/api/SDCForm`, form);
-            console.log(res);
+            await axios.post(`http://localhost:3001/api/SDCForm`, form);
+            setAlert(<Alert severity="success">Form upload successfully!</Alert>)
         } catch (error) {
-            console.log(error)
+            setAlert(<Alert severity="error">There was an error uploading your form, {error}</Alert>)
         }
     }
 
@@ -28,6 +30,7 @@ const FormManager = () => {
                 Upload XML
             </Typography>
             <UploadXML onSubmit={onSubmitNewXML} onUpload={uploadXML} id={3} />
+            {alert}
         </div>
     )
 }

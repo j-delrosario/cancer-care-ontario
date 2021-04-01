@@ -64,7 +64,7 @@ class FormFiller extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="base">
         <Tabs
           centered
           value={this.state.tab}
