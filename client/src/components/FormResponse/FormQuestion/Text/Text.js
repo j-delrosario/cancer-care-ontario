@@ -1,7 +1,9 @@
 import React from "react";
 import TextField from "@material-ui/core/TextField";
 
-class Int extends React.Component {
+import "./Text.css";
+
+class Text extends React.Component {
   state = {
     input: this.props.question !== undefined ? this.props.question.answer : "",
   };
@@ -11,33 +13,32 @@ class Int extends React.Component {
     this.setState({
       input: value,
     });
-    this.props.question.answer = value;
 
+    this.props.question.answer = value;
     if (value !== "" && this.props.required) {
       this.props.updateIsFormValid(true);
     } else {
       this.props.updateIsFormValid(false);
     }
   };
+
   render() {
     return (
-      <div className="numberInputContainer">
+      <div className="textFieldContainer">
         <TextField
           helperText={
             this.props.required && this.state.input === "" ? "Required" : ""
           }
           error={this.props.required && this.state.input === ""}
-          onChange={this.onInputChange}
           value={this.state.input}
+          onChange={this.onInputChange}
+          fullWidth
+          multiline
           variant="outlined"
-          type="number"
-          InputLabelProps={{
-            shrink: true,
-          }}
         />
       </div>
     );
   }
 }
 
-export default Int;
+export default Text;

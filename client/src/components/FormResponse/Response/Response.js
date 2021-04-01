@@ -1,12 +1,13 @@
 import React from "react";
 import { Button, Modal } from "@material-ui/core";
 import { Link, withRouter } from "react-router-dom";
-import IntResponse from "../Responses/IntResponse/IntResponse";
-import TextResponse from "../Responses/TextResponse/TextResponse";
-import MultipleChoiceResponse from "../Responses/MultipleChoiceResponse/MultipleChoiceResponse";
 
 import "./Response.css";
-import DeleteResponse from "../DeleteResponse/DeleteResponse";
+
+import IntResponse from "./IntResponse/IntResponse";
+import TextResponse from "./TextResponse/TextResponse";
+import MultipleChoiceResponse from "./MultipleChoiceResponse/MultipleChoiceResponse";
+import DeleteResponse from "./DeleteResponse/DeleteResponse";
 
 class Response extends React.Component {
   state = {
@@ -17,18 +18,18 @@ class Response extends React.Component {
   };
 
   renderQuestionType(questionBody) {
-    if (questionBody.questionType == "MultipleChoice") {
+    if (questionBody.questionType === "MultipleChoice") {
       // Check to see if radio, otherwise it is checkbox
       return (
         <MultipleChoiceResponse
-          isRadio={"is_radio" in questionBody ? questionBody.is_radio : false}
+          isRadio={questionBody.selectionDeselectsSiblings}
           choices={questionBody.choices}
           question={questionBody}
         />
       );
-    } else if (questionBody.questionType == "String") {
+    } else if (questionBody.questionType === "String") {
       return <TextResponse question={questionBody} />;
-    } else if (questionBody.questionType == "Int") {
+    } else if (questionBody.questionType === "Int") {
       return <IntResponse question={questionBody} />;
     }
   }

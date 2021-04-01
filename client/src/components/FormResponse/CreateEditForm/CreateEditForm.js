@@ -1,15 +1,13 @@
 import React from "react";
-import "./CreateEditForm.css";
-import TrueFalse from "../Questions/TrueFalse/TrueFalse";
-import MultipleChoice from "../Questions/MultipleChoice/MultipleChoice";
-import Text from "../Questions/Text/Text";
-import Int from "../Questions/Int/Int";
-import CreatePatient from "../CreatePatient/CreatePatient";
-import CreateFormFiller from "../CreateFormFiller/CreateFormFiller";
-import Autocomplete from "@material-ui/lab/Autocomplete";
-import axios from "axios";
-import { Button, Modal, TextField } from "@material-ui/core";
 import { Link, withRouter } from "react-router-dom";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import { Button, Modal, TextField } from "@material-ui/core";
+import axios from "axios";
+
+import "./CreateEditForm.css";
+
+import CreatePatient from "../../FormFiller/Patients/CreatePatient";
+import CreateFormFiller from "../../FormFiller/FormFillers/CreateFormFiller";
 import FormSection from "../FormSection/FormSection";
 
 class CreateEditForm extends React.Component {
@@ -55,6 +53,7 @@ class CreateEditForm extends React.Component {
     this.getSDCForms();
     this.getPatients();
     this.getFormFillers();
+
   }
 
   getSDCForms = () => {
@@ -101,6 +100,9 @@ class CreateEditForm extends React.Component {
       this.setState({ form: null });
     } else {
       this.setState({ form: input });
+      console.log(input);
+      input.sections.map((section) => {console.log(section); return 0})
+
     }
   };
 
@@ -254,10 +256,7 @@ class CreateEditForm extends React.Component {
             </Button>
           </div>
           <h1>{this.state.form.title}</h1>
-          <FormSection
-            section={{ questions: this.state.form.questions }}
-            updateIsFormValid={this.updateIsFormValid}
-          />
+          <div className="formSectionContainer">
           {this.state.form.sections.map((section) => (
             <div key={section.id}>
               <FormSection
@@ -266,6 +265,11 @@ class CreateEditForm extends React.Component {
               />
             </div>
           ))}
+          <FormSection
+            section={{ sections: [], questions: this.state.form.questions }}
+            updateIsFormValid={this.updateIsFormValid}
+          />
+          </div>
           <div className="action-buttons">
             <Link to="/">
               <Button variant="contained" color="secondary">

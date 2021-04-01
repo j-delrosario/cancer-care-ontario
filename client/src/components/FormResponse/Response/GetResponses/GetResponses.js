@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { Button, Modal, TextField } from "@material-ui/core";
-import Response from "../Response/Response";
+import Response from "../Response";
 
 import "./GetResponses.css";
 

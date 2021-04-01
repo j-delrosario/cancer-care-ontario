@@ -1,7 +1,7 @@
 import React from "react";
 import { Tabs, Tab } from "@material-ui/core";
-import GetResponses from "../GetResponses/GetResponses";
-import CreateEditForm from "../CreateEditForm/CreateEditForm";
+import {CreateEditForm, GetResponses} from "../FormResponse";
+//import CreateEditForm from "../FormResponse/CreateEditForm/CreateEditForm";
 class FormFiller extends React.Component {
   state = {
     tab:
