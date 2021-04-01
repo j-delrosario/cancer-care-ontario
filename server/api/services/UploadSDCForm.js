@@ -122,7 +122,6 @@ function AddMultipleChoiceQuestionBodyToModel(model, question, tab="") {
         let multipleChoiceModel = multipleChoiceBodyModel = null;
         console.log(tab + "Creating Multiple Choice option as " + TypeOfListItem(listItem) + " Question with ID: " + listItem.$.ID + " and Order #: " + listItem.$.order);
         multipleChoiceModel = new models.SDCQuestion({id: listItem.$.ID, orderNumber: listItem.$.order});
-        console.log(listItem.$)
         multipleChoiceModel.selectionDisablesChildren = listItem.$.selectionDisablesChildren == 'true';
         multipleChoiceModel.selectionDeselectsSiblings = listItem.$.selectionDeselectsSiblings == 'true';
 
@@ -178,7 +177,7 @@ function AddQuestionsToModel(model, questionList, tab="") {
                 SaveModel(questionBodyModel);
                 break;
             case "MultipleChoice":
-                if (question.ListField[0].$.maxSelections) {
+                if (question.ListField[0].$ && question.ListField[0].$.maxSelections) {
                     questionModel.maxSelections = parseInt(question.ListField[0].$.maxSelections);
                 }
                 questionBodyModel = new models.MultipleChoiceQuestionBody({});
