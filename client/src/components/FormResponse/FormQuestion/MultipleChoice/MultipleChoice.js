@@ -2,21 +2,23 @@ import React from "react";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormGroup from "@material-ui/core/FormGroup";
+import FormControl from "@material-ui/core/FormControl";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Int from "../Int/Int";
-import Text from "../Text/Text";
+
 import "./MultipleChoice.css";
+
+import FormQuestion from "../../FormQuestion/FormQuestion"
 
 class MultipleChoice extends React.Component {
   state = {
-    isRadio: this.props.isRadio,
+    maxSelections: this.props.maxSelections,
     choices: this.props.choices,
-    input: "",
+    input: ""
   };
 
   componentDidMount() {
-    if (!this.state.isRadio) {
+    if (this.state.maxSelections !== 1) {
       // Give choices a checked property to keep track if user checked it
       for (let index = 0; index < this.state.choices.length; index++) {
         const element = this.state.choices[index];
@@ -33,27 +35,7 @@ class MultipleChoice extends React.Component {
     });
   };
 
-  // handleCheckboxChange = (event) => {
-  //   this.state.choices.map((choice) =>
-  //     choice.questionBody.questionTitle == event.target.name
-  //       ? (choice.checked = event.target.checked)
-  //       : choice
-  //   );
-  //   this.props.question.answer = choice.checked;
-  // };
-
   handleCheckboxChange = (event) => {
-    // this.state.choices.forEach((choice) => {
-    //   if (choice.questionBody.questionTitle == event.target.name) {
-    //     choice.checked = event.target.checked;
-    //     this.props.question.choices.filter(
-    //       (choice) => choice.questionBody.questionTitle == event.target.name
-    //     )[0].checked = event.target.checked;
-    //     console.log("checked", event.target.checked);
-    //     console.log("choice", choice);
-    //   }
-    // });
-
     // Update choices list
     let choiceIndex = -1;
     for (var i = 0; i < this.state.choices.length; i += 1) {
@@ -67,7 +49,6 @@ class MultipleChoice extends React.Component {
           event.target.checked === true &&
           this.state.choices[i].questionBody.questionType !== "NoResponse"
         ) {
-          this.props.updateIsFormValid(false);
         }
       }
     }
@@ -78,63 +59,47 @@ class MultipleChoice extends React.Component {
     });
   };
 
-  renderQuestionType = (choice, display = false) => {
-    // If the multiple choice selection is selected by the user
-    if (this.state.input === choice.questionBody.questionTitle || display) {
-      // If the multiple choice selection has a number input
-      if (choice.questionBody.questionType === "Int") {
-        return (
-          <Int
-            question={choice.questionBody}
-            required={choice.checked === true}
-            updateIsFormValid={this.props.updateIsFormValid}
-          />
-        );
-      } else if (choice.questionBody.questionType === "String") {
-        // If the multiple choice selection has a String input
-        return (
-          <Text
-            question={choice.questionBody}
-            required={choice.checked === true}
-            updateIsFormValid={this.props.updateIsFormValid}
-          />
-        );
-      }
-    }
-  };
-
   renderQuestion = () => {
-    if (this.state.isRadio) {
+    if (this.state.maxSelections === 1) {
       return (
-        <div>
+        <div className="multipleChoiceContainer">
+          <FormControl component="fieldset">
           <RadioGroup
-            value={this.state.value}
+            value={this.state.input}
             onChange={this.handleInputChange}
           >
             {this.state.choices.map((choice) => (
-              <div key={choice._id} className="choiceContainer">
+              <div className="choiceContainer">
                 <div className="choiceText">
                   <FormControlLabel
-                    value={choice.questionBody.questionTitle}
-                    control={<Radio />}
+                    control={
+                      <Radio
+                      />
+                    }
                     label={choice.questionBody.questionTitle}
+                    value={choice.questionBody.questionTitle}
                   />
-                </div>
-                <div className="inputContainer">
-                  {this.renderQuestionType(choice)}
-                </div>
+                  <FormQuestion
+                    question={choice}
+                    noTitle={true}
+                    updateIsFormValid={this.props.updateIsFormValid}
+                  />
+                  </div>
               </div>
             ))}
           </RadioGroup>
+          </FormControl>
         </div>
       );
     } else {
       return (
-        <div>
+        <div className="multipleChoiceContainer">
           <FormGroup>
-            {this.state.choices.map((choice) => (
+            {this.state.choices.map((choice) => {
+              return (
               <div key={choice._id} className="choiceContainer">
                 <div className="choiceText">
+
                   <FormControlLabel
                     control={
                       <Checkbox
@@ -144,13 +109,18 @@ class MultipleChoice extends React.Component {
                     }
                     label={choice.questionBody.questionTitle}
                     name={choice.questionBody.questionTitle}
-                  />
+                  >
+
+                  </FormControlLabel>
+                <FormQuestion
+                    question={choice}
+                    noTitle={true}
+                    updateIsFormValid={this.props.updateIsFormValid}
+                />
                 </div>
-                <div className="inputContainer">
-                  {this.renderQuestionType(choice, true)}
-                </div>
+
               </div>
-            ))}
+            )})}
           </FormGroup>
         </div>
       );

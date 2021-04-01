@@ -72,14 +72,14 @@ async function SaveModel(model) {
 function AddSectionsToModel(model, sectionList, tab="") {
     sectionList.forEach( (section) => {
         console.log(tab + "Creating section with id " + section.$.ID);
-        sectionModel = new models.SDCSection({id: section.$.ID});
+        let sectionModel = new models.SDCSection({id: section.$.ID});
         if (section.$.title)
             sectionModel.title = section.$.title;
         if (section.Property && section.Property[0].$ && section.Property[0].$.val)
             sectionModel.sectionText = section.Property[0].$.val;
         SaveModel(sectionModel);
-        AddDependenciesToModel(sectionModel, section, tab+"  ");
         model.sections.push(sectionModel);
+        AddDependenciesToModel(sectionModel, section, tab+"  ");
     });
 }
 
@@ -122,9 +122,9 @@ function AddMultipleChoiceQuestionBodyToModel(model, question, tab="") {
         let multipleChoiceModel = multipleChoiceBodyModel = null;
         console.log(tab + "Creating Multiple Choice option as " + TypeOfListItem(listItem) + " Question with ID: " + listItem.$.ID + " and Order #: " + listItem.$.order);
         multipleChoiceModel = new models.SDCQuestion({id: listItem.$.ID, orderNumber: listItem.$.order});
-
-        multipleChoiceModel.selectionDisablesChildren = listItem.$.selectionDisablesChildren ?  true : false;
-        multipleChoiceModel.selectionDeselectsSiblings = listItem.$.selectionDeselectsSiblings ? true : false;
+        console.log(listItem.$)
+        multipleChoiceModel.selectionDisablesChildren = listItem.$.selectionDisablesChildren == 'true';
+        multipleChoiceModel.selectionDeselectsSiblings = listItem.$.selectionDeselectsSiblings == 'true';
 
         switch (TypeOfListItem(listItem)) {
             case "Int":
@@ -178,6 +178,9 @@ function AddQuestionsToModel(model, questionList, tab="") {
                 SaveModel(questionBodyModel);
                 break;
             case "MultipleChoice":
+                if (question.ListField[0].$.maxSelections) {
+                    questionModel.maxSelections = parseInt(question.ListField[0].$.maxSelections);
+                }
                 questionBodyModel = new models.MultipleChoiceQuestionBody({});
                 __UploadSDCFormStack.MultipleChoiceQuestionBodyModels.push(questionBodyModel);
                 AddMultipleChoiceQuestionBodyToModel(questionBodyModel, question, tab);
@@ -218,6 +221,7 @@ function AddDependenciesToModel(model, form, tab="") {
 
     if (sectionList) {
         AddSectionsToModel(model, sectionList, tab);
+        SaveModel(model);
     }
 
     if (childItems && childItems.hasOwnProperty("Question")) {
@@ -227,7 +231,7 @@ function AddDependenciesToModel(model, form, tab="") {
 
     if (questionList) {
         AddQuestionsToModel(model, questionList, tab);
-
+        SaveModel(model);
     }
 }
 
