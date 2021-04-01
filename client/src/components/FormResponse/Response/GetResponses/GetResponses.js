@@ -1,10 +1,8 @@
 import React from "react";
 import axios from "axios";
-import Autocomplete from "@material-ui/lab/Autocomplete";
-import { Button, Modal, TextField } from "@material-ui/core";
-import Response from "../Response/Response";
-import { DataGrid } from "@material-ui/data-grid";
-import { Link } from "react-router-dom";
+import { DataGrid } from '@material-ui/data-grid';
+import { Button } from "@material-ui/core";
+import Response from "../Response";
 
 import "./GetResponses.css";
 

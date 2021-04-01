@@ -1,6 +1,8 @@
-import React, { Component } from "react";
-import Response from "../Response/Response";
+import React from "react";
 import axios from "axios";
+
+import Response from "./Response/Response";
+
 class FormResponse extends React.Component {
   state = {
     response: "",

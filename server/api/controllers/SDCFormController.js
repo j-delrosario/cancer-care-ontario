@@ -4,7 +4,7 @@ const fs = require('fs');
 const SDCFormModel = require('../../models/SDCForm');
 const diagnosticProcedureModel = require('../../models/DiagnosticProcedureID');
 const UploadSDCForm = require("../services/UploadSDCForm");
-const SDCForm = require('../../models/SDCForm');
+const SDCSection = require('../../models/SDCSection');
 
 
 
@@ -36,6 +36,8 @@ const findAllSDCForms = async (req, res) => {
         } else {
             SDCForms = await findAllSDCFormsByDeprecationStatus(false)
         }
+        let a = await SDCSection.find({"title": "IMPRESSIONS"});
+        //console.log(SDCForms);
         res.send(SDCForms);
     } catch (err) {
         res.status(500).send(err);

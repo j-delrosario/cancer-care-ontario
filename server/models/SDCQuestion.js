@@ -7,8 +7,9 @@ var Schema = mongoose.Schema;
 var SDCQuestionSchema = new Schema({
     id: {type: String, required: true},
     orderNumber: Number,
-    selectionDisablesChildren: Boolean,
-    selectionDeselectsSiblings: Boolean,
+    selectionDisablesChildren: {type: Boolean, default: false},
+    selectionDeselectsSiblings: {type: Boolean, default: false},
+    maxSelections: {type: Number, default: 1},
     questionBody: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "SDCQuestionBody"

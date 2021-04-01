@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import UploadXML from '../../components/uploadXML/uploadXML'
+import UploadXML from './uploadXML/uploadXML'
 import axios from 'axios';
 import {Typography} from '@material-ui/core'
 // import { useForm } from "react-hook-form";

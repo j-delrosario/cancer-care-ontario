@@ -1,0 +1,23 @@
+.sectionContainer {
+    margin-left: 0px;
+  }
+
+.sectionTitleContainer {
+    background-color: midnightblue;
+    color: white;
+    padding-left: 5px;
+}
+
+.sectionTitle {
+    padding-top: 2.5px;
+    padding-bottom: 2.5px;
+    font-weight: bold;
+}
+.sectionText {
+    font-size: small;
+    margin-bottom: 10px;
+}
+
+.sectionQuestionContainer {
+    margin-left: -20px;
+}

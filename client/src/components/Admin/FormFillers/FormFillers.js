@@ -8,7 +8,7 @@ import {
   Modal,
   Paper,
 } from "@material-ui/core";
-import CreateFormFiller from "../../CreateFormFiller/CreateFormFiller";
+import { CreateFormFiller } from "../../FormFiller/";
 import "./FormFillers.css";
 
 class FormFillers extends React.Component {

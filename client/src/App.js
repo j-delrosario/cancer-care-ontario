@@ -1,16 +1,18 @@
 import "./App.css";
 import React from "react";
 import { Route, Switch, BrowserRouter } from "react-router-dom";
-import Navbar from "./components/Navbar/Navbar";
-import Home from "./components/Home/Home";
-import CreateEditForm from "./components/CreateEditForm/CreateEditForm";
-import GetResponses from "./components/GetResponses/GetResponses";
-import FormFiller from "./components/FormFiller/FormFiller";
-import FormResponse from "./components/FormResponse/FormResponse";
 import { Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
-import FormManager from "./pages/FormManager/FormManager";
+
+import Navbar from "./components/Navbar/Navbar";
+
+import Home from "./components/Home/Home";
 import Admin from "./components/Admin/Admin";
+import FormManager from "./components/FormManager/FormManager";
+import FormFiller from "./components/FormFiller/FormFiller";
+
+import FormResponse from "./components/FormResponse/FormResponse";
+
 class App extends React.Component {
   state = {
     openSnackbarMessage: false,
