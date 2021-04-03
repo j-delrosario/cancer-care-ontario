@@ -8,6 +8,13 @@ class Text extends React.Component {
     input: this.props.question !== undefined ? this.props.question.answer : "",
   };
 
+  componentDidUpdate() {
+    if (!!this.props.clearResponse) {
+      this.state.input = "";
+      this.props.question.answer = "";
+    }
+  }
+
   onInputChange = (event) => {
     const value = event.target.value;
     this.setState({
@@ -26,11 +33,11 @@ class Text extends React.Component {
     return (
       <div className="textFieldContainer">
         <TextField
-          helperText={
+          /*helperText={
             this.props.required && this.state.input === "" ? "Required" : ""
           }
-          error={this.props.required && this.state.input === ""}
-          value={this.state.input}
+          error={this.props.required && this.state.input === ""}*/
+          value={!this.props.clearResponse ? this.state.input : ""}
           onChange={this.onInputChange}
           disabled={this.props.readOnly}
           multiline={this.props.readOnly}
