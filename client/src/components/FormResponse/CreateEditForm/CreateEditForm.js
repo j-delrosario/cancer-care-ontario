@@ -53,7 +53,7 @@ class CreateEditForm extends React.Component {
     this.getSDCForms();
     this.getPatients();
     this.getFormFillers();
-
+    window.scrollTo(0, 0)
   }
 
   getSDCForms = () => {
@@ -100,9 +100,6 @@ class CreateEditForm extends React.Component {
       this.setState({ form: null });
     } else {
       this.setState({ form: input });
-      console.log(input);
-      input.sections.map((section) => {console.log(section); return 0})
-
     }
   };
 
@@ -191,6 +188,13 @@ class CreateEditForm extends React.Component {
       });
   };
 
+  handleCancelClick = () => {
+    this.setState({
+      form: null,
+    });
+    this.props.resetTab(0);
+  };
+
   renderSubmitButton = () => {
     if (this.state.editMode) {
       return (
@@ -262,17 +266,23 @@ class CreateEditForm extends React.Component {
               <FormSection
                 section={section}
                 updateIsFormValid={this.updateIsFormValid}
+                readOnly={false}
               />
             </div>
           ))}
           <FormSection
             section={{ sections: [], questions: this.state.form.questions }}
             updateIsFormValid={this.updateIsFormValid}
+            readOnly={false}
           />
           </div>
           <div className="action-buttons">
-            <Link to="/">
-              <Button variant="contained" color="secondary">
+            <Link to="/form-filler">
+              <Button
+                onClick={this.handleCancelClick}
+                variant="contained"
+                color="secondary"
+              >
                 Cancel
               </Button>
             </Link>
@@ -284,39 +294,6 @@ class CreateEditForm extends React.Component {
       return <div></div>;
     }
   };
-
-  // // Returns question based on question type
-  // renderQuestionType(questionBody) {
-  //   if (questionBody.questionType == "TrueFalse") {
-  //     return <TrueFalse />;
-  //   } else if (questionBody.questionType == "MultipleChoice") {
-  //     // Check to see if radio, otherwise it is checkbox
-  //     return (
-  //       <MultipleChoice
-  //         isRadio={"is_radio" in questionBody ? questionBody.is_radio : false}
-  //         choices={questionBody.choices}
-  //         question={questionBody}
-  //         updateIsFormValid={this.updateIsFormValid}
-  //       />
-  //     );
-  //   } else if (questionBody.questionType == "String") {
-  //     return (
-  //       <Text
-  //         required={true}
-  //         question={questionBody}
-  //         updateIsFormValid={this.updateIsFormValid}
-  //       />
-  //     );
-  //   } else if (questionBody.questionType == "Int") {
-  //     return (
-  //       <Int
-  //         question={questionBody}
-  //         required={true}
-  //         updateIsFormValid={this.props.updateIsFormValid}
-  //       />
-  //     );
-  //   }
-  // }
 
   updateIsFormValid = (value) => {
     this.setState({

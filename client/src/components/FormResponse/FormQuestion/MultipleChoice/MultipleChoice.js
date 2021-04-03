@@ -14,24 +14,43 @@ class MultipleChoice extends React.Component {
   state = {
     maxSelections: this.props.maxSelections,
     choices: this.props.choices,
-    input: ""
+    input: "",
+    deselector: -1,
   };
 
   componentDidMount() {
-    if (this.state.maxSelections !== 1) {
-      // Give choices a checked property to keep track if user checked it
-      for (let index = 0; index < this.state.choices.length; index++) {
-        const element = this.state.choices[index];
-        if (element.checked === undefined) {
-          element.checked = false;
-        }
+    // Give choices a checked property to keep track if user checked it
+    for (let index = 0; index < this.state.choices.length; index++) {
+      const element = this.state.choices[index];
+      if (element.checked === undefined) {
+        element.checked = false;
       }
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.props.clearResponse) {
+      this.state.choices.map((choice) => {
+        choice.checked = false;
+      });
     }
   }
 
   handleInputChange = (event) => {
     this.setState({
       input: event.target.value,
+    });
+    let choiceIndex = -1;
+    for (var i = 0; i < this.state.choices.length; i += 1) {
+      this.state.choices[i].checked = false;
+      if (this.state.choices[i].questionBody.questionTitle === event.target.value) {
+        choiceIndex = i;
+      }
+    }
+    let newArray = [...this.state.choices];
+    newArray[choiceIndex].checked = event.target.checked;
+    this.setState({
+      choices: newArray,
     });
   };
 
@@ -52,12 +71,33 @@ class MultipleChoice extends React.Component {
         }
       }
     }
-    let newArray = [...this.state.choices];
+    let newArray;
+    if (event.target.checked && this.state.choices[choiceIndex].selectionDeselectsSiblings) {
+      newArray = this.state.choices.map((choice) => {
+        choice.checked = false;
+        return choice
+      });
+    } else {
+      newArray = this.state.choices.map((choice, index) => {
+        if (choice.selectionDeselectsSiblings && event.target.checked) {
+          choice.checked = false;
+        }
+        return choice
+      });;
+    }
     newArray[choiceIndex].checked = event.target.checked;
     this.setState({
       choices: newArray,
     });
   };
+
+  isDisabled(choice) {
+    return !choice.selectionDisablesChildren && !choice.checked;
+  }
+
+  isDeselected(choice) {
+
+  }
 
   renderQuestion = () => {
     if (this.state.maxSelections === 1) {
@@ -68,25 +108,31 @@ class MultipleChoice extends React.Component {
             value={this.state.input}
             onChange={this.handleInputChange}
           >
-            {this.state.choices.map((choice) => (
+            {this.state.choices.map((choice) => {
+              return (
               <div className="choiceContainer">
                 <div className="choiceText">
                   <FormControlLabel
                     control={
                       <Radio
+                      checked={!this.props.clearResponse ? choice.checked : false}
                       />
                     }
                     label={choice.questionBody.questionTitle}
                     value={choice.questionBody.questionTitle}
+                    disabled={this.props.readOnly}
                   />
                   <FormQuestion
                     question={choice}
                     noTitle={true}
                     updateIsFormValid={this.props.updateIsFormValid}
+                    readOnly={this.props.readOnly || this.isDisabled(choice)}
+                    selected={choice.checked}
+                    clearResponse={this.props.clearResponse || this.isDisabled(choice)}
                   />
                   </div>
               </div>
-            ))}
+            )})}
           </RadioGroup>
           </FormControl>
         </div>
@@ -103,12 +149,13 @@ class MultipleChoice extends React.Component {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={choice.checked}
+                        checked={!this.props.clearResponse ? choice.checked : false}
                         onChange={this.handleCheckboxChange}
                       />
                     }
                     label={choice.questionBody.questionTitle}
                     name={choice.questionBody.questionTitle}
+                    disabled={this.props.readOnly}
                   >
 
                   </FormControlLabel>
@@ -116,6 +163,9 @@ class MultipleChoice extends React.Component {
                     question={choice}
                     noTitle={true}
                     updateIsFormValid={this.props.updateIsFormValid}
+                    readOnly={this.props.readOnly || this.isDisabled(choice)}
+                    selected={choice.checked}
+                    clearResponse={this.props.clearResponse || this.isDisabled(choice)}
                 />
                 </div>
 

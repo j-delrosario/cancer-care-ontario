@@ -32,14 +32,24 @@ class FormQuestion extends React.Component {
     );
   };
 
+  isDisabled() {
+    if (this.props.selected)
+      return this.props.question.selectionDisablesChildren && this.props.selected;
+    else
+      return false;
+  }
+
   // Returns question based on question type
-  renderQuestionType(question) {
+  renderQuestionType(question, readOnly) {
     if (question.questionBody.questionType === "MultipleChoice") {
       return (
         <MultipleChoice
           maxSelections={question.maxSelections}
           choices={question.questionBody.choices}
           updateIsFormValid={this.props.updateIsFormValid}
+          readOnly={readOnly}
+          clearResponse={this.props.clearResponse || this.isDisabled()}
+          selected={this.props.selected}
         />
       );
     } else if (question.questionBody.questionType === "String") {
@@ -48,6 +58,9 @@ class FormQuestion extends React.Component {
           required={true}
           question={question.questionBody}
           updateIsFormValid={this.props.updateIsFormValid}
+          readOnly={readOnly}
+          clearResponse={this.props.clearResponse}
+
         />
       );
     } else if (question.questionBody.questionType === "Int") {
@@ -56,6 +69,8 @@ class FormQuestion extends React.Component {
           question={question.questionBody}
           required={true}
           updateIsFormValid={this.props.updateIsFormValid}
+          readOnly={readOnly}
+          clearResponse={this.props.clearResponse}
         />
       );
     }
@@ -68,20 +83,24 @@ class FormQuestion extends React.Component {
                 <div className="questionTitle">{this.props.noTitle ? "" : this.props.question.questionBody.questionTitle}</div>
                 <div className="questionText">{this.props.noTitle ? "" : this.props.question.questionBody.questionText}</div>
             </div>
-        {this.renderQuestionType(this.props.question)}
+        {this.renderQuestionType(this.props.question, this.props.readOnly)}
         {this.state.sections.map((section) => (
-            <div key={section.id}>
+            <div key={section.id} className="subSectionContainer">
               <FormSection
                 section={section}
                 updateIsFormValid={this.updateIsFormValid}
+                readOnly={this.props.readOnly || this.isDisabled()}
+                clearResponse={this.props.clearResponse || this.isDisabled()}
               />
             </div>
         ))}
         {this.state.questions.map((question) => (
-            <div key={question.id}>
+            <div key={question.id} className="subQuestionContainer">
               <FormQuestion
                 question={question}
                 updateIsFormValid={this.props.updateIsFormValid}
+                readOnly={this.props.readOnly || this.isDisabled()}
+                clearResponse={this.props.clearResponse || this.isDisabled()}
               />
             </div>
         ))}

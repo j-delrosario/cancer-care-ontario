@@ -1,6 +1,6 @@
 .questionContainer {
     margin-top: -10px;
-    margin-left: 20px;
+    margin-left: 30px;
   }
 
 .questionTitleContainer {
@@ -14,4 +14,12 @@
 
 .questionText {
 font-size: small;
+}
+
+.subQuestionContainer {
+    margin-left: -30px;
+}
+
+.subSectionContainer {
+    margin-left: 15px;
 }

@@ -1,7 +1,6 @@
 import React from "react";
 import { Tabs, Tab } from "@material-ui/core";
 import {CreateEditForm, GetResponses} from "../FormResponse";
-//import CreateEditForm from "../FormResponse/CreateEditForm/CreateEditForm";
 class FormFiller extends React.Component {
   state = {
     tab:
@@ -10,6 +9,7 @@ class FormFiller extends React.Component {
         : 0,
 
     tabText: "New Form",
+    reloadResponses: 0,
   };
 
   // ---------- Tabs ----------
@@ -25,18 +25,19 @@ class FormFiller extends React.Component {
         <CreateEditForm
           appState={this.props.appState}
           response={this.props.response}
+          resetTab={this.resetTab}
         />
       );
     }
     return (
-      <GetResponses appState={this.props.appState} resetTab={this.resetTab} />
+      <GetResponses appState={this.props.appState} resetTab={this.resetTab}/>
     );
   };
 
-  resetTab = () => {
+  resetTab = (tab) => {
     this.setState({
-      tab: 0,
-      tabText: "Edit Form",
+      tab: tab > 0 ? 1 : 0,
+      tabText: tab === -1 ? "Edit Form" : tab === 0 ? "New Form" : "Responses",
     });
   };
 

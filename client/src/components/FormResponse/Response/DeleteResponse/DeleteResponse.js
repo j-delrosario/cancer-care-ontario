@@ -44,7 +44,9 @@ class DeleteResponse extends React.Component {
           </CardContent>
           <CardActions className="classActions">
             <Button
-              onClick={() => this.handleSubmit()}
+              onClick={() => {
+                this.handleSubmit();
+              }}
               color="primary"
               variant="contained"
             >
