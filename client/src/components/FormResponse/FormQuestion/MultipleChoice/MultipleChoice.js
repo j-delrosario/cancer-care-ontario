@@ -14,7 +14,8 @@ class MultipleChoice extends React.Component {
   state = {
     maxSelections: this.props.maxSelections,
     choices: this.props.choices,
-    input: ""
+    input: "",
+    deselector: -1,
   };
 
   componentDidMount() {
@@ -31,7 +32,7 @@ class MultipleChoice extends React.Component {
     if (this.props.clearResponse) {
       this.state.choices.map((choice) => {
         choice.checked = false;
-      })
+      });
     }
   }
 
@@ -70,7 +71,20 @@ class MultipleChoice extends React.Component {
         }
       }
     }
-    let newArray = [...this.state.choices];
+    let newArray;
+    if (event.target.checked && this.state.choices[choiceIndex].selectionDeselectsSiblings) {
+      newArray = this.state.choices.map((choice) => {
+        choice.checked = false;
+        return choice
+      });
+    } else {
+      newArray = this.state.choices.map((choice, index) => {
+        if (choice.selectionDeselectsSiblings && event.target.checked) {
+          choice.checked = false;
+        }
+        return choice
+      });;
+    }
     newArray[choiceIndex].checked = event.target.checked;
     this.setState({
       choices: newArray,
@@ -79,6 +93,10 @@ class MultipleChoice extends React.Component {
 
   isDisabled(choice) {
     return !choice.selectionDisablesChildren && !choice.checked;
+  }
+
+  isDeselected(choice) {
+
   }
 
   renderQuestion = () => {
