@@ -30,6 +30,8 @@ class Int extends React.Component {
           }
           error={this.props.required && this.state.input === ""}
           onChange={this.onInputChange}
+          disabled={this.props.readOnly}
+          multiline={this.props.readOnly}
           value={this.state.input}
           variant="outlined"
           type="number"

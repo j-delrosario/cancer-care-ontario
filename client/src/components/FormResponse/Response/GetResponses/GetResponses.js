@@ -12,6 +12,7 @@ class GetResponses extends React.Component {
     patients: [],
     responses: [],
     formResponse: null,
+    hasDeleted: false,
     rows: [],
     columns: [
       { field: "_id", hide: true, filterable: false },
@@ -67,6 +68,20 @@ class GetResponses extends React.Component {
 
     // Get list of patients
     this.getPatients();
+  }
+
+  componentDidUpdate() {
+    if (this.state.hasDeleted) {
+      // Get all responses
+      this.getAllResponses();
+
+      // Get list of patients
+      this.getPatients();
+
+      this.setState({
+        hasDeleted: false,
+      })
+    }
   }
 
   getAllResponses = () => {
@@ -134,6 +149,7 @@ class GetResponses extends React.Component {
       responses: [],
       formResponse: null,
       patient: null,
+      hasDeleted: true,
     });
   };
 
@@ -181,19 +197,7 @@ class GetResponses extends React.Component {
   render() {
     return (
       <div className="responses-container">
-        {/* <Autocomplete
-          className="autocomplete"
-          value={this.state.patient}
-          onChange={this.onPatientChange}
-          options={this.state.patients}
-          getOptionLabel={(option) => option.name}
-          style={{ width: 300 }}
-          renderInput={(params) => (
-            <TextField {...params} label="Choose patient" variant="outlined" />
-          )}
-        />
-        {this.renderResponses()} */}
-        <div style={{ height: "100vh", width: "100%" }}>
+        <div style={{ height: "75vh", width: "100%" }}>
           <DataGrid
             rows={this.state.rows}
             columns={this.state.columns}

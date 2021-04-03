@@ -32,8 +32,9 @@ class Text extends React.Component {
           error={this.props.required && this.state.input === ""}
           value={this.state.input}
           onChange={this.onInputChange}
+          disabled={this.props.readOnly}
+          multiline={this.props.readOnly}
           fullWidth
-          multiline
           variant="outlined"
         />
       </div>

@@ -18,13 +18,11 @@ class MultipleChoice extends React.Component {
   };
 
   componentDidMount() {
-    if (this.state.maxSelections !== 1) {
-      // Give choices a checked property to keep track if user checked it
-      for (let index = 0; index < this.state.choices.length; index++) {
-        const element = this.state.choices[index];
-        if (element.checked === undefined) {
-          element.checked = false;
-        }
+    // Give choices a checked property to keep track if user checked it
+    for (let index = 0; index < this.state.choices.length; index++) {
+      const element = this.state.choices[index];
+      if (element.checked === undefined) {
+        element.checked = false;
       }
     }
   }
@@ -32,6 +30,18 @@ class MultipleChoice extends React.Component {
   handleInputChange = (event) => {
     this.setState({
       input: event.target.value,
+    });
+    let choiceIndex = -1;
+    for (var i = 0; i < this.state.choices.length; i += 1) {
+      this.state.choices[i].checked = false;
+      if (this.state.choices[i].questionBody.questionTitle === event.target.value) {
+        choiceIndex = i;
+      }
+    }
+    let newArray = [...this.state.choices];
+    newArray[choiceIndex].checked = event.target.checked;
+    this.setState({
+      choices: newArray,
     });
   };
 
@@ -68,25 +78,31 @@ class MultipleChoice extends React.Component {
             value={this.state.input}
             onChange={this.handleInputChange}
           >
-            {this.state.choices.map((choice) => (
+            {this.state.choices.map((choice) => {
+              console.log("RAR: " + this.state.input)
+              console.log("RAR2: " + choice.questionBody.questionTitle)
+              return (
               <div className="choiceContainer">
                 <div className="choiceText">
                   <FormControlLabel
                     control={
                       <Radio
+                      checked={choice.checked}
                       />
                     }
                     label={choice.questionBody.questionTitle}
                     value={choice.questionBody.questionTitle}
+                    disabled={this.props.readOnly}
                   />
                   <FormQuestion
                     question={choice}
                     noTitle={true}
                     updateIsFormValid={this.props.updateIsFormValid}
+                    readOnly={this.props.readOnly}
                   />
                   </div>
               </div>
-            ))}
+            )})}
           </RadioGroup>
           </FormControl>
         </div>
@@ -109,13 +125,15 @@ class MultipleChoice extends React.Component {
                     }
                     label={choice.questionBody.questionTitle}
                     name={choice.questionBody.questionTitle}
+                    disabled={this.props.readOnly}
                   >
 
                   </FormControlLabel>
-                <FormQuestion
+                <FormQuestion className="test"
                     question={choice}
                     noTitle={true}
                     updateIsFormValid={this.props.updateIsFormValid}
+                    readOnly={this.props.readOnly}
                 />
                 </div>
 

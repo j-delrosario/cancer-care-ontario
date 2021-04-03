@@ -33,13 +33,14 @@ class FormQuestion extends React.Component {
   };
 
   // Returns question based on question type
-  renderQuestionType(question) {
+  renderQuestionType(question, readOnly) {
     if (question.questionBody.questionType === "MultipleChoice") {
       return (
         <MultipleChoice
           maxSelections={question.maxSelections}
           choices={question.questionBody.choices}
           updateIsFormValid={this.props.updateIsFormValid}
+          readOnly={readOnly}
         />
       );
     } else if (question.questionBody.questionType === "String") {
@@ -48,14 +49,17 @@ class FormQuestion extends React.Component {
           required={true}
           question={question.questionBody}
           updateIsFormValid={this.props.updateIsFormValid}
+          readOnly={readOnly}
         />
       );
     } else if (question.questionBody.questionType === "Int") {
+      console.log(readOnly)
       return (
         <Int
           question={question.questionBody}
           required={true}
           updateIsFormValid={this.props.updateIsFormValid}
+          readOnly={readOnly}
         />
       );
     }
@@ -68,12 +72,13 @@ class FormQuestion extends React.Component {
                 <div className="questionTitle">{this.props.noTitle ? "" : this.props.question.questionBody.questionTitle}</div>
                 <div className="questionText">{this.props.noTitle ? "" : this.props.question.questionBody.questionText}</div>
             </div>
-        {this.renderQuestionType(this.props.question)}
+        {this.renderQuestionType(this.props.question, this.props.readOnly)}
         {this.state.sections.map((section) => (
             <div key={section.id}>
               <FormSection
                 section={section}
                 updateIsFormValid={this.updateIsFormValid}
+                readOnly={this.props.readOnly}
               />
             </div>
         ))}
@@ -82,6 +87,7 @@ class FormQuestion extends React.Component {
               <FormQuestion
                 question={question}
                 updateIsFormValid={this.props.updateIsFormValid}
+                readOnly={this.props.readOnly}
               />
             </div>
         ))}

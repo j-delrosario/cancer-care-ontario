@@ -4,10 +4,9 @@ import { Link, withRouter } from "react-router-dom";
 
 import "./Response.css";
 
-import IntResponse from "./IntResponse/IntResponse";
-import TextResponse from "./TextResponse/TextResponse";
-import MultipleChoiceResponse from "./MultipleChoiceResponse/MultipleChoiceResponse";
 import DeleteResponse from "./DeleteResponse/DeleteResponse";
+import FormSection from "../FormSection/FormSection"
+import FormQuestion from "../FormQuestion/FormQuestion"
 
 class Response extends React.Component {
   state = {
@@ -29,30 +28,39 @@ class Response extends React.Component {
       });
     }
   }
-  renderQuestionType(questionBody) {
-    if (questionBody.questionType === "MultipleChoice") {
-      // Check to see if radio, otherwise it is checkbox
-      return (
-        <MultipleChoiceResponse
-          isRadio={questionBody.selectionDeselectsSiblings}
-          choices={questionBody.choices}
-          question={questionBody}
-        />
-      );
-    } else if (questionBody.questionType === "String") {
-      return <TextResponse question={questionBody} />;
-    } else if (questionBody.questionType === "Int") {
-      return <IntResponse question={questionBody} />;
-    }
+
+  componentDidUpdate() {
+    this.state.response = this.props.response;
+    this.state.form = this.props.response.SDCForm;
   }
 
+  handleCancelClick = () => {
+    this.setState({
+      response: undefined,
+      form: undefined,
+    });
+  };
+
   handleEditClick = () => {
-    this.props.resetTab();
+    this.props.resetTab(-1);
     this.props.history.push({
       pathname: "/form-filler",
       // search: '?query=abc',
       state: { response: this.props.response },
     });
+  };
+  // ------ Modal -------
+  handleDeleteModalOpen = () => {
+    this.setState({
+      deleteModalOpen: true,
+    });
+  };
+
+  handleDeleteModalClose = () => {
+    this.setState({
+      deleteModalOpen: false,
+    });
+    this.props.reset();
   };
 
   renderActionButtons = () => {
@@ -61,8 +69,12 @@ class Response extends React.Component {
         <div>
           <div className="action-buttons">
             <div className="left-buttons">
-              <Link className="response-link" to="/">
-                <Button variant="contained" color="secondary">
+              <Link className="response-link" to="/form-filler">
+                <Button
+                  onClick={() => this.handleCancelClick()}
+                  variant="contained"
+                  color="secondary"
+                >
                   Cancel
                 </Button>
               </Link>
@@ -89,24 +101,11 @@ class Response extends React.Component {
     }
   };
 
-  // ------ Modal -------
-  handleDeleteModalOpen = () => {
-    this.setState({
-      deleteModalOpen: true,
-    });
-  };
-
-  handleDeleteModalClose = () => {
-    this.setState({
-      deleteModalOpen: false,
-    });
-  };
-
   render() {
     return (
       <div>
         {" "}
-        {this.props.response === undefined ? (
+        {this.state.response === undefined ? (
           ""
         ) : (
           <div>
@@ -114,7 +113,7 @@ class Response extends React.Component {
             <div className="flex-row">
               <div className="bold">URL: </div>
               <div className="side-margin">
-                form-response/{this.props.response._id}
+                {window.location.protocol + window.location.host}/form-response/{this.props.response._id}
               </div>
             </div>
             <div className="patient-filler-container">
@@ -127,38 +126,20 @@ class Response extends React.Component {
                 <div>{this.props.response.formFiller.name}</div>
               </div>
             </div>
-            {this.props.response.SDCForm.questions.map((question) => (
-              <div key={question.id} className="questionContainer">
-                <div className="questionTitle">
-                  {question.questionBody.questionTitle}
-                </div>
-                <div className="questionText">
-                  {question.questionBody.questionText}
-                </div>
-
-                {this.renderQuestionType(question.questionBody)}
-              </div>
-            ))}
             {this.props.response.SDCForm.sections.map((section) => (
               <div key={section.id}>
-                <div className="sectionTitleContainer">
-                  <div className="sectionTitle">{section.title}</div>
-                  <div className="sectionText">{section.sectionText}</div>
-                </div>
-                {section.questions.map((question) => (
-                  <div key={question.id} className="questionContainer">
-                    <div className="questionTitle">
-                      {question.questionBody.questionTitle}
-                    </div>
-                    <div className="questionText">
-                      {question.questionBody.questionText}
-                    </div>
-
-                    {this.renderQuestionType(question.questionBody)}
-                  </div>
-                ))}
+                <FormSection
+                  section={section}
+                  updateIsFormValid={() => {return}}
+                  readOnly={true}
+                />
               </div>
             ))}
+            <FormSection
+                  section={{sections: [], questions: this.props.response.SDCForm.questions}}
+                  updateIsFormValid={() => {return}}
+                  readOnly={true}
+            />
             {this.renderActionButtons()}
           </div>
         )}

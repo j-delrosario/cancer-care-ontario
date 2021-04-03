@@ -32,36 +32,6 @@ class FormSection extends React.Component {
     );
   };
 
-  // Returns question based on question type
-  renderQuestionType(questionBody) {
-    if (questionBody.questionType === "MultipleChoice") {
-      return (
-        <MultipleChoice
-          isRadio={questionBody.selectionDeselectsSiblings}
-          choices={questionBody.choices}
-          question={questionBody}
-          updateIsFormValid={this.props.updateIsFormValid}
-        />
-      );
-    } else if (questionBody.questionType === "String") {
-      return (
-        <Text
-          required={true}
-          question={questionBody}
-          updateIsFormValid={this.props.updateIsFormValid}
-        />
-      );
-    } else if (questionBody.questionType === "Int") {
-      return (
-        <Int
-          question={questionBody}
-          required={true}
-          updateIsFormValid={this.props.updateIsFormValid}
-        />
-      );
-    }
-  }
-
   render() {
     return (
       <div className="sectionContainer">
@@ -74,6 +44,7 @@ class FormSection extends React.Component {
               <FormSection
                 section={section}
                 updateIsFormValid={this.props.updateIsFormValid}
+                readOnly={this.props.readOnly}
               />
             </div>
         ))}
@@ -82,6 +53,7 @@ class FormSection extends React.Component {
             <FormQuestion
               question={question}
               updateIsFormValid={this.props.updateIsFormValid}
+              readOnly={this.props.readOnly}
             />
           </div>
         ))}
