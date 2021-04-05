@@ -45,7 +45,7 @@ class App extends React.Component {
               path="/"
               render={() => (
                 <div>
-                  <Navbar />
+                  {/* <Navbar /> */}
                   <Home />
                 </div>
               )}
@@ -80,7 +80,7 @@ class App extends React.Component {
           <Switch>
             <Route
               exact
-              path="/formmanager"
+              path="/form-manager"
               render={() => (
                 <div>
                   <Navbar />

@@ -1,0 +1,10 @@
+.homepageview {
+    width: 1140px;
+    /* height: 2; */
+    margin: 40vh auto;
+}
+
+.link-text {
+    text-decoration: none;
+    color: black;
+}

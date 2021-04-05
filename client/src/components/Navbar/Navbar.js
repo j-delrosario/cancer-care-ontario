@@ -17,7 +17,7 @@ class Navbar extends React.Component {
             <Link to="/form-filler" className="link">
               Form Filler
             </Link>
-            <Link to="/formmanager" className="link">
+            <Link to="/form-manager" className="link">
               Form Manager
             </Link>
             <Link to="/form-receiver" className="link">
