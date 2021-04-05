@@ -9,7 +9,7 @@ import {
   Paper,
 } from "@material-ui/core";
 import "./Patients.css";
-import CreatePatient from "../../CreatePatient/CreatePatient";
+import { CreatePatient } from "../../FormFiller/";
 
 class Patients extends React.Component {
   state = {

@@ -1,6 +1,10 @@
-import React, { Component } from "react";
-import Response from "../Response/Response";
+import React from "react";
 import axios from "axios";
+
+import "./FormResponse.css"
+
+import Response from "./Response/Response";
+
 class FormResponse extends React.Component {
   state = {
     response: "",
@@ -26,7 +30,7 @@ class FormResponse extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="responseContainer">
         {this.state.response !== "" ? (
           <Response response={this.state.response} />
         ) : (

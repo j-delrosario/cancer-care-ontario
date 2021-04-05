@@ -3,3 +3,10 @@
   font-size: x-large;
   font-weight: bold;
 }
+
+.base {
+    /* margin: 20px !important; */
+    padding: 20px;
+    max-width: 1140px;
+    margin: auto;
+}

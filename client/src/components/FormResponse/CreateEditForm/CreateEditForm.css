@@ -1,0 +1,29 @@
+.container {
+  margin: 10px;
+}
+
+.formSectionContainer {
+  margin-left: 5px;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.autocomplete {
+  margin: 5px;
+}
+
+.patient-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.or {
+  display: flex;
+  align-items: center;
+}
+h1 {
+  margin-left: 5px;
+}
