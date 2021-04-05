@@ -1,11 +1,12 @@
 import React from "react";
-import TextField from "@material-ui/core/TextField";
+import { TextField, FormHelperText } from "@material-ui/core";
 
 import "./Text.css";
 
 class Text extends React.Component {
   state = {
     input: this.props.question !== undefined ? this.props.question.answer : "",
+    isFormQuestionValid: this.props.required === true ? false : true,
   };
 
   componentDidUpdate() {
@@ -22,21 +23,26 @@ class Text extends React.Component {
     });
 
     this.props.question.answer = value;
-    if (value !== "" && this.props.required) {
-      this.props.updateIsFormValid(true);
-    } else {
-      this.props.updateIsFormValid(false);
+
+    const isFormValid = this.checkIfQuestionIsValid();
+    this.setState({
+      isFormQuestionValid: isFormValid,
+    });
+
+    this.props.question.isValid = isFormValid;
+  };
+
+  checkIfQuestionIsValid = () => {
+    if (this.props.required !== undefined && this.props.required === true) {
+      return this.state.input !== "";
     }
+    return true;
   };
 
   render() {
     return (
       <div className="textFieldContainer">
         <TextField
-          /*helperText={
-            this.props.required && this.state.input === "" ? "Required" : ""
-          }
-          error={this.props.required && this.state.input === ""}*/
           value={!this.props.clearResponse ? this.state.input : ""}
           onChange={this.onInputChange}
           disabled={this.props.readOnly}
@@ -44,6 +50,12 @@ class Text extends React.Component {
           fullWidth
           variant="outlined"
         />
+        {/* {this.props.required !== undefined && this.props.required === true
+          ? "Required"
+          : "Not Required"} */}
+        {/* <FormHelperText>
+          {this.state.isFormQuestionValid === true ? "" : "Required"}
+        </FormHelperText> */}
       </div>
     );
   }
