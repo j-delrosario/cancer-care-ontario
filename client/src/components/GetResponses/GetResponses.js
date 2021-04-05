@@ -195,11 +195,11 @@ class GetResponses extends React.Component {
           )}
         />
         {this.renderResponses()} */}
-        <div style={{ height: "100vh", width: "100%" }}>
+        <div style={{ height: 660, width: "100%" }}>
           <DataGrid
             rows={this.state.rows}
             columns={this.state.columns}
-            pageSize={20}
+            pageSize={10}
           />
         </div>
         {this.renderFormResponse()}
