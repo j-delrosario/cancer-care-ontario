@@ -11,7 +11,6 @@ async function startServer() {
   const bodyParser = require("body-parser");
   app.use(bodyParser.json());
   app.use(require("./routes/patients"));
-  app.use(require("./routes/SDCFormResponses"));
 
   app.listen(config.port, (err) => {
     if (err) {
