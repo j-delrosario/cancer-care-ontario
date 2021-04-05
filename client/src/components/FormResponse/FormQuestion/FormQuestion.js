@@ -13,30 +13,30 @@ class FormQuestion extends React.Component {
 
   componentDidMount() {
     this.sortQuestions();
-    this.setState(
-      {
-        sections: this.props.question.sections,
-      },
-    );
+    this.setState({
+      sections: this.props.question.sections,
+    });
   }
 
   sortQuestions = () => {
     const sortedQuestions = this.props.question.questions.sort(function (a, b) {
-      return a.orderNumber > b.orderNumber ?  1 :
-             b.orderNumber > a.orderNumber ? -1 : 0;
+      return a.orderNumber > b.orderNumber
+        ? 1
+        : b.orderNumber > a.orderNumber
+        ? -1
+        : 0;
     });
-    this.setState(
-      {
-        questions: sortedQuestions,
-      },
-    );
+    this.setState({
+      questions: sortedQuestions,
+    });
   };
 
   isDisabled() {
     if (this.props.selected)
-      return this.props.question.selectionDisablesChildren && this.props.selected;
-    else
-      return false;
+      return (
+        this.props.question.selectionDisablesChildren && this.props.selected
+      );
+    else return false;
   }
 
   // Returns question based on question type
@@ -44,6 +44,7 @@ class FormQuestion extends React.Component {
     if (question.questionBody.questionType === "MultipleChoice") {
       return (
         <MultipleChoice
+          question={question.questionBody}
           maxSelections={question.maxSelections}
           choices={question.questionBody.choices}
           updateIsFormValid={this.props.updateIsFormValid}
@@ -55,19 +56,18 @@ class FormQuestion extends React.Component {
     } else if (question.questionBody.questionType === "String") {
       return (
         <Text
-          required={true}
+          required={this.props.required}
           question={question.questionBody}
           updateIsFormValid={this.props.updateIsFormValid}
           readOnly={readOnly}
           clearResponse={this.props.clearResponse}
-
         />
       );
     } else if (question.questionBody.questionType === "Int") {
       return (
         <Int
           question={question.questionBody}
-          required={true}
+          required={this.props.required}
           updateIsFormValid={this.props.updateIsFormValid}
           readOnly={readOnly}
           clearResponse={this.props.clearResponse}
@@ -79,32 +79,41 @@ class FormQuestion extends React.Component {
   render() {
     return (
       <div className="questionContainer">
-            <div className="questionTitleContainer">
-                <div className="questionTitle">{this.props.noTitle ? "" : this.props.question.questionBody.questionTitle}</div>
-                <div className="questionText">{this.props.noTitle ? "" : this.props.question.questionBody.questionText}</div>
-            </div>
+        <div className="questionTitleContainer">
+          <div className="questionTitle">
+            {this.props.noTitle
+              ? ""
+              : this.props.question.questionBody.questionTitle}
+          </div>
+          <div className="questionText">
+            {this.props.noTitle
+              ? ""
+              : this.props.question.questionBody.questionText}
+          </div>
+        </div>
         {this.renderQuestionType(this.props.question, this.props.readOnly)}
         {this.state.sections.map((section) => (
-            <div key={section.id} className="subSectionContainer">
-              <FormSection
-                section={section}
-                updateIsFormValid={this.updateIsFormValid}
-                readOnly={this.props.readOnly || this.isDisabled()}
-                clearResponse={this.props.clearResponse || this.isDisabled()}
-              />
-            </div>
+          <div key={section.id} className="subSectionContainer">
+            <FormSection
+              required={true}
+              section={section}
+              updateIsFormValid={this.updateIsFormValid}
+              readOnly={this.props.readOnly || this.isDisabled()}
+              clearResponse={this.props.clearResponse || this.isDisabled()}
+            />
+          </div>
         ))}
         {this.state.questions.map((question) => (
-            <div key={question.id} className="subQuestionContainer">
-              <FormQuestion
-                question={question}
-                updateIsFormValid={this.props.updateIsFormValid}
-                readOnly={this.props.readOnly || this.isDisabled()}
-                clearResponse={this.props.clearResponse || this.isDisabled()}
-              />
-            </div>
+          <div key={question.id} className="subQuestionContainer">
+            <FormQuestion
+              required={true}
+              question={question}
+              updateIsFormValid={this.props.updateIsFormValid}
+              readOnly={this.props.readOnly || this.isDisabled()}
+              clearResponse={this.props.clearResponse || this.isDisabled()}
+            />
+          </div>
         ))}
-
       </div>
     );
   }

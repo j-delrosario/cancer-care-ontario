@@ -1,11 +1,17 @@
 import React from "react";
-import TextField from "@material-ui/core/TextField";
+import { TextField, FormHelperText } from "@material-ui/core";
 
-import "./Int.css"
+import "./Int.css";
 
 class Int extends React.Component {
   state = {
-    input: this.props.question !== undefined ? !this.props.clearResponse ? this.props.question.answer : "" : "",
+    input:
+      this.props.question !== undefined
+        ? !this.props.clearResponse
+          ? this.props.question.answer
+          : ""
+        : "",
+    isFormQuestionValid: this.props.required === true ? false : true,
   };
 
   componentDidUpdate() {
@@ -22,20 +28,35 @@ class Int extends React.Component {
     });
     this.props.question.answer = value;
 
-    if (value !== "" && this.props.required) {
-      this.props.updateIsFormValid(true);
-    } else {
-      this.props.updateIsFormValid(false);
-    }
+    // if (value !== "" && this.props.required) {
+    //   this.props.updateIsFormValid(true);
+    // } else {
+    //   this.props.updateIsFormValid(false);
+    // }
+
+    const isFormValid = this.checkIfQuestionIsValid();
+    this.setState({
+      isFormQuestionValid: isFormValid,
+    });
+
+    this.props.question.isValid = isFormValid;
   };
+
+  checkIfQuestionIsValid = () => {
+    if (this.props.required !== undefined && this.props.required === true) {
+      return this.state.input !== "";
+    }
+    return true;
+  };
+
   render() {
     return (
       <div className="numberInputContainer">
         <TextField
-          /*helperText={
-            this.props.required && this.state.input === "" ? "Required" : ""
-          }
-          error={this.props.required && this.state.input === ""}*/
+          // helperText={
+          //   this.props.question.answer === undefined ? "Required" : ""
+          // }
+          // error={this.props.question.answer === undefined}
           value={!this.props.clearResponse ? this.state.input : ""}
           onChange={this.onInputChange}
           disabled={this.props.readOnly}
@@ -46,6 +67,9 @@ class Int extends React.Component {
             shrink: true,
           }}
         />
+        {/* <FormHelperText>
+          {this.state.isFormQuestionValid === true ? "" : "Required"}
+        </FormHelperText> */}
       </div>
     );
   }

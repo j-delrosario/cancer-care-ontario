@@ -5,8 +5,9 @@ import { Link, withRouter } from "react-router-dom";
 import "./Response.css";
 
 import DeleteResponse from "./DeleteResponse/DeleteResponse";
-import FormSection from "../FormSection/FormSection"
-import FormQuestion from "../FormQuestion/FormQuestion"
+import FormSection from "../FormSection/FormSection";
+import FormQuestion from "../FormQuestion/FormQuestion";
+import MailOutlineIcon from "@material-ui/icons/MailOutline";
 
 class Response extends React.Component {
   state = {
@@ -17,7 +18,6 @@ class Response extends React.Component {
   };
 
   componentDidMount() {
-    console.log("props", this.props);
     // If coming from the FormFiller page then canEdit is true
     if (
       this.props.location.state !== undefined &&
@@ -109,11 +109,24 @@ class Response extends React.Component {
           ""
         ) : (
           <div>
+            <div>
+              <Button
+                color="primary"
+                variant="contained"
+                href={"mailto:"}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="email-button"
+              >
+                Email Form Receiver &nbsp; <MailOutlineIcon />
+              </Button>
+            </div>
             <h1>{this.props.response.SDCForm.title}</h1>
             <div className="flex-row">
               <div className="bold">URL: </div>
               <div className="side-margin">
-                {window.location.protocol + window.location.host}/form-response/{this.props.response._id}
+                {window.location.protocol + window.location.host}/form-response/
+                {this.props.response._id}
               </div>
             </div>
             <div className="patient-filler-container">
@@ -130,15 +143,22 @@ class Response extends React.Component {
               <div key={section.id}>
                 <FormSection
                   section={section}
-                  updateIsFormValid={() => {return}}
+                  updateIsFormValid={() => {
+                    return;
+                  }}
                   readOnly={true}
                 />
               </div>
             ))}
             <FormSection
-                  section={{sections: [], questions: this.props.response.SDCForm.questions}}
-                  updateIsFormValid={() => {return}}
-                  readOnly={true}
+              section={{
+                sections: [],
+                questions: this.props.response.SDCForm.questions,
+              }}
+              updateIsFormValid={() => {
+                return;
+              }}
+              readOnly={true}
             />
             {this.renderActionButtons()}
           </div>

@@ -1,8 +1,9 @@
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import { Button, Modal, TextField } from "@material-ui/core";
+import { Button, CardContent, Modal, TextField, Card } from "@material-ui/core";
 import axios from "axios";
+import MailOutlineIcon from "@material-ui/icons/MailOutline";
 
 import "./CreateEditForm.css";
 
@@ -19,7 +20,7 @@ class CreateEditForm extends React.Component {
     procedures: [{ title: "Adrenal Gland" }],
     procedure:
       this.props.location.state !== undefined
-        ? { title: "Adrenal Gland" } // TODO: Change when diagnostic prodecure name/title is captured
+        ? this.props.location.state.response.SDCForm.diagnosticProcedure.id
         : null,
     patients: [],
     patient:
@@ -40,6 +41,8 @@ class CreateEditForm extends React.Component {
         ? this.props.location.state.response
         : null,
     sdcForms: [],
+    formSubmittedModalOpen: false,
+    formId: 0,
   };
   componentDidMount() {
     // If a form has been sent in from clicking the edit button, then we are in edit mode
@@ -53,7 +56,7 @@ class CreateEditForm extends React.Component {
     this.getSDCForms();
     this.getPatients();
     this.getFormFillers();
-    window.scrollTo(0, 0)
+    window.scrollTo(0, 0);
   }
 
   getSDCForms = () => {
@@ -120,7 +123,36 @@ class CreateEditForm extends React.Component {
     return this.state.patient !== null && this.state.formFiller !== null;
   };
 
+  checkIfFormIsValid = () => {
+    for (let i = 0; this.state.form.sections; i++) {
+      for (let j = 0; this.state.form.sections[i].questions; i++) {
+        console.log(
+          "this.state.form.sections[i].questions[j]",
+          this.state.form.sections[i].questions[j]
+        );
+        console.log(
+          "this.state.form.sections[i].questions[j].questionBody.isValid: ",
+          this.state.form.sections[i].questions[j].questionBody.isValid
+        );
+        if (
+          this.state.form.sections[i].questions[j].questionBody.isValid ==
+            undefined ||
+          this.state.form.sections[i].questions[j].questionBody.isValid == false
+        ) {
+          console.log(
+            "please fill out: ",
+            this.state.form.sections[i].questions[j].questionBody.questionTitle
+          );
+          return false;
+        }
+      }
+    }
+    return true;
+  };
+
   handleSubmit = () => {
+    const isValid = this.checkIfFormIsValid();
+    console.log("is form valid? ", isValid);
     axios
       .post("/api/SDCFormResponse/responses/", {
         patient: this.state.patient,
@@ -131,6 +163,12 @@ class CreateEditForm extends React.Component {
       .then((res) => {
         console.log(res.data._id); // url
         let url = res.data._id;
+        this.setState(
+          {
+            formId: res.data._id,
+          }
+          // this.handleFormSubmittedModalOpen()
+        );
         console.log("form submitted");
 
         // Open success message
@@ -225,56 +263,22 @@ class CreateEditForm extends React.Component {
     if (this.state.form !== null) {
       return (
         <div>
-          <div className="patient-container">
-            <Autocomplete
-              className="autocomplete"
-              required
-              noOptionsText={
-                <Button
-                  onMouseDown={() => this.handleCreatePatientModalOpen()}
-                  variant="contained"
-                >
-                  Add New Patient
-                </Button>
-              }
-              value={this.state.patient}
-              onChange={this.onPatientChange}
-              options={this.state.patients}
-              getOptionLabel={(option) => option.name}
-              style={{ width: 300 }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Choose patient"
-                  variant="outlined"
-                />
-              )}
-            />
-            <div className="or">-- OR --</div>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => this.handleCreatePatientModalOpen()}
-            >
-              Add New Patient
-            </Button>
-          </div>
           <h1>{this.state.form.title}</h1>
           <div className="formSectionContainer">
-          {this.state.form.sections.map((section) => (
-            <div key={section.id}>
-              <FormSection
-                section={section}
-                updateIsFormValid={this.updateIsFormValid}
-                readOnly={false}
-              />
-            </div>
-          ))}
-          <FormSection
-            section={{ sections: [], questions: this.state.form.questions }}
-            updateIsFormValid={this.updateIsFormValid}
-            readOnly={false}
-          />
+            {this.state.form.sections.map((section) => (
+              <div key={section.id}>
+                <FormSection
+                  section={section}
+                  updateIsFormValid={this.updateIsFormValid}
+                  readOnly={false}
+                />
+              </div>
+            ))}
+            <FormSection
+              section={{ sections: [], questions: this.state.form.questions }}
+              updateIsFormValid={this.updateIsFormValid}
+              readOnly={false}
+            />
           </div>
           <div className="action-buttons">
             <Link to="/form-filler">
@@ -325,10 +329,56 @@ class CreateEditForm extends React.Component {
     });
   };
 
+  handleFormSubmittedModalOpen = () => {
+    this.setState({
+      formSubmittedModalOpen: true,
+    });
+  };
+
+  handleFormSubmittedModalClose = () => {
+    this.setState({
+      formSubmittedModalOpen: false,
+    });
+  };
+
   render() {
     return (
       <div className="container">
         <div>
+          <div className="patient-container">
+            <Autocomplete
+              className="autocomplete"
+              required
+              noOptionsText={
+                <Button
+                  onMouseDown={() => this.handleCreatePatientModalOpen()}
+                  variant="contained"
+                >
+                  Add New Patient
+                </Button>
+              }
+              value={this.state.patient}
+              onChange={this.onPatientChange}
+              options={this.state.patients}
+              getOptionLabel={(option) => option.name}
+              style={{ width: 300 }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Choose patient"
+                  variant="outlined"
+                />
+              )}
+            />
+            <div className="or">-- OR --</div>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => this.handleCreatePatientModalOpen()}
+            >
+              Add New Patient
+            </Button>
+          </div>
           <Autocomplete
             className="autocomplete"
             required
@@ -383,6 +433,29 @@ class CreateEditForm extends React.Component {
             reloadFormFillers={this.getFormFillers}
             appState={this.props.appState}
           />
+        </Modal>
+        <Modal
+          open={this.state.formSubmittedModalOpen}
+          onClose={this.handleFormSubmittedModalClose}
+          className="form-submitted-modal"
+        >
+          <Card>
+            <CardContent>
+              <div className="form-submitted-title">Form Submitted!</div>
+              <div className="form-submitted-text">
+                The form id is: {this.state.formId}
+              </div>
+              <Button
+                color="primary"
+                variant="contained"
+                href={"mailto:"}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Email Form Receiver &nbsp; <MailOutlineIcon />
+              </Button>
+            </CardContent>
+          </Card>
         </Modal>
       </div>
     );

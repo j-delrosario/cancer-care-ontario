@@ -34,3 +34,7 @@
   -webkit-user-select: all; /* for Safari */
   user-select: all;
 }
+
+.email-button {
+  float: right;
+}

@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { DataGrid } from '@material-ui/data-grid';
+import { DataGrid } from "@material-ui/data-grid";
 import { Button } from "@material-ui/core";
 import Response from "../Response";
 
@@ -19,7 +19,7 @@ class GetResponses extends React.Component {
       {
         field: "SDCForm.title",
         headerName: "Form",
-        width: 250,
+        width: 350,
         valueGetter: (params) => params.row?.SDCForm?.title,
         renderCell: (params) => (
           <strong>
@@ -80,7 +80,7 @@ class GetResponses extends React.Component {
 
       this.setState({
         hasDeleted: false,
-      })
+      });
     }
   }
 
@@ -201,7 +201,7 @@ class GetResponses extends React.Component {
           <DataGrid
             rows={this.state.rows}
             columns={this.state.columns}
-            pageSize={20}
+            pageSize={10}
           />
         </div>
         {this.renderFormResponse()}

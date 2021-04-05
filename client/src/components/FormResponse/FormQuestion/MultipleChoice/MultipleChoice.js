@@ -1,14 +1,16 @@
 import React from "react";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormGroup from "@material-ui/core/FormGroup";
-import FormControl from "@material-ui/core/FormControl";
-import Checkbox from "@material-ui/core/Checkbox";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-
+import {
+  Radio,
+  RadioGroup,
+  FormGroup,
+  FormControl,
+  Checkbox,
+  FormControlLabel,
+  FormHelperText,
+} from "@material-ui/core";
 import "./MultipleChoice.css";
 
-import FormQuestion from "../../FormQuestion/FormQuestion"
+import FormQuestion from "../../FormQuestion/FormQuestion";
 
 class MultipleChoice extends React.Component {
   state = {
@@ -16,6 +18,7 @@ class MultipleChoice extends React.Component {
     choices: this.props.choices,
     input: "",
     deselector: -1,
+    isFormQuestionValid: false,
   };
 
   componentDidMount() {
@@ -43,7 +46,9 @@ class MultipleChoice extends React.Component {
     let choiceIndex = -1;
     for (var i = 0; i < this.state.choices.length; i += 1) {
       this.state.choices[i].checked = false;
-      if (this.state.choices[i].questionBody.questionTitle === event.target.value) {
+      if (
+        this.state.choices[i].questionBody.questionTitle === event.target.value
+      ) {
         choiceIndex = i;
       }
     }
@@ -52,6 +57,14 @@ class MultipleChoice extends React.Component {
     this.setState({
       choices: newArray,
     });
+
+    // If a radio option is selected, the question is valid/completed
+    if (event.target.checked === true) {
+      this.setState({
+        isFormQuestionValid: true,
+      });
+      this.props.question.isValid = true;
+    }
   };
 
   handleCheckboxChange = (event) => {
@@ -72,68 +85,99 @@ class MultipleChoice extends React.Component {
       }
     }
     let newArray;
-    if (event.target.checked && this.state.choices[choiceIndex].selectionDeselectsSiblings) {
+    if (
+      event.target.checked &&
+      this.state.choices[choiceIndex].selectionDeselectsSiblings
+    ) {
       newArray = this.state.choices.map((choice) => {
         choice.checked = false;
-        return choice
+        return choice;
       });
     } else {
       newArray = this.state.choices.map((choice, index) => {
         if (choice.selectionDeselectsSiblings && event.target.checked) {
           choice.checked = false;
         }
-        return choice
-      });;
+        return choice;
+      });
     }
     newArray[choiceIndex].checked = event.target.checked;
     this.setState({
       choices: newArray,
     });
+
+    // Check to see if there is atleast one answer selected. If so, question is valid.
+    // Otherwise, form filler is still required to anwer the question
+    const isQuestionValid = this.checkIfFormQuestionValid(newArray);
+
+    this.setState({
+      isFormQuestionValid: isQuestionValid,
+    });
+
+    this.props.question.isValid = isQuestionValid;
   };
 
   isDisabled(choice) {
     return !choice.selectionDisablesChildren && !choice.checked;
   }
 
-  isDeselected(choice) {
+  isDeselected(choice) {}
 
-  }
+  checkIfFormQuestionValid = (array) => {
+    for (let i = 0; i < array.length; i++) {
+      if (array[i].checked === true) {
+        return true;
+      }
+    }
+    return false;
+  };
 
   renderQuestion = () => {
     if (this.state.maxSelections === 1) {
       return (
         <div className="multipleChoiceContainer">
           <FormControl component="fieldset">
-          <RadioGroup
-            value={this.state.input}
-            onChange={this.handleInputChange}
-          >
-            {this.state.choices.map((choice) => {
-              return (
-              <div className="choiceContainer">
-                <div className="choiceText">
-                  <FormControlLabel
-                    control={
-                      <Radio
-                      checked={!this.props.clearResponse ? choice.checked : false}
+            <RadioGroup
+              value={this.state.input}
+              onChange={this.handleInputChange}
+            >
+              {this.state.choices.map((choice) => {
+                return (
+                  <div className="choiceContainer">
+                    <div className="choiceText">
+                      <FormControlLabel
+                        control={
+                          <Radio
+                            checked={
+                              !this.props.clearResponse ? choice.checked : false
+                            }
+                          />
+                        }
+                        label={choice.questionBody.questionTitle}
+                        value={choice.questionBody.questionTitle}
+                        disabled={this.props.readOnly}
                       />
-                    }
-                    label={choice.questionBody.questionTitle}
-                    value={choice.questionBody.questionTitle}
-                    disabled={this.props.readOnly}
-                  />
-                  <FormQuestion
-                    question={choice}
-                    noTitle={true}
-                    updateIsFormValid={this.props.updateIsFormValid}
-                    readOnly={this.props.readOnly || this.isDisabled(choice)}
-                    selected={choice.checked}
-                    clearResponse={this.props.clearResponse || this.isDisabled(choice)}
-                  />
+                      <FormQuestion
+                        required={false}
+                        question={choice}
+                        noTitle={true}
+                        updateIsFormValid={this.props.updateIsFormValid}
+                        readOnly={
+                          this.props.readOnly || this.isDisabled(choice)
+                        }
+                        selected={choice.checked}
+                        clearResponse={
+                          this.props.clearResponse || this.isDisabled(choice)
+                        }
+                      />
+                    </div>
                   </div>
-              </div>
-            )})}
-          </RadioGroup>
+                );
+              })}
+            </RadioGroup>
+            {/* <FormHelperText>
+              {this.state.isFormQuestionValid === true ? "" : "Required"}
+            </FormHelperText> */}
           </FormControl>
         </div>
       );
@@ -143,35 +187,40 @@ class MultipleChoice extends React.Component {
           <FormGroup>
             {this.state.choices.map((choice) => {
               return (
-              <div key={choice._id} className="choiceContainer">
-                <div className="choiceText">
-
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={!this.props.clearResponse ? choice.checked : false}
-                        onChange={this.handleCheckboxChange}
-                      />
-                    }
-                    label={choice.questionBody.questionTitle}
-                    name={choice.questionBody.questionTitle}
-                    disabled={this.props.readOnly}
-                  >
-
-                  </FormControlLabel>
-                <FormQuestion
-                    question={choice}
-                    noTitle={true}
-                    updateIsFormValid={this.props.updateIsFormValid}
-                    readOnly={this.props.readOnly || this.isDisabled(choice)}
-                    selected={choice.checked}
-                    clearResponse={this.props.clearResponse || this.isDisabled(choice)}
-                />
+                <div key={choice._id} className="choiceContainer">
+                  <div className="choiceText">
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={
+                            !this.props.clearResponse ? choice.checked : false
+                          }
+                          onChange={this.handleCheckboxChange}
+                        />
+                      }
+                      label={choice.questionBody.questionTitle}
+                      name={choice.questionBody.questionTitle}
+                      disabled={this.props.readOnly}
+                    ></FormControlLabel>
+                    <FormQuestion
+                      required={false}
+                      question={choice}
+                      noTitle={true}
+                      updateIsFormValid={this.props.updateIsFormValid}
+                      readOnly={this.props.readOnly || this.isDisabled(choice)}
+                      selected={choice.checked}
+                      clearResponse={
+                        this.props.clearResponse || this.isDisabled(choice)
+                      }
+                    />
+                  </div>
                 </div>
-
-              </div>
-            )})}
+              );
+            })}
           </FormGroup>
+          {/* <FormHelperText>
+            {this.state.isFormQuestionValid === true ? "" : "Required"}
+          </FormHelperText> */}
         </div>
       );
     }
