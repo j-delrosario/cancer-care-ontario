@@ -10,6 +10,7 @@ import Home from "./components/Home/Home";
 import Admin from "./components/Admin/Admin";
 import FormManager from "./components/FormManager/FormManager";
 import FormFiller from "./components/FormFiller/FormFiller";
+import FormReceiver from "./components/FormReceiver/FormReceiver";
 
 import FormResponse from "./components/FormResponse/FormResponse";
 
@@ -84,6 +85,19 @@ class App extends React.Component {
                 <div>
                   <Navbar />
                   <FormManager />
+                </div>
+              )}
+            ></Route>
+          </Switch>
+
+          <Switch>
+            <Route
+              exact
+              path="/form-receiver"
+              render={() => (
+                <div>
+                  <Navbar />
+                  <FormReceiver />
                 </div>
               )}
             ></Route>
