@@ -276,18 +276,20 @@ class CreateEditForm extends React.Component {
       formFiller: this.state.formFiller,
       submitted: false,
     };
-    axios
-      .put(
-        "/api/SDCFormResponse/responses/" + this.state.response._id,
-        response
-      )
-      .catch((error) => {
-        console.log(error);
+    if (this.state.createdForm) {
+      axios
+        .put(
+          "/api/SDCFormResponse/responses/" + this.state.response._id,
+          response
+        )
+        .catch((error) => {
+          console.log(error);
+        });
+      console.log("autosaving...");
+      this.setState({
+        lastAutoSaved: new Date().toLocaleString(),
       });
-    console.log("autosaving...");
-    this.setState({
-      lastAutoSaved: new Date().toLocaleString(),
-    });
+    }
   };
 
   renderSubmitButton = () => {
@@ -464,7 +466,7 @@ class CreateEditForm extends React.Component {
             className="autocomplete"
             onChange={this.handleProcedureChange}
             options={this.state.sdcForms}
-            getOptionLabel={(option) => option.title}
+            getOptionLabel={(option) => option ? (option.title ? option.title : option.id) : "N/A"}
             style={{ width: 300 }}
             renderInput={(params) => (
               <TextField {...params} label="Choose Form" variant="outlined" />

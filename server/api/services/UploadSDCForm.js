@@ -118,6 +118,7 @@ function AddStringQuestionBodyToModel(model, question) {
 
 function AddMultipleChoiceQuestionBodyToModel(model, question, tab="") {
     AddQuestionBodyToModel(model, question);
+    if (!question.ListField[0].List[0].ListItem) return;
     question.ListField[0].List[0].ListItem.forEach( (listItem) => {
         let multipleChoiceModel = multipleChoiceBodyModel = null;
         console.log(tab + "Creating Multiple Choice option as " + TypeOfListItem(listItem) + " Question with ID: " + listItem.$.ID + " and Order #: " + listItem.$.order);
