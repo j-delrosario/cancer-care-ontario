@@ -141,15 +141,15 @@ class MultipleChoice extends React.Component {
       return (
         <div className="multipleChoiceContainer">
           <FormGroup>
-            {this.state.choices.map((choice, index) => {
+            {this.state.choices.map((choice) => {
               return (
               <div key={choice._id} className="choiceContainer">
                 <div className="choiceText">
 
                   <FormControlLabel
                     control={
-                      <Checkbox // Don't remove "=== true" the checkmarks won't rerender without it
-                        checked={!this.props.clearResponse ? this.state.choices[index].checked === true : false}
+                      <Checkbox
+                        checked={!this.props.clearResponse ? choice.checked : false}
                         onChange={this.handleCheckboxChange}
                       />
                     }
