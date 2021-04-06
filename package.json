@@ -2,11 +2,11 @@
   "name": "proj-restfulfriends",
   "version": "0.1.0",
   "scripts": {
-    "start": "cd server && npm run dev",
+    "start": "cd server && node server.js",
     "dev": "concurrently \"cd server && npm run dev\" \"cd client && npm start\" ",
     "install-dependencies": "npm install && cd server && npm install && cd ../client && npm install && cd ../",
     "test": "cd server && npm run ci && cd ../client && npm run ci && cd ../",
-    "heroku-postbuild": "npm run install-dependencies && cd client && npm run build"
+    "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "repository": {
     "type": "git",
