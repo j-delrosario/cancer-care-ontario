@@ -2,11 +2,11 @@
   "name": "proj-restfulfriends",
   "version": "0.1.0",
   "scripts": {
-    "start": "npm run dev",
+    "start": "cd server && npm run dev",
     "dev": "concurrently \"cd server && npm run dev\" \"cd client && npm start\" ",
     "install-dependencies": "npm install && cd server && npm install && cd ../client && npm install && cd ../",
     "test": "cd server && npm run ci && cd ../client && npm run ci && cd ../",
-    "heroku-postbuild": "npm run install-dependencies"
+    "heroku-postbuild": "npm run install-dependencies && cd client && npm run build"
   },
   "repository": {
     "type": "git",
@@ -16,8 +16,7 @@
   "dependencies": {
     "@material-ui/core": "^4.11.3",
     "axios": "^0.21.1",
-    "material-ui-dropzone": "^3.5.0",
-    "concurrently": "^5.3.0"
+    "material-ui-dropzone": "^3.5.0"
   },
   "devDependencies": {
     "concurrently": "^5.3.0"
