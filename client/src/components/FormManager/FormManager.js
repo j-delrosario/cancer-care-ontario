@@ -26,8 +26,13 @@ const FormManager = () => {
 
     return (
         <div className="manager-base">
-            <Typography>
+            <Typography style={{
+                fontWeight: "bold"
+            }}>
                 Upload XML
+            </Typography>
+            <Typography>
+                Uploading an SDC Form will create a form or replace a form if one with the same ID already exists.
             </Typography>
             <UploadXML onSubmit={onSubmitNewXML} onUpload={uploadXML} id={3} />
             {alert}

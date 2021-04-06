@@ -9,11 +9,11 @@ const getResponses = async (req, res) => {
   //Can search by SDCForm, patientID, diagnosticProcedureID, or timestamp(timestamp_lt for lower limit, timestamp_gt for upper limit).
 
   //Can't search by formFiller
-  ObjectID = require('mongodb').ObjectID;
+  // ObjectID = require("mongodb").ObjectID;
 
   try {
     if (req.query.timestamp_gt || req.query.timestamp_lt) {
-      req.query.timestamp = {}
+      req.query.timestamp = {};
     }
     if (req.query.timestamp_gt) {
       req.query.timestamp.$gte = new Date(req.query.timestamp_gt);
@@ -23,12 +23,12 @@ const getResponses = async (req, res) => {
       req.query.timestamp.$lte = new Date(req.query.timestamp_lt);
       delete req.query.timestamp_lt;
     }
-    
+
     const responses = await SDCFormResponse.find(req.query);
     res.send(responses);
   } catch (err) {
     console.log(err);
-    if (isMongoError(error)) {
+    if (isMongoError(err)) {
       // check for if mongo server suddenly disconnected before this request.
       res.status(500).send("Internal server error");
     } else {
@@ -41,16 +41,16 @@ const getResponseById = async (req, res) => {
   const id = req.params.id;
 
   // Good practise: Validate id immediately.
-  if (!ObjectID.isValid(id)) {
-    res.status(400).send(); // if invalid id, definitely can't find resource, 404.
-    return; // so that we don't run the rest of the handler.
-  }
+  // if (!ObjectID.isValid(id)) {
+  //   res.status(400).send(); // if invalid id, definitely can't find resource, 404.
+  //   return; // so that we don't run the rest of the handler.
+  // }
   try {
     const response = await SDCFormResponse.findOne({ _id: req.params.id });
     if (!response) {
       res.status(404).send("Response not found"); // could not find this patient
     } else {
-    res.send(response);
+      res.send(response);
     }
   } catch (err) {
     console.log(err);
@@ -62,11 +62,11 @@ const getResponsesByUserId = async (req, res) => {
   const id = req.params.id;
 
   // Good practise: Validate id immediately.
-  if (!ObjectID.isValid(id)) {
-    res.status(400).send(); // if invalid id, definitely can't find resource, 404.
-    return; // so that we don't run the rest of the handler.
-  }
-  
+  // if (!ObjectID.isValid(id)) {
+  //   res.status(400).send(); // if invalid id, definitely can't find resource, 404.
+  //   return; // so that we don't run the rest of the handler.
+  // }
+
   try {
     const responses = await SDCFormResponse.find({
       "patient._id": id,
@@ -112,12 +112,12 @@ const createResponse = async (req, res) => {
 const updateResponse = async (req, res) => {
   const id = req.params.id;
 
-  if (!ObjectID.isValid(id)) {
-    res.status(404).send("Resource not found");
-    return; // so that we don't run the rest of the handler.
-  }
+  // if (!ObjectID.isValid(id)) {
+  //   res.status(404).send("Resource not found");
+  //   return; // so that we don't run the rest of the handler.
+  // }
   try {
-    /*const oldResponse = await SDCFormResponse.findOne({ _id: req.params.id });*/
+    const oldResponse = await SDCFormResponse.findOne({ _id: req.params.id });
     const newResponse = {
       diagnosticProcedure: req.body.SDCForm.diagnosticProcedure,
       patient: req.body.patient,
@@ -140,8 +140,8 @@ const updateResponse = async (req, res) => {
       res.send(response);
     }
   } catch (err) {
-    console.log(error); // console.log server error to the console, not to the client.
-    if (isMongoError(error)) {
+    console.log(err); // console.log server error to the console, not to the client.
+    if (isMongoError(err)) {
       // check for if mongo server suddenly disconnected before this request.
       res.status(500).send("Internal server error");
     } else {
@@ -154,10 +154,10 @@ const deleteResponse = async (req, res) => {
   const id = req.params.id;
 
   // Good practise: Validate id immediately.
-  if (!ObjectID.isValid(id)) {
-    res.status(404).send(); // if invalid id, definitely can't find resource, 404.
-    return; // so that we don't run the rest of the handler.
-  }
+  // if (!ObjectID.isValid(id)) {
+  //   res.status(404).send(); // if invalid id, definitely can't find resource, 404.
+  //   return; // so that we don't run the rest of the handler.
+  // }
 
   try {
     const response = await SDCFormResponse.deleteOne({ _id: id });

@@ -27,3 +27,20 @@
 h1 {
   margin-left: 5px;
 }
+
+.form-submitted-modal {
+  width: 500px;
+  margin: 20% auto;
+}
+
+.form-submitted-title {
+  font-weight: bold;
+  font-size: large;
+  /* background-color: midnightblue;
+  color: white; */
+  padding: 10px 0;
+}
+
+.form-submitted-text {
+  margin: 10px 0;
+}
