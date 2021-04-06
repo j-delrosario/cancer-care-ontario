@@ -1,4 +1,4 @@
-const router = require('Express').Router();
+const router = require('express').Router();
 const diagnosticProcedureController = require('../controllers/diagnosticProcedureController');
 
 router.get('/', diagnosticProcedureController.findAllDiagnosticProcedures);

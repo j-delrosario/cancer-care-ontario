@@ -1,4 +1,4 @@
-const router = require('Express').Router();
+const router = require('express').Router();
 const SDCFormController = require('../controllers/SDCFormController');
 const multipart = require("connect-multiparty");
 const multipartMiddleware = multipart();
