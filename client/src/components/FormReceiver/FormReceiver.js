@@ -13,9 +13,13 @@ class FormReceiver extends React.Component {
   };
 
   getResponseInfo = (id) => {
+    if (id === "")
+      return;
+
     axios
       .get(`/api/SDCFormResponse/responses/${id}`)
       .then((res) => {
+        console.log(res.data)
         this.setState({
           response: res.data,
         });
@@ -56,7 +60,7 @@ class FormReceiver extends React.Component {
                 Find Form
             </Button>
         </div>
-        {this.state.response !== "" ? (
+        {this.state.response !== "" && !Array.isArray(this.state.response) ? (
           <Response response={this.state.response} />
         ) : (
           <p></p>
