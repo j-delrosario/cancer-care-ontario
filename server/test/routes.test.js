@@ -8,33 +8,21 @@ let should = chai.should();
 
 chai.use(chaiHttp);
 
-/*describe('SDCForms', () => {
-    var formID = 5005;
-    var dp = 2;
+describe('SDCForms', () => {
+    var exampleID = "asdfasdfasd";
+    var dp = {"_id" : Buffer.from(exampleID+"4", 'utf8').toString('hex'), name: "dp name"}
+    var pa = {"_id" : Buffer.from(exampleID+"3", 'utf8').toString('hex'), name: "patient name"}
+    var ff = {"_id" : Buffer.from(exampleID+"2", 'utf8').toString('hex'), name: "ff name",}
     describe('/POST SDCForm', () => {
-        it('it should not POST an SDCForm without an ID', (done) => {
-            let form = {
-                diagnosticProcedure: dp,
-                sections: ["test", "test2"],
-                questions: ["dummy", "dummy2"]
-            }
-          chai.request("http://localhost:3001/api")
-              .post('/saveSDCForm')
-              .send(form)
-              .end((err, res) => {
-                    (res).should.have.status(500);
-                done();
-              });
-
-        });
         it('it should not POST an SDCForm without a diagnostic procedure', (done) => {
             let form = {
-                id: formID,
+                patient: pa,
+                formFiller: ff,
                 sections: ["test", "test2"],
                 questions: ["dummy", "dummy2"]
             }
-          chai.request("http://localhost:3001/api")
-              .post('/saveSDCForm')
+          chai.request("http://localhost:3001/api/SDCForm")
+              .post('/')
               .send(form)
               .end((err, res) => {
                     (res).should.have.status(500);
@@ -42,41 +30,46 @@ chai.use(chaiHttp);
               });
 
         });
-        it('it should POST a SDCForm', (done) => {
-            let form = {
-                id: formID,
-                diagnosticProcedure: dp,
-                sections: ["test", "test2"],
-                questions: ["dummy", "dummy2"]
-            }
-          chai.request("http://localhost:3001/api")
-              .post('/saveSDCForm')
+        /*it('it should POST a SDCForm', (done) => {
+            let form = {"file":{"path":'./testSDCForm.pdf'}};
+            //form.append("file", './testSDCForm.pdf');
+          chai.request("http://localhost:3001/api/SDCForm")
+              .post('/')
               .send(form)
+              //.attach('testSDCForm', './testSDCForm.pdf', 'testSDCForm.pdf')
               .end((err, res) => {
                     (res).should.have.status(200);
-                done();
+                    let id = res1.body._id;
+                    chai.request("http://localhost:3001/api/SDCForm")
+                    .delete('/'+id)
+                    .end((err2, res2) => {
+                        (res2).should.have.status(200);
+                    });
+                    done();
               });
 
-        });
+        });*/
     });
     describe('/GET SDCForm', () => {
         it('it should GET the specified SDCForm', (done) => {
-            chai.request("http://localhost:3001/api")
-                .get('/getSDCForm')
-                .query({id: "5005"})
-                .end((err, res) => {
-                    (res).should.have.status(200);
-                    expect((res)).to.be.an('object');
-                    expect((res.body.sections)).to.be.an('array');
-                    expect((res.body.questions)).to.be.an('array');
-                    expect((res.body.id)).to.equal(formID);
-                    expect((res.body.diagnosticProcedure)).to.equal(dp);
+            chai.request("http://localhost:3001/api/SDCForm")
+                .get('/')
+                .end((err, res1) => {
+                    (res1).should.have.status(200);
+                    let dpid = res1.body[0].diagnosticProcedure.id;
+                    let form = res1.body[0]
+                    chai.request("http://localhost:3001/api/SDCForm")
+                    .get('/'+dpid)
+                    .end((err, res) => {
+                        (res).should.have.status(200);
+                        expect((res)).to.be.an('object');
+                        expect((res.body)).to.equal(form);
+                    });
                 done();
-                });
+            });
         });
     });
-
-});*/
+});
 
 describe('SDCFormResponse', () => {
     var exampleID = "asdfasdfasd";
@@ -96,12 +89,13 @@ describe('SDCFormResponse', () => {
               .post('/responses')
               .send(response)
               .end((err, res) => {
+                  //console.log(res.status)
                     (res).should.have.status(400);
-                done();
+                
               });
-
+              done();
         });
-        it('it should not POST an SDCForm without patient or formfiller objects.', (done) => {
+        it('it should not POST a response without patient or formfiller objects.', (done) => {
             let response = {
                 patient: {something: "else"},
                 SDCForm: form,
@@ -112,9 +106,9 @@ describe('SDCFormResponse', () => {
               .send(response)
               .end((err, res) => {
                     (res).should.have.status(400);
-                done();
+                
               });
-
+              done();
         });
         it('it should POST a SDCFormResponse', (done) => {
             let response = {
@@ -127,9 +121,9 @@ describe('SDCFormResponse', () => {
               .send(response)
               .end((err, res) => {
                     (res).should.have.status(200);
-                done();
+                
               });
-
+              done();
         });
     });
     describe('/PUT SDCFormResponse', () => {
@@ -146,18 +140,18 @@ describe('SDCFormResponse', () => {
                 .end((err, res1) => {
                     let id = res1.body[0]._id;
                     chai.request("http://localhost:3001/api/SDCFormResponse")
-                .put('/responses/'+id)
-                .send(response)
-                .end((err, res) => {
-                    (res).should.have.status(200);
-                    expect((res)).to.be.an('object');
-                    expect((res.body.diagnosticProcedure)).to.equal(dp._id);
-                    expect((res.body.patient._id)).to.equal(pa2._id);
-                    expect((res.body.formFiller._id)).to.equal(ff._id);
-            
-            done();
+                    .put('/responses/'+id)
+                    .send(response)
+                    .end((err, res) => {
+                        (res).should.have.status(200);
+                        expect((res)).to.be.an('object');
+                        expect((res.body.diagnosticProcedure)).to.equal(dp._id);
+                        expect((res.body.patient._id)).to.equal(pa2._id);
+                        expect((res.body.formFiller._id)).to.equal(ff._id);
+                    });
+                
             });
-                done();});
+            done();
         });
     });
     describe('/GET SDCFormResponse', () => {
