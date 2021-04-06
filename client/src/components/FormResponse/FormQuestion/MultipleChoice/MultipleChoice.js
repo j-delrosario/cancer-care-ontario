@@ -17,7 +17,6 @@ class MultipleChoice extends React.Component {
     maxSelections: this.props.maxSelections,
     choices: this.props.choices,
     input: "",
-    deselector: -1,
     isFormQuestionValid: false,
   };
 
@@ -121,8 +120,6 @@ class MultipleChoice extends React.Component {
     return !choice.selectionDisablesChildren && !choice.checked;
   }
 
-  isDeselected(choice) {}
-
   checkIfFormQuestionValid = (array) => {
     for (let i = 0; i < array.length; i++) {
       if (array[i].checked === true) {
@@ -141,15 +138,15 @@ class MultipleChoice extends React.Component {
               value={this.state.input}
               onChange={this.handleInputChange}
             >
-              {this.state.choices.map((choice) => {
+              {this.state.choices.map((choice, index) => {
                 return (
                   <div className="choiceContainer">
                     <div className="choiceText">
                       <FormControlLabel
                         control={
                           <Radio
-                            checked={
-                              !this.props.clearResponse ? choice.checked : false
+                            checked={ // Don't remove "=== true", checkmarks won't rerender otherwise
+                              !this.props.clearResponse ? this.state.choices[index].checked === true : false
                             }
                           />
                         }
