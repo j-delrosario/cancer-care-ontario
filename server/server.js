@@ -12,8 +12,6 @@ async function startServer() {
   app.use(bodyParser.json());
   app.use(require("./routes/patients"));
 
-  app.use(express.static('client/build'))
-
   app.listen(port, (err) => {
     if (err) {
       console.log(err);
