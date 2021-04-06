@@ -36,8 +36,6 @@ const findAllSDCForms = async (req, res) => {
         } else {
             SDCForms = await findAllSDCFormsByDeprecationStatus(false)
         }
-        let a = await SDCSection.find({"title": "IMPRESSIONS"});
-        //console.log(SDCForms);
         res.send(SDCForms);
     } catch (err) {
         res.status(500).send(err);

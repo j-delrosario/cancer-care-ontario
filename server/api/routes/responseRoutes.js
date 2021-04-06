@@ -4,6 +4,7 @@ const SDCFormResponseController = require("../controllers/SDCFormResponseControl
 
 const router = express.Router();
 
+router.post("/responses/validate", SDCFormResponseController.validateResponse);
 router.post("/responses/", SDCFormResponseController.createResponse);
 router.put("/responses/:id", SDCFormResponseController.updateResponse);
 router.delete("/responses/:id", SDCFormResponseController.deleteResponse);

@@ -15,7 +15,7 @@ class MultipleChoice extends React.Component {
     maxSelections: this.props.maxSelections,
     choices: this.props.choices,
     input: "",
-    deselector: -1,
+    deselector: [[-1]],
   };
 
   componentDidMount() {
@@ -82,8 +82,8 @@ class MultipleChoice extends React.Component {
         if (choice.selectionDeselectsSiblings && event.target.checked) {
           choice.checked = false;
         }
-        return choice
-      });;
+        return choice;
+      });
     }
     newArray[choiceIndex].checked = event.target.checked;
     this.setState({
@@ -141,15 +141,15 @@ class MultipleChoice extends React.Component {
       return (
         <div className="multipleChoiceContainer">
           <FormGroup>
-            {this.state.choices.map((choice) => {
+            {this.state.choices.map((choice, index) => {
               return (
               <div key={choice._id} className="choiceContainer">
                 <div className="choiceText">
 
                   <FormControlLabel
                     control={
-                      <Checkbox
-                        checked={!this.props.clearResponse ? choice.checked : false}
+                      <Checkbox // Don't remove "=== true" the checkmarks won't rerender without it
+                        checked={!this.props.clearResponse ? this.state.choices[index].checked === true : false}
                         onChange={this.handleCheckboxChange}
                       />
                     }
