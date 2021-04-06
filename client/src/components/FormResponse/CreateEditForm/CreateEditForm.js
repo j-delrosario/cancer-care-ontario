@@ -44,6 +44,7 @@ class CreateEditForm extends React.Component {
     sdcForms: [],
     formSubmittedModalOpen: false,
     formId: 0,
+    lastAutoSaved: null,
   };
   componentDidMount() {
     // If a form has been sent in from clicking the edit button, then we are in edit mode
@@ -61,7 +62,11 @@ class CreateEditForm extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.state.patient != null && this.state.formFiller != null && this.state.form != null) {
+    if (
+      this.state.patient != null &&
+      this.state.formFiller != null &&
+      this.state.form != null
+    ) {
       if (!this.state.editMode && !this.state.createdForm) {
         let response = {
           patient: this.state.patient,
@@ -69,13 +74,18 @@ class CreateEditForm extends React.Component {
           formTitle: this.state.form.title,
           formFiller: this.state.formFiller,
           submitted: false,
-        }
-        axios.post("/api/SDCFormResponse/responses/", response).then((res) => {
-          this.setState({
-            response: res.data,
-            createdForm: true,
+        };
+        axios
+          .post("/api/SDCFormResponse/responses/", response)
+          .then((res) => {
+            this.setState({
+              response: res.data,
+              createdForm: true,
+            });
           })
-        }).catch((err) => {console.log(err)})
+          .catch((err) => {
+            console.log(err);
+          });
       }
     }
   }
@@ -129,13 +139,15 @@ class CreateEditForm extends React.Component {
 
   onPatientChange = (event, input) => {
     this.setState({
-      patient: input, createdForm: false
+      patient: input,
+      createdForm: false,
     });
   };
 
   onFormFillerChange = (event, input) => {
     this.setState({
-      formFiller: input, createdForm: false
+      formFiller: input,
+      createdForm: false,
     });
   };
 
@@ -171,9 +183,16 @@ class CreateEditForm extends React.Component {
     return true;
   };
 
-  messageOnSubmit = (messageText, type, questions=[]) => {
+  messageOnSubmit = (messageText, type, questions = []) => {
     let qs = questions.map((question) => {
-       return (<div><h3 style={{display:"inline"}}>{question}<br></br></h3></div>)
+      return (
+        <div>
+          <h3 style={{ display: "inline" }}>
+            {question}
+            <br></br>
+          </h3>
+        </div>
+      );
     });
     const message = (
       <div>
@@ -182,39 +201,55 @@ class CreateEditForm extends React.Component {
       </div>
     );
     this.props.appState.handleOpenSnackbarMessage(type, message);
-  }
+  };
 
   async validateResponse(response) {
-    let res = await axios.post("/api/SDCFormResponse/responses/validate/", response).catch((err) => {throw new Error(err)});
+    let res = await axios
+      .post("/api/SDCFormResponse/responses/validate/", response)
+      .catch((err) => {
+        throw new Error(err);
+      });
     return res.data;
   }
 
-  async submitResponse(response, update=false) {
-    let res = await axios.put("/api/SDCFormResponse/responses/" + this.state.response._id, response).catch((err) => {throw new Error(err)})
+  async submitResponse(response, update = false) {
+    let res = await axios
+      .put(
+        "/api/SDCFormResponse/responses/" + this.state.response._id,
+        response
+      )
+      .catch((err) => {
+        throw new Error(err);
+      });
     console.log(res.data._id); // url
     let url = res.data._id;
     this.setState({
-        formId: res.data._id,
-      });
-    console.log(res)
+      formId: res.data._id,
+    });
+    console.log(res);
     console.log(update ? "form updated" : "form submitted");
-    this.messageOnSubmit(update ? "Response updated" : "Response submitted!", "success")
+    this.messageOnSubmit(
+      update ? "Response updated" : "Response submitted!",
+      "success"
+    );
     this.props.history.push(`/form-response/${url}`); // Go to form response page
   }
 
-  handleSubmit = async (update=false) => {
+  handleSubmit = async (update = false) => {
     let response = {
       patient: this.state.patient,
       SDCForm: this.state.form,
       formTitle: this.state.form.title,
       formFiller: this.state.formFiller,
       submitted: true,
-    }
-    let invalidQuestions = await this.validateResponse(response).catch((error) => {
-      console.log(error);
-      this.messageOnSubmit("Response validation failed", "error");
-      return;
-    });
+    };
+    let invalidQuestions = await this.validateResponse(response).catch(
+      (error) => {
+        console.log(error);
+        this.messageOnSubmit("Response validation failed", "error");
+        return;
+      }
+    );
     if (invalidQuestions.length === 0) {
       await this.submitResponse(response, update).catch((error) => {
         console.log(error);
@@ -240,12 +275,20 @@ class CreateEditForm extends React.Component {
       formTitle: this.state.form.title,
       formFiller: this.state.formFiller,
       submitted: false,
-    }
-    axios.put("/api/SDCFormResponse/responses/" + this.state.response._id, response).catch((error) => {
-      console.log(error);
+    };
+    axios
+      .put(
+        "/api/SDCFormResponse/responses/" + this.state.response._id,
+        response
+      )
+      .catch((error) => {
+        console.log(error);
+      });
+    console.log("autosaving...");
+    this.setState({
+      lastAutoSaved: new Date().toLocaleString(),
     });
-    console.log("autosaving...")
-  }
+  };
 
   renderSubmitButton = () => {
     if (this.state.editMode) {
@@ -306,6 +349,7 @@ class CreateEditForm extends React.Component {
                 Cancel
               </Button>
             </Link>
+            <div>Last saved: {this.state.lastAutoSaved}</div>
             {this.renderSubmitButton()}
           </div>
         </div>
