@@ -56,7 +56,7 @@ class GetResponses extends React.Component {
         field: "timestamp",
         headerName: "Created At",
         width: 200,
-        valueGetter: (params) =>
+        valueFormatter: (params) =>
           new Date(params.row?.timestamp).toLocaleString(),
       },
       {
@@ -64,7 +64,7 @@ class GetResponses extends React.Component {
         headerName: "Status",
         width: 150,
         valueGetter: (params) => {
-          return params.row?.submitted ? "Submitted" : "In-Progress"
+          return params.row?.submitted ? "Submitted" : "In-Progress";
         },
       },
     ],
@@ -210,6 +210,12 @@ class GetResponses extends React.Component {
             rows={this.state.rows}
             columns={this.state.columns}
             pageSize={10}
+            sortModel={[
+              {
+                field: "timestamp",
+                sort: "desc",
+              },
+            ]}
           />
         </div>
         {this.renderFormResponse()}
