@@ -31,6 +31,7 @@ var SDCFormResponseSchema = new Schema(
     patient: { type: PatientID.schema },
     formFiller: { type: FormFillerID.schema },
     timestamp: { type: Date, required: true },
+    submitted: {type: Boolean, default: false},
     questionResponses: [SDCQuestionResponse.schema],
     persistentLocator: {
       type: mongoose.Schema.Types.ObjectId,

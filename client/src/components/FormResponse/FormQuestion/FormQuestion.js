@@ -51,6 +51,7 @@ class FormQuestion extends React.Component {
           readOnly={readOnly}
           clearResponse={this.props.clearResponse || this.isDisabled()}
           selected={this.props.selected}
+          onUpdate={this.props.onUpdate}
         />
       );
     } else if (question.questionBody.questionType === "String") {
@@ -61,6 +62,7 @@ class FormQuestion extends React.Component {
           updateIsFormValid={this.props.updateIsFormValid}
           readOnly={readOnly}
           clearResponse={this.props.clearResponse}
+          onUpdate={this.props.onUpdate}
         />
       );
     } else if (question.questionBody.questionType === "Int") {
@@ -71,6 +73,7 @@ class FormQuestion extends React.Component {
           updateIsFormValid={this.props.updateIsFormValid}
           readOnly={readOnly}
           clearResponse={this.props.clearResponse}
+          onUpdate={this.props.onUpdate}
         />
       );
     }
@@ -100,6 +103,7 @@ class FormQuestion extends React.Component {
               updateIsFormValid={this.updateIsFormValid}
               readOnly={this.props.readOnly || this.isDisabled()}
               clearResponse={this.props.clearResponse || this.isDisabled()}
+              onUpdate={this.props.onUpdate}
             />
           </div>
         ))}
@@ -111,6 +115,7 @@ class FormQuestion extends React.Component {
               updateIsFormValid={this.props.updateIsFormValid}
               readOnly={this.props.readOnly || this.isDisabled()}
               clearResponse={this.props.clearResponse || this.isDisabled()}
+              onUpdate={this.props.onUpdate}
             />
           </div>
         ))}

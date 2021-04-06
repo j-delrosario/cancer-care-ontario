@@ -78,6 +78,7 @@ class Response extends React.Component {
                   Cancel
                 </Button>
               </Link>
+              { this.state.response.submitted ? "" :
               <Button
                 onClick={() => this.handleDeleteModalOpen()}
                 className="response-link"
@@ -86,15 +87,18 @@ class Response extends React.Component {
               >
                 Delete
               </Button>
+              }
             </div>
-            <Button
-              onClick={() => this.handleEditClick()}
-              className="response-link"
-              variant="contained"
-              color="primary"
-            >
-              Edit
-            </Button>
+            { this.state.response.submitted ? "" :
+              <Button
+                onClick={() => this.handleEditClick()}
+                className="response-link"
+                variant="contained"
+                color="primary"
+              >
+                Edit
+              </Button>
+            }
           </div>
         </div>
       );

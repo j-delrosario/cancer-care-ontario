@@ -18,6 +18,8 @@ class FormSection extends React.Component {
     });
   }
 
+
+
   sortQuestions = () => {
     const sortedQuestions = this.props.section.questions.sort(function (a, b) {
       return a.orderNumber > b.orderNumber
@@ -45,6 +47,7 @@ class FormSection extends React.Component {
               section={section}
               updateIsFormValid={this.props.updateIsFormValid}
               readOnly={this.props.readOnly}
+              onUpdate={this.props.onUpdate}
             />
           </div>
         ))}
@@ -55,6 +58,7 @@ class FormSection extends React.Component {
               question={question}
               updateIsFormValid={this.props.updateIsFormValid}
               readOnly={this.props.readOnly}
+              onUpdate={this.props.onUpdate}
             />
           </div>
         ))}

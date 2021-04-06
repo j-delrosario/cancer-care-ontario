@@ -93,6 +93,7 @@ const createResponse = async (req, res) => {
       formFiller: req.body.formFiller,
       formFillerID: req.body.formFiller._id,
       timestamp: Date.now(),
+      submitted: req.body.submitted ? true : false,
     });
 
     /// Save the response
@@ -126,6 +127,7 @@ const updateResponse = async (req, res) => {
       formFiller: req.body.formFiller,
       formFillerID: req.body.formFiller._id,
       timestamp: oldResponse.timestamp,
+      submitted: req.body.submitted ? true : false,
     };
     const response = await SDCFormResponse.findOneAndReplace(
       { _id: id },

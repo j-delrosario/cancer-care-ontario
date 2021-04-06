@@ -40,6 +40,9 @@ class Int extends React.Component {
     });
 
     this.props.question.isValid = isFormValid;
+    if (this.props.onUpdate) {
+      this.props.onUpdate();
+    }
   };
 
   checkIfQuestionIsValid = () => {

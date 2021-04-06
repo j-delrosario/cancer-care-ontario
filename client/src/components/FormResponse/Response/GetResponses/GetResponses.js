@@ -43,21 +43,29 @@ class GetResponses extends React.Component {
       {
         field: "patient.name",
         headerName: "Patient",
-        width: 250,
+        width: 200,
         valueGetter: (params) => params.row?.patient?.name,
       },
       {
         field: "formFiller.name",
         headerName: "Form Filler",
-        width: 250,
+        width: 200,
         valueGetter: (params) => params.row?.formFiller?.name,
       },
       {
         field: "timestamp",
         headerName: "Created At",
-        width: 250,
+        width: 200,
         valueGetter: (params) =>
           new Date(params.row?.timestamp).toLocaleString(),
+      },
+      {
+        field: "submitted",
+        headerName: "Status",
+        width: 150,
+        valueGetter: (params) => {
+          return params.row?.submitted ? "Submitted" : "In-Progress"
+        },
       },
     ],
   };
