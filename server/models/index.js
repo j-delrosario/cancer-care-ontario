@@ -8,4 +8,6 @@ module.exports = {
     MultipleChoiceQuestionBody: require("../models/MultipleChoiceQuestionBody"),
     StringQuestionBody: require("../models/StringQuestionBody"),
     NoResponseQuestionBody: require("./NoResponseQuestionBody"),
+    PatientID: require("../models/PatientID"),
+    FormFillerID: require("../models/FormFillerID"),
 }

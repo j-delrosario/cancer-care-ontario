@@ -29,10 +29,10 @@ const FormManager = () => {
             <Typography style={{
                 fontWeight: "bold"
             }}>
-                Upload XML
+                Upload SDC Form from XML
             </Typography>
             <Typography>
-                Uploading an SDC Form will create a form or replace a form if one with the same ID already exists.
+                Uploading an SDC Form with a Diagnostic Procedure ID and version number that is already in the database will keep the SDC Form with the latest version number and deprecate the previous copy.
             </Typography>
             <UploadXML onSubmit={onSubmitNewXML} onUpload={uploadXML} id={3} />
             {alert}

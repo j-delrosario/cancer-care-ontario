@@ -2,6 +2,7 @@ const SDCFormResponse = require("../../models/FormResponses/SDCFormResponse");
 
 // helpers/middlewares
 const { mongoChecker, isMongoError } = require("../services/mongo_helpers");
+const ValidateResponseForm = require("../services/ValidateResponseForm");
 
 const getResponses = async (req, res) => {
   //Gets all responses if no parameter's are entered.
@@ -171,6 +172,24 @@ const deleteResponse = async (req, res) => {
   }
 };
 
+const validateResponse = async (req, res) => {
+  try {
+    const validResponseForm = await ValidateResponseForm(req.body);
+    console.log("Invalid Responses for Questions:")
+    console.log(validResponseForm)
+    res.send(validResponseForm);
+  } catch (err) {
+    console.log(error); // console.log server error to the console, not to the client.
+    if (isMongoError(error)) {
+      // check for if mongo server suddenly disconnected before this request.
+      res.status(500).send("Internal server error");
+    } else {
+      res.status(400).send("Bad Request");
+    }
+  }
+};
+
+
 module.exports = {
   getResponses,
   getResponseById,
@@ -178,4 +197,5 @@ module.exports = {
   createResponse,
   updateResponse,
   deleteResponse,
+  validateResponse,
 };

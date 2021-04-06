@@ -150,47 +150,55 @@ class CreateEditForm extends React.Component {
     return true;
   };
 
-  handleSubmit = () => {
-    const isValid = this.checkIfFormIsValid();
-    console.log("is form valid? ", isValid);
-    axios
-      .post("/api/SDCFormResponse/responses/", {
-        patient: this.state.patient,
-        SDCForm: this.state.form,
-        formTitle: this.state.form.title,
-        formFiller: this.state.formFiller,
-      })
-      .then((res) => {
-        console.log(res.data._id); // url
-        let url = res.data._id;
-        this.setState(
-          {
-            formId: res.data._id,
-          }
-          // this.handleFormSubmittedModalOpen()
-        );
-        console.log("form submitted");
+  messageOnSubmit = (messageText, type, questions=[]) => {
+    let qs = questions.map((question) => {
+       return (<div><h3 style={{display:"inline"}}>{question}<br></br></h3></div>)
+    });
+    const message = (
+      <div>
+        <h2>{messageText}</h2>
+        {questions.length === 0 ? "" : qs}
+      </div>
+    );
+    this.props.appState.handleOpenSnackbarMessage(type, message);
+  }
 
-        // Open success message
-        const message = (
-          <div>
-            <h2>Response submitted!</h2>
-          </div>
-        );
-        this.props.appState.handleOpenSnackbarMessage("success", message);
-        this.props.history.push(`/form-response/${url}`); // Go to form response page
-      })
-      .catch((err) => {
-        console.log(err);
+  async validateResponse(response) {
+    let res = await axios.post("/api/SDCFormResponse/responses/validate/", response).catch((err) => {throw new Error(err)});
+    return res.data;
+  }
 
-        // Open error message
-        const message = (
-          <div>
-            <h2>Response not submitted</h2>
-          </div>
-        );
-        this.props.appState.handleOpenSnackbarMessage("error", message);
+  async submitResponse(response) {
+    let res = await axios.post("/api/SDCFormResponse/responses/", response).catch((err) => {throw new Error(err)})
+    console.log(res.data._id); // url
+    let url = res.data._id;
+    this.setState({
+        formId: res.data._id,
       });
+    console.log("form submitted");
+    this.messageOnSubmit("Response submitted!", "success")
+    this.props.history.push(`/form-response/${url}`); // Go to form response page
+  }
+
+  handleSubmit = async () => {
+    let response = {
+      patient: this.state.patient,
+      SDCForm: this.state.form,
+      formTitle: this.state.form.title,
+      formFiller: this.state.formFiller,
+    }
+    let invalidQuestions = await this.validateResponse(response).catch((error) => {
+      console.log(error);
+      this.messageOnSubmit("Response validation failed", "error");
+    });
+    if (invalidQuestions.length === 0) {
+      await this.submitResponse(response).catch((error) => {
+        console.log(error);
+        this.messageOnSubmit("Response not submitted", "error");
+      });
+    } else {
+      this.messageOnSubmit("Required Questions:", "error", invalidQuestions);
+    }
   };
 
   handleUpdate = () => {
