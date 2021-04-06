@@ -64,6 +64,9 @@ class MultipleChoice extends React.Component {
       });
       this.props.question.isValid = true;
     }
+    if (this.props.onUpdate) {
+      this.props.onUpdate();
+    }
   };
 
   handleCheckboxChange = (event) => {
@@ -114,6 +117,9 @@ class MultipleChoice extends React.Component {
     });
 
     this.props.question.isValid = isQuestionValid;
+    if (this.props.onUpdate) {
+      this.props.onUpdate();
+    }
   };
 
   isDisabled(choice) {
@@ -166,6 +172,7 @@ class MultipleChoice extends React.Component {
                         clearResponse={
                           this.props.clearResponse || this.isDisabled(choice)
                         }
+                        onUpdate={this.props.onUpdate}
                       />
                     </div>
                   </div>
@@ -209,6 +216,7 @@ class MultipleChoice extends React.Component {
                       clearResponse={
                         this.props.clearResponse || this.isDisabled(choice)
                       }
+                      onUpdate={this.props.onUpdate}
                     />
                   </div>
                 </div>
